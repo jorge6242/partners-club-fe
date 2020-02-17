@@ -1,4 +1,4 @@
-# Dashboard-CRUD
+# Dashboard Partners Club
 # ReactJS-Hooks-Typescript and Redux-Redux-Thunk  
 
 ## Features
