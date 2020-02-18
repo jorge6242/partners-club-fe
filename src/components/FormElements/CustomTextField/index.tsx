@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from "react";
 import TextField from "@material-ui/core/TextField";
+import moment from 'moment';
 
 const emailPattern = {
   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
@@ -14,6 +15,7 @@ type CustomTextFieldProps = {
   errorsField: any;
   errorsMessageField: any;
   isEmail: boolean;
+  type?: string;
 };
 
 const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
@@ -23,7 +25,8 @@ const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
   register,
   errorsField,
   errorsMessageField,
-  isEmail
+  isEmail,
+  type = 'text'
 }) => (
   <TextField
     margin="dense"
@@ -31,6 +34,7 @@ const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
     autoFocus
     placeholder={placeholder}
     name={field}
+    type={type}
     inputRef={register({
       required: required ? "Required" : false,
       pattern: isEmail ? emailPattern : null

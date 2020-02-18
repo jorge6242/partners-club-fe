@@ -20,4 +20,4 @@ export const ACTIONS = {
   }
   
   
-  export type LoginActionTypes = SetUser | Logout | SetLoadng
+  export type ActionTypes = SetUser | Logout | SetLoadng

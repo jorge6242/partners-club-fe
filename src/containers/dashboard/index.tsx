@@ -93,17 +93,35 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        <ListItem button onClick={() => handeClick("/dashboard/category")}>
+        <ListItem button>
           <ListItemIcon>
             <InboxIcon />
           </ListItemIcon>
-          <ListItemText primary={"Category"} />
+          <ListItemText primary={"Banco"} onClick={() => handeClick("/dashboard/banco")} />
         </ListItem>
         <ListItem button>
           <ListItemIcon>
             <InboxIcon />
           </ListItemIcon>
-          <ListItemText primary={"Products"} onClick={() => handeClick("/dashboard/product")} />
+          <ListItemText primary={"Pais"} onClick={() => handeClick("/dashboard/pais")} />
+        </ListItem>
+        <ListItem button>
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary={"Deporte"} onClick={() => handeClick("/dashboard/deporte")} />
+        </ListItem>
+        <ListItem button>
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary={"Profesion"} onClick={() => handeClick("/dashboard/profesion")} />
+        </ListItem>
+        <ListItem button>
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary={"Socios"} onClick={() => handeClick("/dashboard/socio")} />
         </ListItem>
       </List>
     </div>

@@ -7,6 +7,11 @@ import snackBarReducer from './snackBarReducer';
 import productReducer from './productReducer';
 import categoryReducer from './categoryReducer';
 import loginReducer from './loginReducer';
+import bankReducer from './bankReducer';
+import countryReducer from './countryReducer';
+import sportReducer from './sportReducer';
+import professionReducer from './professionReducer';
+import personReducer from './personReducer';
 
 const rootReducer = combineReducers({
   modalReducer,
@@ -14,6 +19,11 @@ const rootReducer = combineReducers({
   productReducer,
   categoryReducer,
   loginReducer,
+  bankReducer,
+  countryReducer,
+  sportReducer,
+  professionReducer,
+  personReducer
 });
 
 export default rootReducer;

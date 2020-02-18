@@ -1,4 +1,4 @@
-import {  ACTIONS, LoginActionTypes } from '../interfaces/actionTypes/loginTypes';
+import {  ACTIONS, ActionTypes } from '../interfaces/actionTypes/loginTypes';
 import SecureStorage from "../config/SecureStorage";
 
 type LoginInitialState = {
@@ -17,7 +17,7 @@ const initialState: LoginInitialState = {
   loading: false
 };
 
-const userReducer = (state = initialState, action: LoginActionTypes) => {
+const userReducer = (state = initialState, action: ActionTypes) => {
   switch (action.type) {
     case ACTIONS.SET_USER:
       return {

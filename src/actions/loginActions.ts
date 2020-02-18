@@ -1,4 +1,4 @@
-import Auth from '../services/Auth';
+import Auth from '../api/Auth';
 import SecureStorage from '../config/SecureStorage'
 import snackBarUpdate from '../actions/snackBarActions';
 import { ACTIONS } from '../interfaces/actionTypes/loginTypes';
@@ -43,18 +43,18 @@ export const login = (body: object) => async (dispatch: Function) => {
 
 export const logout = () => ({ type: ACTIONS.LOGOUT })
 
-export const checkUser = () => async (dispatch: Function) => {
+export const checkLogin = () => async (dispatch: Function) => {
     try {
         const {
-            data,
+            data: { data },
             status
         } = await Auth.checkLogin();
-        let checkUserLoginResponse = [];
+        let checkLoginResponse = [];
         if (status === 200) {
-            checkUserLoginResponse = data;
+            checkLoginResponse = data;
             dispatch({ type: ACTIONS.SET_USER, payload: data })
         }
-        return checkUserLoginResponse;
+        return checkLoginResponse;
     } catch (error) {
         return error;
     }

@@ -8,6 +8,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles({
   root: {
@@ -15,23 +16,30 @@ const useStyles = makeStyles({
   },
   container: {
     maxHeight: 440
+  },
+  progress: {
+    display: 'flex',
+    justifyContent: 'left',
+    padding: 10
   }
 });
 
 interface DataTableProps {
   data: any;
   columns: any;
-  isDelete: boolean;
+  isDelete?: boolean;
   handleEdit: Function;
-  handleDelete: Function;
+  handleDelete?: any;
+  loading?: boolean;
 }
 
 const DataTable: FunctionComponent<DataTableProps> = ({
   data,
   columns,
-  isDelete,
+  isDelete = true,
   handleEdit,
-  handleDelete
+  handleDelete,
+  loading
 }) => {
   const classes = useStyles();
 
@@ -55,43 +63,46 @@ const DataTable: FunctionComponent<DataTableProps> = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.length > 0 &&
-              data.map((row: any) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                    {columns.map((column: any) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                    <TableCell>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => handleEdit(row.id)}
-                      >
-                        Edit
-                      </Button>
-                    </TableCell>
-                    {isDelete && (
+            {
+              loading ? (<TableRow className={classes.progress}><CircularProgress color="primary" /></TableRow>)
+                :
+                data.map((row: any) => {
+                  return (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                      {columns.map((column: any) => {
+                        const value = row[column.id];
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {column.format && typeof value === "number"
+                              ? column.format(value)
+                              : value}
+                          </TableCell>
+                        );
+                      })}
                       <TableCell>
                         <Button
                           variant="contained"
-                          color="secondary"
-                          onClick={() => handleDelete(row.id)}
+                          color="primary"
+                          onClick={() => handleEdit(row.id)}
                         >
-                          Delete
-                        </Button>
+                          Edit
+                      </Button>
                       </TableCell>
-                    )}
-                  </TableRow>
-                );
-              })}
+                      {isDelete && (
+                        <TableCell>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={() => handleDelete(row.id)}
+                          >
+                            Delete
+                        </Button>
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  );
+                })
+            }
           </TableBody>
         </Table>
       </TableContainer>

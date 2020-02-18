@@ -1,21 +1,21 @@
-import { ACTIONS, ActionTypes } from '../interfaces/actionTypes/productTypes';
+import {  ACTIONS, ActionTypes } from '../interfaces/actionTypes/bankTypes';
 
-type ProductInitialState = {
-    products: Array<string | number>;
+type BanksInitialState = {
+    banks: Array<string | number>;
     loading: boolean;
 }
 
-const initialState: ProductInitialState = {
-    products: [],
+const initialState: BanksInitialState = {
+    banks: [],
     loading: false
 };
 
-const productReducer = (state = initialState, action: ActionTypes)  => {
+const bankReducer = (state = initialState, action: ActionTypes) => {
     switch (action.type) {
         case ACTIONS.GET_ALL:
             return {
                 ...state,
-                products: action.payload,
+                banks: action.payload,
             };
             case ACTIONS.SET_LOADING:
             return {
@@ -27,4 +27,4 @@ const productReducer = (state = initialState, action: ActionTypes)  => {
     }
 };
 
-export default productReducer;
+export default bankReducer;

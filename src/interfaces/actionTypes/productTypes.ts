@@ -20,4 +20,4 @@ interface SetLoadng {
 }
 
 
-export type ProductActionTypes = GetProduct | GetAllProduct | SetLoadng
+export type ActionTypes = GetProduct | GetAllProduct | SetLoadng

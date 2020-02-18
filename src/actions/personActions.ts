@@ -1,20 +1,28 @@
-import Product from "../api/Product";
+import Person from "../api/Person";
 import snackBarUpdate from "../actions/snackBarActions";
 import { updateModal } from "../actions/modalActions";
-import { ACTIONS } from '../interfaces/actionTypes/productTypes';
+import { ACTIONS } from '../interfaces/actionTypes/personTypes';
 
 export const getAll = () => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_LOADING,
+    payload: true
+  });
   try {
-    const { data, status } = await Product.getAll();
-    let getAllProducts = [];
+    const { data: { data }, status } = await Person.getAll();
+    let response = [];
     if (status === 200) {
-      getAllProducts = data;
+      response = data;
       dispatch({
         type: ACTIONS.GET_ALL,
-        payload: getAllProducts
+        payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_LOADING,
+        payload: false
       });
     }
-    return getAllProducts;
+    return response;
   } catch (error) {
     snackBarUpdate({
       payload: {
@@ -23,6 +31,46 @@ export const getAll = () => async (dispatch: Function) => {
         type: "error"
       }
     })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
+export const search = (term: string) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_LOADING,
+    payload: true
+  });
+  try {
+    const { data: { data }, status } = await Person.search(term);
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_ALL,
+        payload: response
+      });
+    }
+    dispatch({
+      type: ACTIONS.SET_LOADING,
+      payload: false
+    });
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_LOADING,
+      payload: false
+    });
     return error;
   }
 };
@@ -33,14 +81,14 @@ export const create = (body: object) => async (dispatch: Function) => {
     payload: true
   });
   try {
-    const response = await Product.create(body);
+    const response = await Person.create(body);
     const { status } = response;
-    let createProductResponse: any = [];
+    let createresponse: any = [];
     if (status === 200 || status === 201) {
-      createProductResponse = response;
+      createresponse = response;
       snackBarUpdate({
         payload: {
-          message: "Product Created!",
+          message: "Person Created!",
           type: "success",
           status: true
         }
@@ -59,11 +107,16 @@ export const create = (body: object) => async (dispatch: Function) => {
         payload: false
       });
     }
-    return createProductResponse;
+    return createresponse;
   } catch (error) {
+    let message = 'General Error';
+    if (error && error.response) {
+      const { data: { message: msg } } = error.response; 
+      message = msg
+    }
     snackBarUpdate({
       payload: {
-        message: error.message,
+        message,
         type: "error",
         status: true
       }
@@ -78,12 +131,12 @@ export const create = (body: object) => async (dispatch: Function) => {
 
 export const get = (id: number) => async (dispatch: Function) => {
   try {
-    const { data, status } = await Product.get(id);
-    let productResponse = [];
+    const { data: { data }, status } = await Person.get(id);
+    let response = [];
     if (status === 200) {
-      productResponse = data;
+      response = data;
     }
-    return productResponse;
+    return response;
   } catch (error) {
     snackBarUpdate({
       payload: {
@@ -102,16 +155,16 @@ export const update = (body: object) => async (dispatch: Function) => {
     payload: true
   });
   try {
-    const { data, status } = await Product.update(body);
-    let productResponse: any = [];
+    const { data, status } = await Person.update(body);
+    let response: any = [];
     if (status === 200) {
-      productResponse = {
+      response = {
         data,
         status
       };
       snackBarUpdate({
         payload: {
-          message: "Product Updated!",
+          message: "Person Updated!",
           type: "success",
           status: true
         }
@@ -130,7 +183,7 @@ export const update = (body: object) => async (dispatch: Function) => {
         payload: false
       });
     }
-    return productResponse;
+    return response;
   } catch (error) {
     snackBarUpdate({
       payload: {
@@ -149,23 +202,23 @@ export const update = (body: object) => async (dispatch: Function) => {
 
 export const remove = (id: number) => async (dispatch: Function) => {
   try {
-    const { data, status } = await Product.remove(id);
-    let productResponse: any = [];
+    const { data, status } = await Person.remove(id);
+    let response: any = [];
     if (status === 200) {
-      productResponse = {
+      response = {
         data,
         status
       };
       snackBarUpdate({
         payload: {
-          message: "Product Removed!",
+          message: "Person Removed!",
           type: "success",
           status: true
         }
       })(dispatch);
       dispatch(getAll());
     }
-    return productResponse;
+    return response;
   } catch (error) {
     snackBarUpdate({
       payload: {

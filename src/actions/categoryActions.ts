@@ -1,4 +1,4 @@
-import Category from "../services/Category";
+import Category from "../api/Category";
 import snackBarUpdate from '../actions/snackBarActions';
 import { updateModal } from '../actions/modalActions';
 import { ACTIONS } from '../interfaces/actionTypes/categoryTypes';

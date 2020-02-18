@@ -20,4 +20,4 @@ export const ACTIONS = {
   }
   
   
-  export type CategoryActionTypes = GetCategory | GetAllCategories | SetLoadng
+  export type ActionTypes = GetCategory | GetAllCategories | SetLoadng

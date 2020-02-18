@@ -67,7 +67,6 @@ export default function Modal() {
               }`}
           >
             <div className={classes.root}>
-              <CircularProgress />
               <CircularProgress color="secondary" />
             </div>
           </Grid>

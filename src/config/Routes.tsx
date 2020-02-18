@@ -15,15 +15,20 @@ import SnackBar from "../components/SnackBar";
 import Login from "../containers/login";
 import SecureStorage from "./SecureStorage";
 import Category from "../containers/category";
-import { checkUser } from "../actions/loginActions"
+import { checkLogin } from "../actions/loginActions"
+import Bank from "../containers/bank";
+import Country from "../containers/Country";
+import Sport from "../containers/Sport";
+import Profession from "../containers/Profession";
+import Person from "../containers/person";
 
 export default function Routes() {
-  
+
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(checkUser())
+    dispatch(checkLogin())
   }, [dispatch])
-  
+
   return (
     <Router>
       <MainLayout>
@@ -47,6 +52,31 @@ export default function Routes() {
                         path="/dashboard/category"
                         exact
                         component={Category}
+                      />
+                      <Route
+                        path="/dashboard/banco"
+                        exact
+                        component={Bank}
+                      />
+                      <Route
+                        path="/dashboard/pais"
+                        exact
+                        component={Country}
+                      />
+                      <Route
+                        path="/dashboard/deporte"
+                        exact
+                        component={Sport}
+                      />
+                      <Route
+                        path="/dashboard/profesion"
+                        exact
+                        component={Profession}
+                      />
+                                            <Route
+                        path="/dashboard/socio"
+                        exact
+                        component={Person}
                       />
                     </Dashboard>
                     >

@@ -1,4 +1,4 @@
-import {  ACTIONS, CategoryActionTypes } from '../interfaces/actionTypes/categoryTypes';
+import {  ACTIONS, ActionTypes } from '../interfaces/actionTypes/categoryTypes';
 
 type CategoryInitialState = {
     categories: Array<string | number>;
@@ -10,7 +10,7 @@ const initialState: CategoryInitialState = {
     loading: false
 };
 
-const categoryReducer = (state = initialState, action: CategoryActionTypes) => {
+const categoryReducer = (state = initialState, action: ActionTypes) => {
     switch (action.type) {
         case ACTIONS.GET_ALL:
             return {
