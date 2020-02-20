@@ -5,12 +5,10 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux'
 
 import CustomTextField from "../FormElements/CustomTextField";
-import CustomSelect from "../FormElements/CustomSelect";
-import { get, update, create } from "../../actions/productActions";
-import { getAll as getAllCategories } from "../../actions/categoryActions";
+import { update, create, get } from "../../actions/genderActions";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -48,15 +46,13 @@ const useStyles = makeStyles(theme => ({
 
 type FormData = {
   description: string;
-  price: string;
-  categories_id: number;
 };
 
-type ProductFormProps = {
-  id: number;
+type FormComponentProps = {
+  id?: number;
 };
 
-const ProductForm: FunctionComponent<ProductFormProps> = ({ id }) => {
+const GenderForm: FunctionComponent<FormComponentProps> = ({ id }) => {
   const classes = useStyles();
   const {
     handleSubmit,
@@ -65,20 +61,15 @@ const ProductForm: FunctionComponent<ProductFormProps> = ({ id }) => {
     reset,
     setValue
   } = useForm<FormData>();
-  const loading = useSelector((state: any) => state.productReducer.loading);
-  const categories = useSelector((state: any) => state.categoryReducer.categories);
+  const loading = useSelector((state: any) => state.genderReducer.loading);
   const dispatch = useDispatch();
 
 
   useEffect(() => {
     async function fetch() {
-      await dispatch(getAllCategories());
       if (id) {
         const response: any = await dispatch(get(id));
-        const { description, price, categories_id } = response;
-        setValue("description", description);
-        setValue("price", price);
-        setValue("categories_id", categories_id);
+        setValue("description", response.description);
       }
     }
     fetch();
@@ -90,7 +81,7 @@ const ProductForm: FunctionComponent<ProductFormProps> = ({ id }) => {
     };
   }, [reset]);
 
-  const handleForm = (form: object) => {
+  const handleForm = (form : object) => {
     if (id) {
       dispatch(update({ id, ...form }));
     } else {
@@ -102,7 +93,7 @@ const ProductForm: FunctionComponent<ProductFormProps> = ({ id }) => {
     <Container component="main">
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Product
+          Sexo
         </Typography>
         <form
           className={classes.form}
@@ -118,31 +109,7 @@ const ProductForm: FunctionComponent<ProductFormProps> = ({ id }) => {
             errorsMessageField={
               errors.description && errors.description.message
             }
-            isEmail={false}
           />
-          <CustomTextField
-            placeholder="Price"
-            field="price"
-            required
-            register={register}
-            errorsField={errors.price}
-            errorsMessageField={errors.price && errors.price.message}
-            isEmail={false}
-          />
-
-          <CustomSelect
-            label="Category"
-            field="categories_id"
-            required
-            register={register}
-            errorsMessageField={errors.categories_id && errors.categories_id.message}
-          >
-            {categories.map((category: any) => (
-              <option key={category.id} value={category.id}>
-                {category.description}
-              </option>
-            ))}
-          </CustomSelect>
 
           <div className={classes.wrapper}>
             <Button
@@ -165,4 +132,4 @@ const ProductForm: FunctionComponent<ProductFormProps> = ({ id }) => {
   );
 }
 
-export default ProductForm;
+export default GenderForm;

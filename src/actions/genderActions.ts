@@ -1,7 +1,7 @@
-import Person from "../api/Person";
+import API from "../api/Gender";
 import snackBarUpdate from "../actions/snackBarActions";
 import { updateModal } from "../actions/modalActions";
-import { ACTIONS } from '../interfaces/actionTypes/personTypes';
+import { ACTIONS } from '../interfaces/actionTypes/genderTypes';
 
 export const getAll = () => async (dispatch: Function) => {
   dispatch({
@@ -9,7 +9,7 @@ export const getAll = () => async (dispatch: Function) => {
     payload: true
   });
   try {
-    const { data: { data }, status } = await Person.getAll();
+    const { data: { data }, status } = await API.getAll();
     let response = [];
     if (status === 200) {
       response = data;
@@ -45,7 +45,7 @@ export const search = (term: string) => async (dispatch: Function) => {
     payload: true
   });
   try {
-    const { data: { data }, status } = await Person.search(term);
+    const { data: { data }, status } = await API.search(term);
     let response = [];
     if (status === 200) {
       response = data;
@@ -81,29 +81,33 @@ export const create = (body: object) => async (dispatch: Function) => {
     payload: true
   });
   try {
-    const response = await Person.create(body);
-    const { status, data: { data } } = response;
-    let createresponse: any = [];
+    const apiResponse = await API.create(body);
+    const { status } = apiResponse;
+    let response: any = [];
     if (status === 200 || status === 201) {
-      createresponse = { ...data };
-      dispatch({
-        type: ACTIONS.SET_PERSON,
-        payload: data
-      });
+      response = apiResponse;
       snackBarUpdate({
         payload: {
-          message: "Person Created!",
+          message: "Gender Created!",
           type: "success",
           status: true
         }
       })(dispatch);
       dispatch(getAll());
+      dispatch(
+        updateModal({
+          payload: {
+            status: false,
+            element: null
+          }
+        })
+      );
       dispatch({
         type: ACTIONS.SET_LOADING,
         payload: false
       });
     }
-    return createresponse;
+    return response;
   } catch (error) {
     let message = 'General Error';
     if (error && error.response) {
@@ -126,39 +130,14 @@ export const create = (body: object) => async (dispatch: Function) => {
 };
 
 export const get = (id: number) => async (dispatch: Function) => {
-  dispatch(
-    updateModal({
-      payload: {
-        isLoader: true,
-      }
-    })
-  );
   try {
-    const { data: { data }, status } = await Person.get(id);
+    const { data: { data }, status } = await API.get(id);
     let response = [];
     if (status === 200) {
       response = data;
-      dispatch({
-        type: ACTIONS.SET_PERSON,
-        payload: data
-      });
     }
-    dispatch(
-      updateModal({
-        payload: {
-          isLoader: false,
-        }
-      })
-    );
     return response;
   } catch (error) {
-    dispatch(
-      updateModal({
-        payload: {
-          isLoader: false,
-        }
-      })
-    );
     snackBarUpdate({
       payload: {
         message: error.message,
@@ -176,7 +155,7 @@ export const update = (body: object) => async (dispatch: Function) => {
     payload: true
   });
   try {
-    const { data, status } = await Person.update(body);
+    const { data, status } = await API.update(body);
     let response: any = [];
     if (status === 200) {
       response = {
@@ -185,11 +164,19 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Person Updated!",
+          message: "Gender Updated!",
           type: "success",
           status: true
         }
       })(dispatch);
+      dispatch(
+        updateModal({
+          payload: {
+            status: false,
+            element: null
+          }
+        })
+      );
       dispatch(getAll());
       dispatch({
         type: ACTIONS.SET_LOADING,
@@ -215,7 +202,7 @@ export const update = (body: object) => async (dispatch: Function) => {
 
 export const remove = (id: number) => async (dispatch: Function) => {
   try {
-    const { data, status } = await Person.remove(id);
+    const { data, status } = await API.remove(id);
     let response: any = [];
     if (status === 200) {
       response = {
@@ -224,7 +211,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Person Removed!",
+          message: "Gender Removed!",
           type: "success",
           status: true
         }

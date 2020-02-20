@@ -3,11 +3,13 @@ import {  ACTIONS, ActionTypes } from '../interfaces/actionTypes/personTypes';
 type InitialState = {
     persons: Array<string | number>;
     loading: boolean;
+    selectedPerson: any;
 }
 
 const initialState: InitialState = {
     persons: [],
-    loading: false
+    loading: false,
+    selectedPerson: null,
 };
 
 const personReducer = (state = initialState, action: ActionTypes) => {
@@ -17,6 +19,11 @@ const personReducer = (state = initialState, action: ActionTypes) => {
                 ...state,
                 persons: action.payload,
             };
+        case ACTIONS.SET_PERSON:
+                return {
+                    ...state,
+                    selectedPerson: action.payload,
+                };
             case ACTIONS.SET_LOADING:
             return {
                 ...state,

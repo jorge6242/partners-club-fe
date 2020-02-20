@@ -1,7 +1,7 @@
 export const ACTIONS = {
-    GET_ALL: 'bank/get_all',
-    GET: 'bank/get',
-    SET_LOADING: 'bank/set_loading'
+    GET_ALL: 'gender/get_all',
+    GET: 'gender/get',
+    SET_LOADING: 'gender/set_loading'
 };
   
   interface Get {

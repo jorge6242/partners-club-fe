@@ -93,7 +93,7 @@ const BankForm: FunctionComponent<BankFormProps> = ({ id }) => {
     <Container component="main">
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Banco
+          Deporte
         </Typography>
         <form
           className={classes.form}

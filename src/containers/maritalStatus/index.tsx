@@ -4,44 +4,26 @@ import AddIcon from "@material-ui/icons/Add";
 import { useDispatch, useSelector } from 'react-redux';
 
 import './index.sass';
-import { getAll, remove, search } from "../../actions/personActions";
+import { getAll, remove, search } from "../../actions/maritalStatusActions";
 import { updateModal } from "../../actions/modalActions";
-import PersonForm from "../../components/PersonForm";
+import MaritalStatusForm from "../../components/MaritalStatusForm";
 import DataTable from '../../components/DataTable'
-import PersonColumn from '../../interfaces/PersonColumn';
+import MasterTableColumns from '../../interfaces/MasterTableColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
 
-const columns: PersonColumn[] = [
+const columns: MasterTableColumns[] = [
   { id: "id", label: "Id", minWidth: 170 },
   {
-    id: "name",
-    label: "Nombre",
-    minWidth: 170,
-    align: "right"
-  },
-  {
-    id: "last_name",
-    label: "Apellido",
-    minWidth: 170,
-    align: "right"
-  },
-  {
-    id: "primary_email",
-    label: "Correo Primario",
-    minWidth: 170,
-    align: "right"
-  },
-  {
-    id: "rif_ci",
-    label: "RIF/CI",
+    id: "description",
+    label: "Description",
     minWidth: 170,
     align: "right"
   },
 ];
 
-export default function Bank() {
+export default function MaritalStatus() {
   const dispatch = useDispatch();
-  const { persons, loading } = useSelector((state: any) => state.personReducer);
+  const { list, loading } = useSelector((state: any) => state.maritalStatusReducer);
   useEffect(() => {
     async function fetchData() {
       dispatch(getAll());
@@ -54,8 +36,7 @@ export default function Bank() {
       updateModal({
         payload: {
           status: true,
-          element: <PersonForm id={id} />,
-          customSize: 'large'
+          element: <MaritalStatusForm id={id} />
         }
       })
     );
@@ -66,8 +47,7 @@ export default function Bank() {
       updateModal({
         payload: {
           status: true,
-          element: <PersonForm />,
-          customSize: 'large'
+          element: <MaritalStatusForm />
         }
       })
     );
@@ -86,21 +66,21 @@ export default function Bank() {
   }
 
   return (
-    <div className="person-container">
-      <div className="person-container__header">
-        <div className="person-container__title">Socio</div>
-        <div className="person-container__button" onClick={() => handleCreate()}>
+    <div className="marital-status-container">
+      <div className="marital-status-container__header">
+        <div className="marital-status-container__title">Estado Civil</div>
+        <div className="marital-status-container__button" onClick={() => handleCreate()}>
           <Fab size="small" color="primary" aria-label="add">
             <AddIcon />
           </Fab>
         </div>
       </div>
-      <div className="person-container__search">
+      <div className="marital-status-container__search">
         <CustomSearch handleSearch={handleSearch} />
       </div>
       <div>
         <DataTable
-          data={persons}
+          data={list}
           columns={columns}
           handleEdit={handleEdit}
           isDelete

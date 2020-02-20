@@ -10,18 +10,18 @@ const emailPattern = {
 type CustomTextFieldProps = {
   placeholder: string;
   field: string;
-  required: boolean;
+  required?: boolean;
   register: Function;
   errorsField: any;
   errorsMessageField: any;
-  isEmail: boolean;
+  isEmail?: boolean;
   type?: string;
 };
 
 const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
   placeholder,
   field,
-  required,
+  required = false,
   register,
   errorsField,
   errorsMessageField,
@@ -29,6 +29,8 @@ const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
   type = 'text'
 }) => (
   <TextField
+    label={placeholder}
+    size="small"
     margin="dense"
     fullWidth
     autoFocus
@@ -39,6 +41,9 @@ const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
       required: required ? "Required" : false,
       pattern: isEmail ? emailPattern : null
     })}
+    InputLabelProps={{
+      shrink: true,
+    }}
     required={errorsField ? true : false}
     error={errorsField ? true : false}
     helperText={errorsField && errorsMessageField}

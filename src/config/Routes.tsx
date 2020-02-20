@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import {
-  BrowserRouter as Router,
+  HashRouter,
   Route,
   Switch,
   Redirect,
@@ -21,6 +21,9 @@ import Country from "../containers/Country";
 import Sport from "../containers/Sport";
 import Profession from "../containers/Profession";
 import Person from "../containers/person";
+import MaritalStatus from "../containers/maritalStatus";
+import StatusPerson from "../containers/statusPerson";
+import Gender from "../containers/gender";
 
 export default function Routes() {
 
@@ -30,7 +33,7 @@ export default function Routes() {
   }, [dispatch])
 
   return (
-    <Router>
+    <HashRouter>
       <MainLayout>
         <Switch>
           <Route path="/" exact component={Login} />
@@ -73,13 +76,27 @@ export default function Routes() {
                         exact
                         component={Profession}
                       />
-                                            <Route
+                      <Route
                         path="/dashboard/socio"
                         exact
                         component={Person}
                       />
+                      <Route
+                        path="/dashboard/estado-civil"
+                        exact
+                        component={MaritalStatus}
+                      />
+                      <Route
+                        path="/dashboard/status-persona"
+                        exact
+                        component={StatusPerson}
+                      />
+                      <Route
+                        path="/dashboard/sexo"
+                        exact
+                        component={Gender}
+                      />
                     </Dashboard>
-                    >
                   </Switch>
                 );
               }
@@ -90,6 +107,6 @@ export default function Routes() {
         <Modal />
         <SnackBar />
       </MainLayout>
-    </Router>
+    </HashRouter>
   );
 }

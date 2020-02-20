@@ -4,30 +4,36 @@ import './index.sass';
 
 type CustomSelectProps = {
   field: string;
-  required: boolean;
+  required?: boolean;
   register: Function;
   errorsMessageField: any;
-  children: ChildNode;
+  selectionMessage?: string;
+  label: string;
 };
 
 const CustomSelect: FunctionComponent<CustomSelectProps> = ({
   field,
-  required,
+  required = false,
   register,
   errorsMessageField,
-  children
+  children,
+  selectionMessage = 'Seleccione',
+  label
 }) => (
-    <div className="custom-select-container">
+    <div>
+      <div>{label}</div>
+      <div className="custom-select-container">
       <select
         ref={register({
           required: required ? "Required" : false
         })}
         name={field}
       >
-        <option value="">Select option</option>
+        <option value="">{selectionMessage}</option>
         {children}
       </select>
       <div className="custom-select-container__message">{errorsMessageField}</div>
+    </div>
     </div>
   );
 

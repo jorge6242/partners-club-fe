@@ -25,9 +25,15 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
+      justifyContent: 'center',
       '& > * + *': {
         marginLeft: theme.spacing(2),
       },
+    },
+    progress: {
+      margin: theme.spacing(2),
+      position: 'relative',
+      top: '45%',
     },
   }),
 );
@@ -44,7 +50,7 @@ export default function Modal() {
         <Grid
           container
           spacing={0}
-          className={`modal-main__content ${customSize}`}
+          className={`modal-main__content modal-main__content--${customSize}`}
         >
           <Grid container spacing={0} className="modal-main_header">
             <Grid item xs={4} className="modal-main_title">
@@ -54,7 +60,7 @@ export default function Modal() {
               item
               xs={7}
               className="modal-main_close"
-              onClick={() => dispatch(updateModal({ payload: { status: false, element: <div /> } }))}
+              onClick={() => dispatch(updateModal({ payload: { status: false, element: <div />, customSize: '' } }))}
             >
               X
             </Grid>
@@ -66,9 +72,7 @@ export default function Modal() {
               isLoader ? "modal-main__active" : ""
               }`}
           >
-            <div className={classes.root}>
-              <CircularProgress color="secondary" />
-            </div>
+              <CircularProgress className={classes.progress} color="primary" />
           </Grid>
           <Grid container spacing={0} className="modal-main__children">
             {element}

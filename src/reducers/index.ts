@@ -12,6 +12,9 @@ import countryReducer from './countryReducer';
 import sportReducer from './sportReducer';
 import professionReducer from './professionReducer';
 import personReducer from './personReducer';
+import maritalStatusReducer from './maritalStatusReducer';
+import statusPersonReducer from './statusPersonReducer';
+import genderReducer from './genderReducer';
 
 const rootReducer = combineReducers({
   modalReducer,
@@ -23,7 +26,10 @@ const rootReducer = combineReducers({
   countryReducer,
   sportReducer,
   professionReducer,
-  personReducer
+  personReducer,
+  maritalStatusReducer,
+  statusPersonReducer,
+  genderReducer
 });
 
 export default rootReducer;
