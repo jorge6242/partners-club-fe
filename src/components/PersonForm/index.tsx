@@ -27,6 +27,8 @@ import { getAll as getStatusPersonAll } from "../../actions/statusPersonActions"
 import { getAll as getMaritalStatusAll } from "../../actions/maritalStatusActions";
 import { getAll as getGenderAll } from "../../actions/genderActions";
 import { getAll as getCountries } from "../../actions/countryActions";
+import { getAll as getProfessions } from "../../actions/professionActions";
+import TransferList from "../TransferList";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -131,10 +133,12 @@ type FormData = {
   fax: string;
   city: string;
   state: string;
+  type_person: number;
   postal_code: string;
   status_person_id: number;
   marital_statuses_id: number;
   countries_id: number;
+  profession_list: any;
 };
 
 type PersonFormProps = {
@@ -146,10 +150,11 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const [tempPersonId, setTempPersonId] = useState(0);
-  const [expanded, setExpanded] = React.useState<string | false>('panel1');
+  const [expanded, setExpanded] = React.useState<string | false>("panel1");
   const [image, setImage] = useState({ preview: "", raw: "" });
   const [imageField, setImageField] = useState();
   const [value, setTab] = useState(0);
+  const [selectedProff, setSelectedProff] = useState<any>(null);
   const {
     handleSubmit,
     register,
@@ -158,7 +163,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     setValue,
     getValues
   } = useForm<FormData>();
-  const { picture } = getValues();
+  const { picture, profession_list: selectedProfessions } = getValues();
   const loading = useSelector((state: any) => state.personReducer.loading);
   const { list: statusPersonList } = useSelector(
     (state: any) => state.statusPersonReducer
@@ -168,6 +173,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   );
   const { countries } = useSelector((state: any) => state.countryReducer);
   const { list: genderList } = useSelector((state: any) => state.genderReducer);
+  const { professions: professionList } = useSelector((state: any) => state.professionReducer);
   const disableTabs = tempPersonId > 0 ? false : true;
 
   const handleChange = (event: React.ChangeEvent<{}>, tabValue: number) => {
@@ -178,7 +184,10 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     setTab(index);
   };
 
-  const handleExpandedPanel = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
+  const handleExpandedPanel = (panel: string) => (
+    event: React.ChangeEvent<{}>,
+    isExpanded: boolean
+  ) => {
     setExpanded(isExpanded ? panel : false);
   };
 
@@ -188,6 +197,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     dispatch(getGenderAll());
     dispatch(getCountries());
     async function fetch() {
+      dispatch(getProfessions());
       if (id) {
         const response: any = await dispatch(get(id));
         const {
@@ -212,10 +222,12 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
           fax,
           city,
           state,
+          type_person,
           postal_code,
           status_person_id,
           marital_statuses_id,
-          countries_id
+          countries_id,
+          professions,
         } = response;
         setValue("name", name);
         setValue("last_name", last_name);
@@ -239,9 +251,18 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
         setValue("city", city);
         setValue("state", state);
         setValue("postal_code", postal_code);
+        setValue("type_person", type_person);
         setValue("status_person_id", status_person_id);
         setValue("marital_statuses_id", marital_statuses_id);
         setValue("countries_id", countries_id);
+        console.log('professions ', professions);
+        if(professions) {
+          const list = professions.map((element: any) => element.id);
+          setValue("profession_list", JSON.stringify(list));
+          setSelectedProff(professions)
+        } else {
+          setSelectedProff([])
+        }
         setTempPersonId(id);
       }
     }
@@ -286,15 +307,33 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     });
     const reader: any = new FileReader();
     reader.onload = () => {
-      console.log("reader.result ", reader.result);
       setValue("picture", reader.result);
     };
     reader.readAsDataURL(e.target.files[0]);
   };
 
+  const onProfessionsChange = (event: any) => {
+    setValue("profession_list",JSON.stringify(event));
+  }
+    
+
   const renderMainData = () => {
     return (
       <Grid container spacing={2}>
+        <Grid item xs={3}>
+          <CustomSelect
+            label="Tipo"
+            selectionMessage="Seleccione Tipo"
+            field="type_person"
+            register={register}
+            errorsMessageField={
+              errors.type_person && errors.type_person.message
+            }
+          >
+            <option value={1}> Natural </option>
+            <option value={2}> Empresa </option>
+          </CustomSelect>
+        </Grid>
         <Grid item xs={3}>
           <CustomSelect
             label="Estatus"
@@ -474,9 +513,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             field="state"
             register={register}
             errorsField={errors.state}
-            errorsMessageField={
-              errors.state && errors.state.message
-            }
+            errorsMessageField={errors.state && errors.state.message}
           />
         </Grid>
         <Grid item xs={3}>
@@ -485,9 +522,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             field="city"
             register={register}
             errorsField={errors.city}
-            errorsMessageField={
-              errors.city && errors.city.message
-            }
+            errorsMessageField={errors.city && errors.city.message}
           />
         </Grid>
         <Grid item xs={3}>
@@ -508,7 +543,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   const renderContactsData = () => {
     return (
       <Grid container spacing={2}>
-<Grid item xs={3}>
+        <Grid item xs={3}>
           <CustomTextField
             placeholder="Correo Primario"
             field="primary_email"
@@ -583,11 +618,12 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
           />
         </Grid>
       </Grid>
-    )
-  }
+    );
+  };
 
   let imagePreview = picture;
   if (image.preview) imagePreview = image.preview;
+  console.log('selectedProff ', selectedProff);
   return (
     <Container component="main" className={classes.formContainer}>
       <div className={classes.paper}>
@@ -614,7 +650,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
               <input
                 style={{ display: "none" }}
                 name="picture"
-                onChange={loadImage}
                 ref={register}
               />
             </Grid>
@@ -646,7 +681,10 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                   >
                     <TabPanel value={value} index={0} dir={theme.direction}>
                       <div className={classes.root}>
-                        <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleExpandedPanel('panel1')}>
+                        <ExpansionPanel
+                          expanded={expanded === "panel1"}
+                          onChange={handleExpandedPanel("panel1")}
+                        >
                           <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
@@ -661,7 +699,11 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                           </ExpansionPanelDetails>
                         </ExpansionPanel>
 
-                        <ExpansionPanel  disabled={disableTabs} expanded={expanded === 'panel2'} onChange={handleExpandedPanel('panel2')}>
+                        <ExpansionPanel
+                          disabled={disableTabs}
+                          expanded={expanded === "panel2"}
+                          onChange={handleExpandedPanel("panel2")}
+                        >
                           <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
@@ -676,7 +718,11 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                           </ExpansionPanelDetails>
                         </ExpansionPanel>
 
-                        <ExpansionPanel disabled={disableTabs} expanded={expanded === 'panel3'} onChange={handleExpandedPanel('panel3')}>
+                        <ExpansionPanel
+                          disabled={disableTabs}
+                          expanded={expanded === "panel3"}
+                          onChange={handleExpandedPanel("panel3")}
+                        >
                           <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
@@ -691,7 +737,11 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                           </ExpansionPanelDetails>
                         </ExpansionPanel>
 
-                        <ExpansionPanel disabled={disableTabs} expanded={expanded === 'panel4'} onChange={handleExpandedPanel('panel4')}>
+                        <ExpansionPanel
+                          disabled={disableTabs}
+                          expanded={expanded === "panel4"}
+                          onChange={handleExpandedPanel("panel4")}
+                        >
                           <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
@@ -702,11 +752,27 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                             </Typography>
                           </ExpansionPanelSummary>
                           <ExpansionPanelDetails>
-                            campos de trabajo
+                            {professionList.length > 0 && selectedProff && (
+                              <TransferList
+                                data={professionList}
+                                selectedData={selectedProff}
+                                leftTitle="Profesiones"
+                                onSelectedList={onProfessionsChange}
+                              />
+                            )}
+                            <input
+                              style={{ display: "none" }}
+                              name="profession_list"
+                              ref={register}
+                            />
                           </ExpansionPanelDetails>
                         </ExpansionPanel>
 
-                        <ExpansionPanel disabled={disableTabs} expanded={expanded === 'panel5'} onChange={handleExpandedPanel('panel5')}>
+                        <ExpansionPanel
+                          disabled={disableTabs}
+                          expanded={expanded === "panel5"}
+                          onChange={handleExpandedPanel("panel5")}
+                        >
                           <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
