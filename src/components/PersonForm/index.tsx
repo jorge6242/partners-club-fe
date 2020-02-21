@@ -661,7 +661,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                           </ExpansionPanelDetails>
                         </ExpansionPanel>
 
-                        <ExpansionPanel  expanded={expanded === 'panel2'} onChange={handleExpandedPanel('panel2')}>
+                        <ExpansionPanel  disabled={disableTabs} expanded={expanded === 'panel2'} onChange={handleExpandedPanel('panel2')}>
                           <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
@@ -676,7 +676,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                           </ExpansionPanelDetails>
                         </ExpansionPanel>
 
-                        <ExpansionPanel expanded={expanded === 'panel3'} onChange={handleExpandedPanel('panel3')}>
+                        <ExpansionPanel disabled={disableTabs} expanded={expanded === 'panel3'} onChange={handleExpandedPanel('panel3')}>
                           <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
@@ -691,7 +691,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                           </ExpansionPanelDetails>
                         </ExpansionPanel>
 
-                        <ExpansionPanel expanded={expanded === 'panel4'} onChange={handleExpandedPanel('panel4')}>
+                        <ExpansionPanel disabled={disableTabs} expanded={expanded === 'panel4'} onChange={handleExpandedPanel('panel4')}>
                           <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
@@ -706,7 +706,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                           </ExpansionPanelDetails>
                         </ExpansionPanel>
 
-                        <ExpansionPanel expanded={expanded === 'panel5'} onChange={handleExpandedPanel('panel5')}>
+                        <ExpansionPanel disabled={disableTabs} expanded={expanded === 'panel5'} onChange={handleExpandedPanel('panel5')}>
                           <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
