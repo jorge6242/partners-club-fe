@@ -108,6 +108,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   heading: {
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular
+  },
+  swipeableViewsContainer: {
+    height: '300px',
   }
 }));
 
@@ -678,6 +681,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                     axis={theme.direction === "rtl" ? "x-reverse" : "x"}
                     index={value}
                     onChangeIndex={handleChangeIndex}
+                    className={classes.swipeableViewsContainer}
                   >
                     <TabPanel value={value} index={0} dir={theme.direction}>
                       <div className={classes.root}>
