@@ -14,8 +14,9 @@ import _ from "lodash";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      margin: "auto"
+    transferListroot: {
+      margin: "auto",
+      justifyContent: 'flex-start',
     },
     cardHeader: {
       padding: theme.spacing(1, 2)
@@ -63,8 +64,6 @@ const TransferList: FunctionComponent<TransferListProps> = ({
   const [right, setRight] = React.useState<number[]>(selectedData);
 
   useEffect(() => {
-    console.log('data ', data)
-    console.log('selectedData ', selectedData)
     if (data.length > 0 && selectedData.length > 0) {
       const newArray: any = [];
       data.forEach((element: any) => {
@@ -132,6 +131,7 @@ const TransferList: FunctionComponent<TransferListProps> = ({
         className={classes.cardHeader}
         avatar={
           <Checkbox
+            color="primary"
             onClick={handleToggleAll(items)}
             checked={
               numberOfChecked(items) === items.length && items.length !== 0
@@ -160,6 +160,7 @@ const TransferList: FunctionComponent<TransferListProps> = ({
             >
               <ListItemIcon>
                 <Checkbox
+                  color="primary"
                   checked={checked.indexOf(value) !== -1}
                   tabIndex={-1}
                   disableRipple
@@ -181,7 +182,7 @@ const TransferList: FunctionComponent<TransferListProps> = ({
       spacing={2}
       justify="center"
       alignItems="center"
-      className={classes.root}
+      className={classes.transferListroot}
     >
       <Grid item>{customList(leftTitle, newLefArray)}</Grid>
       <Grid item>

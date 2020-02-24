@@ -29,6 +29,7 @@ import { getAll as getGenderAll } from "../../actions/genderActions";
 import { getAll as getCountries } from "../../actions/countryActions";
 import { getAll as getProfessions } from "../../actions/professionActions";
 import TransferList from "../TransferList";
+import Autocomplete from "../AutoComplete";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -149,15 +150,17 @@ type PersonFormProps = {
 };
 
 const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
-  const classes = useStyles();
-  const theme = useTheme();
-  const dispatch = useDispatch();
+
+  /* States */
   const [tempPersonId, setTempPersonId] = useState(0);
   const [expanded, setExpanded] = React.useState<string | false>("panel1");
   const [image, setImage] = useState({ preview: "", raw: "" });
   const [imageField, setImageField] = useState();
   const [value, setTab] = useState(0);
   const [selectedProff, setSelectedProff] = useState<any>(null);
+
+  /* Form */
+
   const {
     handleSubmit,
     register,
@@ -167,6 +170,9 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     getValues
   } = useForm<FormData>();
   const { picture, profession_list: selectedProfessions } = getValues();
+
+  /* Redux */
+  const dispatch = useDispatch();
   const loading = useSelector((state: any) => state.personReducer.loading);
   const { list: statusPersonList } = useSelector(
     (state: any) => state.statusPersonReducer
@@ -176,8 +182,13 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   );
   const { countries } = useSelector((state: any) => state.countryReducer);
   const { list: genderList } = useSelector((state: any) => state.genderReducer);
-  const { professions: professionList } = useSelector((state: any) => state.professionReducer);
+  const { professions: professionList, } = useSelector((state: any) => state.professionReducer);
   const disableTabs = tempPersonId > 0 ? false : true;
+
+  /* Styles */
+
+  const classes = useStyles();
+  const theme = useTheme();
 
   const handleChange = (event: React.ChangeEvent<{}>, tabValue: number) => {
     setTab(tabValue);
@@ -258,8 +269,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
         setValue("status_person_id", status_person_id);
         setValue("marital_statuses_id", marital_statuses_id);
         setValue("countries_id", countries_id);
-        console.log('professions ', professions);
-        if(professions) {
+        if (professions) {
           const list = professions.map((element: any) => element.id);
           setValue("profession_list", JSON.stringify(list));
           setSelectedProff(professions)
@@ -279,7 +289,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   }, [reset]);
 
   const handleForm = async (form: object) => {
-    console.log("form ", form);
     if (tempPersonId > 0) {
       dispatch(update({ id: tempPersonId, ...form }));
     } else {
@@ -316,9 +325,9 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   };
 
   const onProfessionsChange = (event: any) => {
-    setValue("profession_list",JSON.stringify(event));
+    setValue("profession_list", JSON.stringify(event));
   }
-    
+
 
   const renderMainData = () => {
     return (
@@ -626,7 +635,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
 
   let imagePreview = picture;
   if (image.preview) imagePreview = image.preview;
-  console.log('selectedProff ', selectedProff);
   return (
     <Container component="main" className={classes.formContainer}>
       <div className={classes.paper}>
@@ -756,19 +764,24 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                             </Typography>
                           </ExpansionPanelSummary>
                           <ExpansionPanelDetails>
-                            {professionList.length > 0 && selectedProff && (
-                              <TransferList
-                                data={professionList}
-                                selectedData={selectedProff}
-                                leftTitle="Profesiones"
-                                onSelectedList={onProfessionsChange}
-                              />
-                            )}
-                            <input
-                              style={{ display: "none" }}
-                              name="profession_list"
-                              ref={register}
-                            />
+                            <Grid container spacing={3}>
+                              <Grid item xs={12}> <Autocomplete /> </Grid>
+                              <Grid item xs={12} justify="flex-start"> {professionList.length > 0 && selectedProff && (
+                                <TransferList
+                                  data={professionList}
+                                  selectedData={selectedProff}
+                                  leftTitle="Profesiones"
+                                  onSelectedList={onProfessionsChange}
+                                />
+                              )}
+                                <input
+                                  style={{ display: "none" }}
+                                  name="profession_list"
+                                  ref={register}
+                                /> </Grid>
+                            </Grid>
+
+
                           </ExpansionPanelDetails>
                         </ExpansionPanel>
 
