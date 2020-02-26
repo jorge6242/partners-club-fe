@@ -1,7 +1,8 @@
 export const ACTIONS = {
     GET_ALL: 'bank/get_all',
     GET: 'bank/get',
-    SET_LOADING: 'bank/set_loading'
+    SET_LOADING: 'bank/set_loading',
+    SET_PAGINATION: 'bank/set_pagination',
 };
   
   interface Get {
@@ -18,6 +19,11 @@ export const ACTIONS = {
     type: typeof ACTIONS.SET_LOADING
     payload: boolean
   }
+
+  interface SetPagination {
+    type: typeof ACTIONS.SET_PAGINATION
+    payload: Array<string|number>
+  }
   
   
-  export type ActionTypes = Get | GetAll | SetLoading
+  export type ActionTypes = Get | GetAll | SetLoading | SetPagination

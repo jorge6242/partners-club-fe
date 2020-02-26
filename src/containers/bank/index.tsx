@@ -7,7 +7,7 @@ import './index.sass';
 import { getAll, remove, search } from "../../actions/bankActions";
 import { updateModal } from "../../actions/modalActions";
 import BankForm from "../../components/BankForm";
-import DataTable from '../../components/DataTable'
+import DataTable1 from '../../components/DataTable1'
 import MasterTableColumns from '../../interfaces/MasterTableColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
 
@@ -23,7 +23,7 @@ const columns: MasterTableColumns[] = [
 
 export default function Bank() {
   const dispatch = useDispatch();
-  const { banks, loading } = useSelector((state: any) => state.bankReducer);
+  const { banks, loading, pagination } = useSelector((state: any) => state.bankReducer);
   useEffect(() => {
     async function fetchData() {
       dispatch(getAll());
@@ -65,6 +65,15 @@ export default function Bank() {
     }
   }
 
+  const handleChangePage = (newPage: number) => {
+    const page = pagination.currentPage === 1 ? 2 : newPage;
+    dispatch(getAll(page, pagination.perPage))
+  };
+
+  const handlePerPage = (page: number, perPage: number) => {
+    dispatch(getAll(page, perPage))
+  }
+
   return (
     <div className="bank-container">
       <div className="bank-container__header">
@@ -79,13 +88,16 @@ export default function Bank() {
         <CustomSearch handleSearch={handleSearch} />
       </div>
       <div>
-        <DataTable
-          data={banks}
+        <DataTable1
+          rows={banks}
+          pagination={pagination}
           columns={columns}
           handleEdit={handleEdit}
           isDelete
           handleDelete={handleDelete}
           loading={loading}
+          onChangePage={handleChangePage}
+          onChangePerPage={handlePerPage}
         />
       </div>
     </div>

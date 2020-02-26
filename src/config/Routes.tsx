@@ -3,7 +3,7 @@ import {
   HashRouter,
   Route,
   Switch,
-  Redirect,
+  Redirect
 } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 
@@ -15,7 +15,7 @@ import SnackBar from "../components/SnackBar";
 import Login from "../containers/login";
 import SecureStorage from "./SecureStorage";
 import Category from "../containers/category";
-import { checkLogin } from "../actions/loginActions"
+import { checkLogin, setupInterceptors } from "../actions/loginActions"
 import Bank from "../containers/bank";
 import Country from "../containers/Country";
 import Sport from "../containers/Sport";
@@ -26,11 +26,17 @@ import StatusPerson from "../containers/statusPerson";
 import Gender from "../containers/gender";
 
 export default function Routes() {
-
   const dispatch = useDispatch()
+  const token = SecureStorage.getItem('token');
+
   useEffect(() => {
     dispatch(checkLogin())
-  }, [dispatch])
+  }, [dispatch, token])
+
+  useEffect(() => {
+    setupInterceptors()
+  }, [token])
+
 
   return (
     <HashRouter>

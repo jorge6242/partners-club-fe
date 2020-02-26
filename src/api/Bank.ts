@@ -3,8 +3,15 @@ import headers from "../helpers/headers";
 import Prefix from "../config/ApiPrefix";
 
 const Bank = {
-  getAll() {
-    return AXIOS.get(`${Prefix.api}/bank`, { headers: headers() });
+  getAll(data: number, perPage: number) {
+    const page = data ? data : 1;
+    return AXIOS.get(`${Prefix.api}/bank`, {
+      params: {
+        page,
+        perPage
+      },
+      headers: headers()
+    });
   },
   create(data: any) {
     return AXIOS.post(
@@ -31,7 +38,9 @@ const Bank = {
     return AXIOS.delete(`${Prefix.api}/bank/${id}`, { headers: headers() });
   },
   search(term: string) {
-    return AXIOS.get(`${Prefix.api}/bank-search?term=${term}`, { headers: headers() });
+    return AXIOS.get(`${Prefix.api}/bank-search?term=${term}`, {
+      headers: headers()
+    });
   }
 };
 

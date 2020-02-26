@@ -3,11 +3,18 @@ import {  ACTIONS, ActionTypes } from '../interfaces/actionTypes/bankTypes';
 type BanksInitialState = {
     banks: Array<string | number>;
     loading: boolean;
+    pagination: any;
 }
 
 const initialState: BanksInitialState = {
     banks: [],
-    loading: false
+    loading: false,
+    pagination: {
+        total: 0,
+        perPage: 0,
+        prevPageUrl: null,
+        currentPage: 0,
+    },
 };
 
 const bankReducer = (state = initialState, action: ActionTypes) => {
@@ -17,6 +24,11 @@ const bankReducer = (state = initialState, action: ActionTypes) => {
                 ...state,
                 banks: action.payload,
             };
+            case ACTIONS.SET_PAGINATION:
+                return {
+                    ...state,
+                    pagination: action.payload,
+                };
             case ACTIONS.SET_LOADING:
             return {
                 ...state,

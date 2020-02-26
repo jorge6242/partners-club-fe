@@ -1,4 +1,5 @@
 import Auth from '../api/Auth';
+import AXIOS from '../config/Axios'
 import SecureStorage from '../config/SecureStorage'
 import snackBarUpdate from '../actions/snackBarActions';
 import { ACTIONS } from '../interfaces/actionTypes/loginTypes';
@@ -59,3 +60,23 @@ export const checkLogin = () => async (dispatch: Function) => {
         return error;
     }
 };
+
+export function setupInterceptors() {
+      AXIOS.interceptors.response.use(
+        response => {
+            console.log('response ', response);
+          return response;
+        },
+        error => {
+        console.log('error.response ', error.response);
+        let data: any = { code: 500 };
+        if (error.response && error.response.status === 401) {;
+            if(window.location.pathname !== '/' && error.response.data.message === "Unauthenticated."){
+                console.log('error.response.data.message ', error.response.data.message);
+            }
+          }
+          return Promise.reject(error);
+        },
+      );
+  }
+  

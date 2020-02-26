@@ -9,6 +9,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { TablePagination } from "@material-ui/core";
 
 const useStyles = makeStyles({
   root: {
@@ -25,23 +26,38 @@ const useStyles = makeStyles({
 });
 
 interface DataTableProps {
-  data: any;
+  rows: any;
+  pagination?: any;
   columns: any;
   isDelete?: boolean;
   handleEdit: Function;
   handleDelete?: any;
   loading?: boolean;
+  onChangePage: any;
+  onChangePerPage: any;
 }
 
-const DataTable: FunctionComponent<DataTableProps> = ({
-  data,
+const DataTable1: FunctionComponent<DataTableProps> = ({
+  rows = [],
+  pagination,
   columns,
   isDelete = true,
   handleEdit,
   handleDelete,
-  loading
+  loading,
+  onChangePage,
+  onChangePerPage
 }) => {
   const classes = useStyles();
+
+  const handlePage = (event: unknown, newPage: number) => {
+    const page = pagination.currentPage === 1 ? 2 : newPage;
+    onChangePage(page);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onChangePerPage(pagination.currentPage, event.target.value)
+  };
 
   return (
     <Paper className={classes.root}>
@@ -66,7 +82,7 @@ const DataTable: FunctionComponent<DataTableProps> = ({
             {
               loading ? (<TableRow className={classes.progress}><CircularProgress color="primary" /></TableRow>)
                 :
-                data.map((row: any) => {
+                rows.map((row: any) => {
                   return (
                     <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                       {columns.map((column: any) => {
@@ -106,8 +122,18 @@ const DataTable: FunctionComponent<DataTableProps> = ({
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+          labelRowsPerPage="Filas"
+          rowsPerPageOptions={[5 ,10, 20, 30, 40]}
+          component="div"
+          count={pagination.total}
+          rowsPerPage={pagination.perPage}
+          page={pagination.prevPageUrl === null ? 0 : pagination.currentPage}
+          onChangePage={handlePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
     </Paper>
   );
 };
 
-export default DataTable;
+export default DataTable1;
