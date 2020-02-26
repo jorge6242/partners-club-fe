@@ -1,37 +1,28 @@
-import Bank from "../api/Bank";
+import API from "../api/Permission";
 import snackBarUpdate from "../actions/snackBarActions";
 import { updateModal } from "../actions/modalActions";
-import { ACTIONS } from '../interfaces/actionTypes/bankTypes';
+import { ACTIONS } from '../interfaces/actionTypes/PermissionTypes';
 
-export const getAll = (page: number = 1, perPage: number = 5) => async (dispatch: Function) => {
+export const getAll = () => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,
     payload: true
   });
   try {
-    const { data: { data }, status } = await Bank.getAll(page, perPage);
+    const { data: { data }, status } = await API.getAll();
     let response = [];
     if (status === 200) {
-      const pagination = {
-        total: data.total,
-        perPage: data.per_page,
-        prevPageUrl: data.prev_page_url,
-        currentPage: data.current_page,
-      }
-      response = data.data;
+      response = data;
       dispatch({
         type: ACTIONS.GET_ALL,
         payload: response
-      });
-      dispatch({
-        type: ACTIONS.SET_PAGINATION,
-        payload: pagination
       });
       dispatch({
         type: ACTIONS.SET_LOADING,
         payload: false
       });
     }
+    console.log('response ', response)
     return response;
   } catch (error) {
     snackBarUpdate({
@@ -55,7 +46,7 @@ export const search = (term: string) => async (dispatch: Function) => {
     payload: true
   });
   try {
-    const { data: { data }, status } = await Bank.search(term);
+    const { data: { data }, status } = await API.search(term);
     let response = [];
     if (status === 200) {
       response = data;
@@ -91,14 +82,14 @@ export const create = (body: object) => async (dispatch: Function) => {
     payload: true
   });
   try {
-    const response = await Bank.create(body);
-    const { status } = response;
-    let createresponse: any = [];
+    const apiResponse = await API.create(body);
+    const { status } = apiResponse;
+    let response: any = [];
     if (status === 200 || status === 201) {
-      createresponse = response;
+      response = apiResponse;
       snackBarUpdate({
         payload: {
-          message: "Bank Created!",
+          message: "Permission Created!",
           type: "success",
           status: true
         }
@@ -117,7 +108,7 @@ export const create = (body: object) => async (dispatch: Function) => {
         payload: false
       });
     }
-    return createresponse;
+    return response;
   } catch (error) {
     let message = 'General Error';
     if (error && error.response) {
@@ -141,7 +132,7 @@ export const create = (body: object) => async (dispatch: Function) => {
 
 export const get = (id: number) => async (dispatch: Function) => {
   try {
-    const { data: { data }, status } = await Bank.get(id);
+    const { data: { data }, status } = await API.get(id);
     let response = [];
     if (status === 200) {
       response = data;
@@ -165,7 +156,7 @@ export const update = (body: object) => async (dispatch: Function) => {
     payload: true
   });
   try {
-    const { data, status } = await Bank.update(body);
+    const { data, status } = await API.update(body);
     let response: any = [];
     if (status === 200) {
       response = {
@@ -174,7 +165,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Bank Updated!",
+          message: "Permission Updated!",
           type: "success",
           status: true
         }
@@ -195,14 +186,9 @@ export const update = (body: object) => async (dispatch: Function) => {
     }
     return response;
   } catch (error) {
-    let message = 'General Error';
-    if (error && error.response) {
-      const { data: { message: msg } } = error.response; 
-      message = msg
-    }
     snackBarUpdate({
       payload: {
-        message,
+        message: error.message,
         type: "error",
         status: true
       }
@@ -217,7 +203,7 @@ export const update = (body: object) => async (dispatch: Function) => {
 
 export const remove = (id: number) => async (dispatch: Function) => {
   try {
-    const { data, status } = await Bank.remove(id);
+    const { data, status } = await API.remove(id);
     let response: any = [];
     if (status === 200) {
       response = {
@@ -226,7 +212,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Bank Removed!",
+          message: "Permission Removed!",
           type: "success",
           status: true
         }

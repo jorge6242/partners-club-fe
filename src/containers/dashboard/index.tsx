@@ -1,68 +1,73 @@
-import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
-import IconButton from '@material-ui/core/IconButton';
-import BuildIcon from '@material-ui/icons/Build';
+import React from "react";
+import AppBar from "@material-ui/core/AppBar";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Divider from "@material-ui/core/Divider";
+import Drawer from "@material-ui/core/Drawer";
+import Hidden from "@material-ui/core/Hidden";
+import IconButton from "@material-ui/core/IconButton";
+import BuildIcon from "@material-ui/icons/Build";
 import MenuIcon from "@material-ui/icons/Menu";
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
 import { useHistory } from "react-router-dom";
-import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import { useDispatch } from 'react-redux';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import {
+  makeStyles,
+  useTheme,
+  Theme,
+  createStyles
+} from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import { useDispatch } from "react-redux";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
-import { logout } from '../../actions/loginActions';
+import { logout } from "../../actions/loginActions";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      display: 'flex',
+      display: "flex"
     },
     drawer: {
-      [theme.breakpoints.up('sm')]: {
+      [theme.breakpoints.up("sm")]: {
         width: drawerWidth,
-        flexShrink: 0,
-      },
+        flexShrink: 0
+      }
     },
     appBar: {
-      [theme.breakpoints.up('sm')]: {
+      [theme.breakpoints.up("sm")]: {
         width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
-      },
+        marginLeft: drawerWidth
+      }
     },
     menuButton: {
       marginRight: theme.spacing(2),
-      [theme.breakpoints.up('sm')]: {
-        display: 'none',
-      },
+      [theme.breakpoints.up("sm")]: {
+        display: "none"
+      }
     },
     toolbar: theme.mixins.toolbar,
     drawerPaper: {
-      width: drawerWidth,
+      width: drawerWidth
     },
     content: {
       flexGrow: 1,
-      padding: theme.spacing(3),
+      padding: theme.spacing(3)
     },
     header: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      width: '100%'
+      display: "flex",
+      justifyContent: "space-between",
+      width: "100%"
     }
-  }),
+  })
 );
 
 interface ResponsiveDrawerProps {
@@ -92,7 +97,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     setAnchorEl(null);
   };
 
-  const handleLogout = () => dispatch(logout())
+  const handleLogout = () => dispatch(logout());
 
   const handleMenu = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -117,52 +122,90 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
           <ListItemIcon>
             <DoubleArrowIcon />
           </ListItemIcon>
-          <ListItemText primary={"Banco"} onClick={() => handeClick("/dashboard/banco")} />
+          <ListItemText
+            primary={"Roles"}
+            onClick={() => handeClick("/dashboard/role")}
+          />
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
             <DoubleArrowIcon />
           </ListItemIcon>
-          <ListItemText primary={"Pais"} onClick={() => handeClick("/dashboard/pais")} />
+          <ListItemText
+            primary={"Permisos"}
+            onClick={() => handeClick("/dashboard/permission")}
+          />
         </MenuItem>
-        <MenuItem >
+        <MenuItem>
           <ListItemIcon>
             <DoubleArrowIcon />
           </ListItemIcon>
-          <ListItemText primary={"Deporte"} onClick={() => handeClick("/dashboard/deporte")} />
+          <ListItemText
+            primary={"Banco"}
+            onClick={() => handeClick("/dashboard/banco")}
+          />
         </MenuItem>
-
-        <MenuItem >
+        <MenuItem>
           <ListItemIcon>
             <DoubleArrowIcon />
           </ListItemIcon>
-          <ListItemText primary={"Profesion"} onClick={() => handeClick("/dashboard/profesion")} />
+          <ListItemText
+            primary={"Pais"}
+            onClick={() => handeClick("/dashboard/pais")}
+          />
         </MenuItem>
-
-        <MenuItem >
+        <MenuItem>
           <ListItemIcon>
             <DoubleArrowIcon />
           </ListItemIcon>
-          <ListItemText primary={"Estado Civil"} onClick={() => handeClick("/dashboard/estado-civil")} />
+          <ListItemText
+            primary={"Deporte"}
+            onClick={() => handeClick("/dashboard/deporte")}
+          />
         </MenuItem>
 
-        <MenuItem >
+        <MenuItem>
           <ListItemIcon>
             <DoubleArrowIcon />
           </ListItemIcon>
-          <ListItemText primary={"Estatus"} onClick={() => handeClick("/dashboard/status-persona")} />
+          <ListItemText
+            primary={"Profesion"}
+            onClick={() => handeClick("/dashboard/profesion")}
+          />
         </MenuItem>
 
-        <MenuItem >
+        <MenuItem>
           <ListItemIcon>
             <DoubleArrowIcon />
           </ListItemIcon>
-          <ListItemText primary={"Sexo"} onClick={() => handeClick("/dashboard/sexo")} />
+          <ListItemText
+            primary={"Estado Civil"}
+            onClick={() => handeClick("/dashboard/estado-civil")}
+          />
         </MenuItem>
 
+        <MenuItem>
+          <ListItemIcon>
+            <DoubleArrowIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={"Estatus"}
+            onClick={() => handeClick("/dashboard/status-persona")}
+          />
+        </MenuItem>
+
+        <MenuItem>
+          <ListItemIcon>
+            <DoubleArrowIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={"Sexo"}
+            onClick={() => handeClick("/dashboard/sexo")}
+          />
+        </MenuItem>
       </Menu>
       <List>
-        <ListItem button onClick={handleMenu} >
+        <ListItem button onClick={handleMenu}>
           <ListItemIcon>
             <BuildIcon />
           </ListItemIcon>
@@ -172,7 +215,10 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
           <ListItemIcon>
             <AccountCircleIcon />
           </ListItemIcon>
-          <ListItemText primary={"Socios"} onClick={() => handeClick("/dashboard/socio")} />
+          <ListItemText
+            primary={"Socios"}
+            onClick={() => handeClick("/dashboard/socio")}
+          />
         </ListItem>
       </List>
     </div>
@@ -195,9 +241,11 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
           <div className={classes.header}>
             <Typography variant="h6" noWrap>
               Main Dashboard
-          </Typography>
+            </Typography>
             <Typography variant="h6" noWrap>
-              <Button variant="contained" onClick={() => handleLogout()}>Logout</Button>
+              <Button variant="contained" onClick={() => handleLogout()}>
+                Logout
+              </Button>
             </Typography>
           </div>
         </Toolbar>
@@ -208,14 +256,14 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
           <Drawer
             container={container}
             variant="temporary"
-            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+            anchor={theme.direction === "rtl" ? "right" : "left"}
             open={mobileOpen}
             onClose={handleDrawerToggle}
             classes={{
-              paper: classes.drawerPaper,
+              paper: classes.drawerPaper
             }}
             ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
+              keepMounted: true // Better open performance on mobile.
             }}
           >
             {drawer}
@@ -224,7 +272,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
         <Hidden xsDown implementation="css">
           <Drawer
             classes={{
-              paper: classes.drawerPaper,
+              paper: classes.drawerPaper
             }}
             variant="permanent"
             open

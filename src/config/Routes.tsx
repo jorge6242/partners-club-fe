@@ -24,6 +24,8 @@ import Person from "../containers/person";
 import MaritalStatus from "../containers/maritalStatus";
 import StatusPerson from "../containers/statusPerson";
 import Gender from "../containers/gender";
+import Role from "../containers/role";
+import Permission from "../containers/permission";
 
 export default function Routes() {
   const dispatch = useDispatch()
@@ -52,6 +54,16 @@ export default function Routes() {
                 return (
                   <Switch>
                     <Dashboard>
+                    <Route
+                        path="/dashboard/role"
+                        exact
+                        component={Role}
+                      />
+                      <Route
+                        path="/dashboard/permission"
+                        exact
+                        component={Permission}
+                      />
                       <Route
                         path="/dashboard/product"
                         exact
