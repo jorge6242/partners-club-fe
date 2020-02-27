@@ -19,7 +19,8 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'flex-start',
     },
     cardHeader: {
-      padding: theme.spacing(1, 2)
+      padding: theme.spacing(1, 2),
+      color: '#2980b9',
     },
     list: {
       width: 200,
@@ -65,6 +66,7 @@ const TransferList: FunctionComponent<TransferListProps> = ({
 
   useEffect(() => {
     if (data.length > 0 && selectedData.length > 0) {
+      setRight(selectedData)
       const newArray: any = [];
       data.forEach((element: any) => {
         const selectedItem = selectedData.filter(
@@ -76,7 +78,7 @@ const TransferList: FunctionComponent<TransferListProps> = ({
       });
       setLeft(newArray);
     }
-  }, [data, setLeft]);
+  }, [data, setLeft, selectedData]);
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
@@ -144,8 +146,7 @@ const TransferList: FunctionComponent<TransferListProps> = ({
             inputProps={{ "aria-label": "all items selected" }}
           />
         }
-        title={title}
-        subheader={`${numberOfChecked(items)}/${items.length}`}
+        title={`${title} ${numberOfChecked(items)}/${items.length}`}
       />
       <Divider />
       <List className={classes.list} dense component="div" role="list">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
@@ -8,14 +8,20 @@ import IconButton from "@material-ui/core/IconButton";
 import BuildIcon from "@material-ui/icons/Build";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import SportsBaseballIcon from '@material-ui/icons/SportsBaseball';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import LockIcon from '@material-ui/icons/Lock';
+import PersonIcon from '@material-ui/icons/Person';
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
+import PeopleIcon from '@material-ui/icons/People';
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import {
   makeStyles,
   useTheme,
@@ -86,7 +92,15 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();
+  const location = useLocation();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log('location ', location.pathname);
+    if(location.pathname === '/dashboard') {
+      history.push('/dashboard/main');
+    }
+  }, []);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -120,7 +134,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
       >
         <MenuItem>
           <ListItemIcon>
-            <DoubleArrowIcon />
+            <PeopleIcon />
           </ListItemIcon>
           <ListItemText
             primary={"Roles"}
@@ -129,7 +143,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <DoubleArrowIcon />
+            <LockIcon />
           </ListItemIcon>
           <ListItemText
             primary={"Permisos"}
@@ -138,7 +152,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <DoubleArrowIcon />
+            <AccountBalanceIcon />
           </ListItemIcon>
           <ListItemText
             primary={"Banco"}
@@ -156,7 +170,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <DoubleArrowIcon />
+            <SportsBaseballIcon />
           </ListItemIcon>
           <ListItemText
             primary={"Deporte"}
@@ -203,8 +217,27 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             onClick={() => handeClick("/dashboard/sexo")}
           />
         </MenuItem>
+
+        <MenuItem>
+          <ListItemIcon>
+            <PersonIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={"Usuario"}
+            onClick={() => handeClick("/dashboard/user")}
+          />
+        </MenuItem>
       </Menu>
       <List>
+      <ListItem button>
+          <ListItemIcon>
+            <DashboardIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={"Dashboard"}
+            onClick={() => handeClick("/dashboard/main")}
+          />
+        </ListItem>
         <ListItem button onClick={handleMenu}>
           <ListItemIcon>
             <BuildIcon />
@@ -223,7 +256,6 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
       </List>
     </div>
   );
-
   return (
     <div className={classes.root}>
       <CssBaseline />

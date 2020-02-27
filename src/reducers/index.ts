@@ -17,6 +17,7 @@ import statusPersonReducer from './statusPersonReducer';
 import genderReducer from './genderReducer';
 import roleReducer from './roleReducer';
 import permissionReducer from './permissionReducer';
+import userReducer from './userReducer';
 
 const rootReducer = combineReducers({
   modalReducer,
@@ -33,7 +34,8 @@ const rootReducer = combineReducers({
   statusPersonReducer,
   genderReducer,
   roleReducer,
-  permissionReducer
+  permissionReducer,
+  userReducer
 });
 
 export default rootReducer;

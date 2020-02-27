@@ -306,7 +306,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   };
 
   const handleImage = () => {
-    console.log("handleImage ");
     imageField.click();
     setImageField(imageField);
   };
@@ -819,6 +818,9 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                     </TabPanel>
                     <TabPanel value={value} index={5} dir={theme.direction}>
                       Lockers
+                    </TabPanel>
+                    <TabPanel value={value} index={6} dir={theme.direction}>
+                      Actividades
                     </TabPanel>
                   </SwipeableViews>
                 </div>

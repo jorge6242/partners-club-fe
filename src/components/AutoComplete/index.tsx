@@ -48,7 +48,7 @@ export default function Asynchronous() {
 
     const handleSelect = (option: any, value: any) => {
         if (option.description === value.description) {
-            console.log('value ', value);
+            //console.log('value ', value);
         }
         return option.description === value.description;
     }

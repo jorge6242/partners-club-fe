@@ -45,6 +45,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 type FormData = {
+  name: string;
   description: string;
 };
 
@@ -69,7 +70,8 @@ const PermissionForm: FunctionComponent<FormComponentProps> = ({ id }) => {
     async function fetch() {
       if (id) {
         const response: any = await dispatch(get(id));
-        setValue("name", response.description);
+        setValue("name", response.name);
+        setValue("description", response.description);
       }
     }
     fetch();
@@ -100,6 +102,16 @@ const PermissionForm: FunctionComponent<FormComponentProps> = ({ id }) => {
           onSubmit={handleSubmit(handleForm)}
           noValidate
         >
+            <CustomTextField
+            placeholder="Palabra Clave"
+            field="name"
+            required
+            register={register}
+            errorsField={errors.name}
+            errorsMessageField={
+              errors.name && errors.name.message
+            }
+          />
           <CustomTextField
             placeholder="Description"
             field="description"

@@ -22,7 +22,6 @@ export const getAll = () => async (dispatch: Function) => {
         payload: false
       });
     }
-    console.log('response ', response)
     return response;
   } catch (error) {
     snackBarUpdate({

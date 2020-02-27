@@ -10,11 +10,11 @@ import Grid from "@material-ui/core/Grid";
 
 import TransferList from "../TransferList";
 import CustomTextField from "../FormElements/CustomTextField";
-import { update, create, get } from "../../actions/roleActions";
-import { getAll as getAllPermissions } from "../../actions/permissionActions";
+import { update, create, get } from "../../actions/userActions";
+import { getAll as getAllRoles } from "../../actions/roleActions";
 
 const useStyles = makeStyles(theme => ({
-  rootRoleForm: {
+  rootUserForm: {
     width: "100%"
   },
   paper: {
@@ -52,37 +52,36 @@ const useStyles = makeStyles(theme => ({
 
 type FormData = {
   name: string;
-  slug: string;
-  description: string;
-  permissions: string;
+  email: string;
+  password: string;
+  roles: string;
 };
 
 type FormComponentProps = {
   id?: number;
 };
 
-const RoleForm: FunctionComponent<FormComponentProps> = ({ id }) => {
+const UserForm: FunctionComponent<FormComponentProps> = ({ id }) => {
   const classes = useStyles();
   const [selectedData, setSelectedData] = useState<any>([]);
-  const { handleSubmit, register, errors, reset, setValue, getValues } = useForm<
+  const { handleSubmit, register, errors, reset, setValue } = useForm<
     FormData
   >();
-  const loading = useSelector((state: any) => state.roleReducer.loading);
-  const { list } = useSelector((state: any) => state.permissionReducer);
+  const loading = useSelector((state: any) => state.userReducer.loading);
+  const { list } = useSelector((state: any) => state.roleReducer);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllPermissions());
+    dispatch(getAllRoles());
     async function fetch() {
       if (id) {
         const response: any = await dispatch(get(id));
-        const { name, slug, description, permissions } = response;
+        const { name, email, roles } = response;
         setValue("name", name);
-        setValue("slug", slug);
-        setValue("description", description);
-        if (permissions.length > 0) {
-          const list = permissions.map((element: any) => element.id);
-          setValue("permissions", JSON.stringify(list));
-          setSelectedData(permissions);
+        setValue("email", email);
+        if (roles.length > 0) {
+          const list = roles.map((element: any) => element.id);
+          setValue("roles", JSON.stringify(list));
+          setSelectedData(roles);
         } else {
           setSelectedData([]);
         }
@@ -101,19 +100,19 @@ const RoleForm: FunctionComponent<FormComponentProps> = ({ id }) => {
     if (id) {
     dispatch(update({ id, ...form }));
     } else {
-    dispatch(create(form));
+    dispatch(create({...form, password: '123456'}));
     }
   };
 
   const onPermissionsChange = (event: any) => {
-    setValue("permissions", JSON.stringify(event));
+    setValue("roles", JSON.stringify(event));
   };
 
   return (
-    <Container component="main" className={classes.rootRoleForm}>
+    <Container component="main" className={classes.rootUserForm}>
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Rol
+          Usuario
         </Typography>
         <form
           className={classes.form}
@@ -135,24 +134,12 @@ const RoleForm: FunctionComponent<FormComponentProps> = ({ id }) => {
                 </Grid>
                 <Grid item xs={12}>
                   <CustomTextField
-                    placeholder="Clave"
-                    field="slug"
+                    placeholder="Correo"
+                    field="email"
                     required
                     register={register}
-                    errorsField={errors.slug}
-                    errorsMessageField={errors.slug && errors.slug.message}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <CustomTextField
-                    placeholder="Descripcion"
-                    field="description"
-                    required
-                    register={register}
-                    errorsField={errors.description}
-                    errorsMessageField={
-                      errors.description && errors.description.message
-                    }
+                    errorsField={errors.email}
+                    errorsMessageField={errors.email && errors.email.message}
                   />
                 </Grid>
               </Grid>
@@ -163,14 +150,14 @@ const RoleForm: FunctionComponent<FormComponentProps> = ({ id }) => {
                   <TransferList
                     data={list}
                     selectedData={selectedData}
-                    leftTitle="Permisos"
+                    leftTitle="Roles"
                     onSelectedList={onPermissionsChange}
                   />
                 )}
               </Grid>
               <input
                 style={{ display: "none" }}
-                name="permissions"
+                name="roles"
                 ref={register}
               />
             </Grid>
@@ -197,4 +184,4 @@ const RoleForm: FunctionComponent<FormComponentProps> = ({ id }) => {
   );
 };
 
-export default RoleForm;
+export default UserForm;

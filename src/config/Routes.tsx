@@ -26,6 +26,8 @@ import StatusPerson from "../containers/statusPerson";
 import Gender from "../containers/gender";
 import Role from "../containers/role";
 import Permission from "../containers/permission";
+import User from "../containers/user";
+import Home from "../containers/home";
 
 export default function Routes() {
   const dispatch = useDispatch()
@@ -55,63 +57,59 @@ export default function Routes() {
                   <Switch>
                     <Dashboard>
                     <Route
+                        path="/dashboard/main"
+                        component={Home}
+                      />
+                    <Route
+                        path="/dashboard/user"
+                        component={User}
+                      />
+                    <Route
                         path="/dashboard/role"
-                        exact
                         component={Role}
                       />
                       <Route
                         path="/dashboard/permission"
-                        exact
                         component={Permission}
                       />
                       <Route
                         path="/dashboard/product"
-                        exact
                         component={Product}
                       />
                       <Route
                         path="/dashboard/category"
-                        exact
                         component={Category}
                       />
                       <Route
                         path="/dashboard/banco"
-                        exact
                         component={Bank}
                       />
                       <Route
                         path="/dashboard/pais"
-                        exact
                         component={Country}
                       />
                       <Route
                         path="/dashboard/deporte"
-                        exact
                         component={Sport}
                       />
                       <Route
                         path="/dashboard/profesion"
-                        exact
                         component={Profession}
                       />
                       <Route
                         path="/dashboard/socio"
-                        exact
                         component={Person}
                       />
                       <Route
                         path="/dashboard/estado-civil"
-                        exact
                         component={MaritalStatus}
                       />
                       <Route
                         path="/dashboard/status-persona"
-                        exact
                         component={StatusPerson}
                       />
                       <Route
                         path="/dashboard/sexo"
-                        exact
                         component={Gender}
                       />
                     </Dashboard>
