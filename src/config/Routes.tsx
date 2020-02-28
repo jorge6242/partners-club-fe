@@ -1,11 +1,6 @@
 import React, { useEffect } from "react";
-import {
-  HashRouter,
-  Route,
-  Switch,
-  Redirect
-} from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import Dashboard from "../containers/dashboard";
 import Product from "../containers/product";
@@ -15,7 +10,7 @@ import SnackBar from "../components/SnackBar";
 import Login from "../containers/login";
 import SecureStorage from "./SecureStorage";
 import Category from "../containers/category";
-import { checkLogin, setupInterceptors } from "../actions/loginActions"
+import { checkLogin, setupInterceptors } from "../actions/loginActions";
 import Bank from "../containers/bank";
 import Country from "../containers/Country";
 import Sport from "../containers/Sport";
@@ -28,19 +23,20 @@ import Role from "../containers/role";
 import Permission from "../containers/permission";
 import User from "../containers/user";
 import Home from "../containers/home";
+import Reports from "../containers/reports";
+import ExpirationCard from "../containers/Templates/ExpirationCard";
 
 export default function Routes() {
-  const dispatch = useDispatch()
-  const token = SecureStorage.getItem('token');
+  const dispatch = useDispatch();
+  const token = SecureStorage.getItem("token");
 
   useEffect(() => {
-    dispatch(checkLogin())
-  }, [dispatch, token])
+    dispatch(checkLogin());
+  }, [dispatch, token]);
 
   useEffect(() => {
-    setupInterceptors()
-  }, [token])
-
+    setupInterceptors();
+  }, [token]);
 
   return (
     <HashRouter>
@@ -48,6 +44,7 @@ export default function Routes() {
         <Switch>
           <Route path="/" exact component={Login} />
           <Route path="/login" exact component={Login} />
+          <Route path="/template/expiration-cards" component={ExpirationCard} />
           <Route
             path="/dashboard"
             exact={false}
@@ -56,50 +53,24 @@ export default function Routes() {
                 return (
                   <Switch>
                     <Dashboard>
-                    <Route
-                        path="/dashboard/main"
-                        component={Home}
-                      />
-                    <Route
-                        path="/dashboard/user"
-                        component={User}
-                      />
-                    <Route
-                        path="/dashboard/role"
-                        component={Role}
-                      />
+                      <Route path="/dashboard/main" component={Home} />
+                      <Route path="/dashboard/reports" component={Reports} />
+                      <Route path="/dashboard/user" component={User} />
+                      <Route path="/dashboard/role" component={Role} />
                       <Route
                         path="/dashboard/permission"
                         component={Permission}
                       />
-                      <Route
-                        path="/dashboard/product"
-                        component={Product}
-                      />
-                      <Route
-                        path="/dashboard/category"
-                        component={Category}
-                      />
-                      <Route
-                        path="/dashboard/banco"
-                        component={Bank}
-                      />
-                      <Route
-                        path="/dashboard/pais"
-                        component={Country}
-                      />
-                      <Route
-                        path="/dashboard/deporte"
-                        component={Sport}
-                      />
+                      <Route path="/dashboard/product" component={Product} />
+                      <Route path="/dashboard/category" component={Category} />
+                      <Route path="/dashboard/banco" component={Bank} />
+                      <Route path="/dashboard/pais" component={Country} />
+                      <Route path="/dashboard/deporte" component={Sport} />
                       <Route
                         path="/dashboard/profesion"
                         component={Profession}
                       />
-                      <Route
-                        path="/dashboard/socio"
-                        component={Person}
-                      />
+                      <Route path="/dashboard/socio" component={Person} />
                       <Route
                         path="/dashboard/estado-civil"
                         component={MaritalStatus}
@@ -108,10 +79,7 @@ export default function Routes() {
                         path="/dashboard/status-persona"
                         component={StatusPerson}
                       />
-                      <Route
-                        path="/dashboard/sexo"
-                        component={Gender}
-                      />
+                      <Route path="/dashboard/sexo" component={Gender} />
                     </Dashboard>
                   </Switch>
                 );

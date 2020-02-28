@@ -2,6 +2,10 @@ import Person from "../api/Person";
 import snackBarUpdate from "../actions/snackBarActions";
 import { updateModal } from "../actions/modalActions";
 import { ACTIONS } from '../interfaces/actionTypes/personTypes';
+import Axios from '../config/Axios';
+import headers from "../helpers/headers";
+
+import Prefix from "../config/ApiPrefix";
 
 export const getAll = () => async (dispatch: Function) => {
   dispatch({
@@ -242,4 +246,28 @@ export const remove = (id: number) => async (dispatch: Function) => {
     })(dispatch);
     return error;
   }
+};
+
+export const geReports = () => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_SECOND_LOADING,
+    payload: true
+  });
+  Axios({
+    url: `${Prefix.api}/person-report`,
+    method: 'GET',
+    responseType: 'blob', // important
+    headers: headers(),
+  }).then((response) => {
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'file.pdf');
+    document.body.appendChild(link);
+    link.click();
+    dispatch({
+      type: ACTIONS.SET_SECOND_LOADING,
+      payload: false
+    });
+  });
 };

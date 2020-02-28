@@ -2,9 +2,10 @@ import React, { useEffect } from "react";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import { useDispatch, useSelector } from 'react-redux';
+import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 
 import './index.sass';
-import { getAll, remove, search } from "../../actions/personActions";
+import { getAll, remove, search, geReports } from "../../actions/personActions";
 import { updateModal } from "../../actions/modalActions";
 import PersonForm from "../../components/PersonForm";
 import DataTable from '../../components/DataTable'
@@ -85,10 +86,19 @@ export default function Bank() {
     }
   }
 
+  const handleReport = () => {
+    dispatch(geReports());
+  }
+
   return (
     <div className="person-container">
       <div className="person-container__header">
         <div className="person-container__title">Socio</div>
+        <div className="person-container__button" onClick={() => handleReport()}>
+          <Fab size="small" color="primary" aria-label="add">
+            <PictureAsPdfIcon />
+          </Fab>
+        </div>
         <div className="person-container__button" onClick={() => handleCreate()}>
           <Fab size="small" color="primary" aria-label="add">
             <AddIcon />

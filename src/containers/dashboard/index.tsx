@@ -11,6 +11,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SportsBaseballIcon from '@material-ui/icons/SportsBaseball';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import ListAltIcon from '@material-ui/icons/ListAlt';
 import LockIcon from '@material-ui/icons/Lock';
 import PersonIcon from '@material-ui/icons/Person';
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
@@ -251,6 +252,15 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
           <ListItemText
             primary={"Socios"}
             onClick={() => handeClick("/dashboard/socio")}
+          />
+        </ListItem>
+        <ListItem button>
+          <ListItemIcon>
+            <ListAltIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={"Reportes"}
+            onClick={() => handeClick("/dashboard/reports")}
           />
         </ListItem>
       </List>

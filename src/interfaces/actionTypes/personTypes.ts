@@ -2,7 +2,8 @@ export const ACTIONS = {
     GET_ALL: 'person/get_all',
     GET: 'person/get',
     SET_PERSON: 'set_person/get',
-    SET_LOADING: 'person/set_loading'
+    SET_LOADING: 'person/set_loading',
+    SET_SECOND_LOADING: 'person/set_loading'
 };
   
   interface GetPerson {
@@ -24,6 +25,11 @@ export const ACTIONS = {
     type: typeof ACTIONS.SET_LOADING
     payload: boolean
   }
+
+  interface SetSecondLoading {
+    type: typeof ACTIONS.SET_SECOND_LOADING
+    payload: boolean
+  }
   
   
-  export type ActionTypes = GetPerson | SetPerson | GetAllPersons | SetLoading
+  export type ActionTypes = GetPerson | SetPerson | GetAllPersons | SetLoading | SetSecondLoading

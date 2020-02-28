@@ -3,12 +3,14 @@ import {  ACTIONS, ActionTypes } from '../interfaces/actionTypes/personTypes';
 type InitialState = {
     persons: Array<string | number>;
     loading: boolean;
+    secondLoading: boolean;
     selectedPerson: any;
 }
 
 const initialState: InitialState = {
     persons: [],
     loading: false,
+    secondLoading: false,
     selectedPerson: null,
 };
 
@@ -29,6 +31,11 @@ const personReducer = (state = initialState, action: ActionTypes) => {
                 ...state,
                 loading: action.payload,
             };
+            case ACTIONS.SET_SECOND_LOADING:
+                return {
+                    ...state,
+                    secondLoading: action.payload,
+                };
         default:
             return state;
     }

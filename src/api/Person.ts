@@ -31,8 +31,11 @@ const Person = {
     return AXIOS.delete(`${Prefix.api}/person/${id}`, { headers: headers() });
   },
   search(term: string) {
-    return AXIOS.get(`${Prefix.api}/person-search?term=${term}`, { headers: headers() });
-  }
+    return AXIOS.get(`${Prefix.api}/person-search?term=${term}`, { headers: headers(), responseType: 'blob' });
+  },
+  report() {
+    return AXIOS.get(`${Prefix.api}/person-report`, { headers: headers() });
+  },
 };
 
 export default Person;
