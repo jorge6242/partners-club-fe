@@ -31,10 +31,42 @@ const Person = {
     return AXIOS.delete(`${Prefix.api}/person/${id}`, { headers: headers() });
   },
   search(term: string) {
-    return AXIOS.get(`${Prefix.api}/person-search?term=${term}`, { headers: headers(), responseType: 'blob' });
+    return AXIOS.get(`${Prefix.api}/person-search?term=${term}`, {
+      headers: headers(),
+    });
   },
   report() {
     return AXIOS.get(`${Prefix.api}/person-report`, { headers: headers() });
+  },
+  searchPersonToAssign(id: number, term: string) {
+    return AXIOS.get(`${Prefix.api}/search-person-to-assign`, {
+      params: {
+        term,
+        id
+      },
+      headers: headers(),
+    });
+  },
+  assignPerson(data: any) {
+    return AXIOS.post(
+      `${Prefix.api}/assign-person`,
+      {
+        ...data
+      },
+      { headers: headers() }
+    );
+  },
+  searchFamilyByPerson(id: number, term: string) {
+    return AXIOS.get(`${Prefix.api}/search-family-by-person`, {
+      params: {
+        term,
+        id,
+      },
+      headers: headers(),
+    });
+  },
+  removeRelation(id: number) {
+    return AXIOS.delete(`${Prefix.api}/person-relation/${id}`, { headers: headers() });
   },
 };
 

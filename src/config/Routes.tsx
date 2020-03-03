@@ -25,6 +25,7 @@ import User from "../containers/user";
 import Home from "../containers/home";
 import Reports from "../containers/reports";
 import ExpirationCard from "../containers/Templates/ExpirationCard";
+import RelationType from "../containers/relationType";
 
 export default function Routes() {
   const dispatch = useDispatch();
@@ -80,6 +81,7 @@ export default function Routes() {
                         component={StatusPerson}
                       />
                       <Route path="/dashboard/sexo" component={Gender} />
+                      <Route path="/dashboard/relation-type" component={RelationType} />
                     </Dashboard>
                   </Switch>
                 );

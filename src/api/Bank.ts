@@ -37,8 +37,12 @@ const Bank = {
   remove(id: number) {
     return AXIOS.delete(`${Prefix.api}/bank/${id}`, { headers: headers() });
   },
-  search(term: string) {
-    return AXIOS.get(`${Prefix.api}/bank-search?term=${term}`, {
+  search(term: string, perPage: number) {
+    return AXIOS.get(`${Prefix.api}/bank-search`, {
+      params: {
+        term,
+        perPage
+      },
       headers: headers()
     });
   }

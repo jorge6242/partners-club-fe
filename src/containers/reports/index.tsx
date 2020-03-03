@@ -2,8 +2,11 @@ import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from 'react-redux';
 
 import "./index.sass";
+import { updateModal } from "../../actions/modalActions";
+import ExpirationCard from "../Templates/ExpirationCard";
 import WidgetReport from "../../components/WidgetReport";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -32,10 +35,18 @@ createStyles({
 
 export default function Reports() {
  const classes = useStyles();
- const history = useHistory();
+ const dispatch = useDispatch();
 
-  const handlePreview = (path: string) => {
-    history.push(path);
+  const handlePreview = () => {
+    dispatch(
+      updateModal({
+        payload: {
+          status: true,
+          element: <ExpirationCard />,
+          customSize: 'large'
+        }
+      })
+    );
   };
 
 
@@ -43,7 +54,7 @@ export default function Reports() {
     <div className="report-container">
       <Grid container spacing={3} className={classes.widgetContainer}>
         <Grid item xs={3}>
-          <WidgetReport title="Tarjetas Vencidas" handleClick={() => handlePreview("/template/expiration-cards")}/>
+          <WidgetReport title="Tarjetas Vencidas" handleClick={() => handlePreview()}/>
         </Grid>
         <Grid item xs={3}>
         

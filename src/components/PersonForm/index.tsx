@@ -19,24 +19,78 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Chip from '@material-ui/core/Chip';
 
 import CustomSelect from "../FormElements/CustomSelect";
 import CustomTextField from "../FormElements/CustomTextField";
-import { update, create, get } from "../../actions/personActions";
+import { update, create, get, searchPersonsToAssign, searchFamilyByPerson, assignPerson, removeRelation } from "../../actions/personActions";
 import { getAll as getStatusPersonAll } from "../../actions/statusPersonActions";
 import { getAll as getMaritalStatusAll } from "../../actions/maritalStatusActions";
 import { getAll as getGenderAll } from "../../actions/genderActions";
 import { getAll as getCountries } from "../../actions/countryActions";
 import { getAll as getProfessions } from "../../actions/professionActions";
+import { getAll as getRelationTypes } from "../../actions/relationTypeActions";
 import TransferList from "../TransferList";
-import Autocomplete from "../AutoComplete";
+import DataTableAssignPersons from "../DataTableAssignPersons";
+import PersonColumn from '../../interfaces/PersonColumn';
+import FamilyPersonColumns from '../../interfaces/FamilyPersonColumns';
+import DataTable from "../DataTable";
+import DataTable2 from "../DataTable2";
+import CustomSearch from '../FormElements/CustomSearch';
+
+const FamilysColumns: FamilyPersonColumns[] = [
+  {
+    id: "id",
+    label: "ID",
+    minWidth: 170,
+    align: "right",
+    component: (value: any) => <span>{value.value}</span>,
+  },
+  {
+    id: "name",
+    label: "Nombre",
+    minWidth: 170,
+    align: "right",
+    component: (value: any) => <span>{value.value}</span>,
+  },
+  {
+    id: "last_name",
+    label: "Apellido",
+    minWidth: 170,
+    align: "right",
+    component: (value: any) => <span>{value.value}</span>,
+  },
+  {
+    id: "relationType",
+    label: "Parentesco",
+    minWidth: 170,
+    align: "right",
+    component: (value: any) => (<span><strong>{value.value.description}</strong></span>),
+  },
+];
+
+const columns: PersonColumn[] = [
+  { id: "id", label: "Id", minWidth: 170 },
+  {
+    id: "name",
+    label: "Nombre",
+    minWidth: 170,
+    align: "right"
+  },
+  {
+    id: "last_name",
+    label: "Apellido",
+    minWidth: 170,
+    align: "right"
+  },
+];
 
 interface TabPanelProps {
   children?: React.ReactNode;
   dir?: string;
   index: any;
   value: any;
-}
+};
 
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
@@ -173,7 +227,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
 
   /* Redux */
   const dispatch = useDispatch();
-  const loading = useSelector((state: any) => state.personReducer.loading);
+  const { loading, assignLoading, relationLoading ,personsToAssign, paginationPersonsToAssign, familyByPerson } = useSelector((state: any) => state.personReducer);
   const { list: statusPersonList } = useSelector(
     (state: any) => state.statusPersonReducer
   );
@@ -183,6 +237,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   const { countries } = useSelector((state: any) => state.countryReducer);
   const { list: genderList } = useSelector((state: any) => state.genderReducer);
   const { professions: professionList, } = useSelector((state: any) => state.professionReducer);
+  const { list: relationTypeList, } = useSelector((state: any) => state.relationTypeReducer);
   const disableTabs = tempPersonId > 0 ? false : true;
 
   /* Styles */
@@ -210,9 +265,12 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     dispatch(getMaritalStatusAll());
     dispatch(getGenderAll());
     dispatch(getCountries());
+    dispatch(getRelationTypes());
     async function fetch() {
       dispatch(getProfessions());
       if (id) {
+        dispatch(searchPersonsToAssign(id));
+        dispatch(searchFamilyByPerson(id))
         const response: any = await dispatch(get(id));
         const {
           name,
@@ -632,6 +690,32 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     );
   };
 
+  const handleAssign = (personRelated: number, relationType: number) => {
+    const data = {
+      base_id: id,
+      related_id: personRelated,
+      relation_type_id: relationType
+    }
+    dispatch(assignPerson(data))
+  }
+
+  const handleChangePage = (newPage: number) => {
+    // const page = pagination.currentPage === 1 ? 2 : newPage;
+    // dispatch(getAll(page, pagination.perPage))
+  };
+
+  const handlePerPage = (page: number, perPage: number) => {
+    // dispatch(getAll(page, perPage))
+  }
+
+  const handleSearch = (event: any) => {
+    dispatch(searchPersonsToAssign(event.value))
+  }
+
+  const handleDeleteRelation = (relationId: number) => {
+    dispatch(removeRelation(relationId,id));
+  }
+
   let imagePreview = picture;
   if (image.preview) imagePreview = image.preview;
   return (
@@ -764,7 +848,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                           </ExpansionPanelSummary>
                           <ExpansionPanelDetails>
                             <Grid container spacing={3}>
-                              <Grid item xs={12}> <Autocomplete /> </Grid>
+                              {/* <Grid item xs={12}> <Autocomplete /> </Grid> */}
                               <Grid item xs={12} justify="flex-start"> {professionList.length > 0 && selectedProff && (
                                 <TransferList
                                   data={professionList}
@@ -805,7 +889,69 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                       </div>
                     </TabPanel>
                     <TabPanel value={value} index={1} dir={theme.direction}>
-                      Familiares
+                      <div className={classes.root}>
+                        <ExpansionPanel
+                          expanded={expanded === "panel-familiars-assing"}
+                          onChange={handleExpandedPanel("panel-familiars-assing")}
+                        >
+                          <ExpansionPanelSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel-familiarsa-assing-content"
+                            id="panel-familiarsa-assing-header"
+                          >
+                            <Typography className={classes.heading}>
+                              Buscar familiares
+                            </Typography>
+                          </ExpansionPanelSummary>
+                          <ExpansionPanelDetails>
+                            <Grid container spacing={2}>
+                              <Grid item xs={12}>
+                                <CustomSearch handleSearch={handleSearch} />
+                              </Grid>
+                              <Grid item xs={12}>
+                                <DataTableAssignPersons
+                                  rows={personsToAssign}
+                                  pagination={paginationPersonsToAssign}
+                                  handleAssign={handleAssign}
+                                  columns={columns}
+                                  onChangePage={handleChangePage}
+                                  onChangePerPage={handlePerPage}
+                                  selectOptionData={relationTypeList}
+                                />
+                              </Grid>
+                            </Grid>
+                          </ExpansionPanelDetails>
+                        </ExpansionPanel>
+
+                        <ExpansionPanel
+                          expanded={expanded === "panel-familiars"}
+                          onChange={handleExpandedPanel("panel-familiars")}
+                        >
+                          <ExpansionPanelSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel-familiarsa-content"
+                            id="panel-familiarsa-header"
+                          >
+                            <Typography className={classes.heading}>
+                              Familiares Asignados
+                            </Typography>
+                          </ExpansionPanelSummary>
+                          <ExpansionPanelDetails>
+                            <Grid container spacing={2}>
+                              <Grid item xs={12}>
+                                <DataTable2
+                                  data={familyByPerson}
+                                  columns={FamilysColumns}
+                                  isDelete
+                                  handleDelete={handleDeleteRelation}
+                                  loading={relationLoading}
+                                />
+                              </Grid>
+                            </Grid>
+
+                          </ExpansionPanelDetails>
+                        </ExpansionPanel>
+                      </div>
                     </TabPanel>
                     <TabPanel value={value} index={2} dir={theme.direction}>
                       Pagos

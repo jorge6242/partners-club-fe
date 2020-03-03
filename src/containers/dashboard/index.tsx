@@ -221,6 +221,16 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
 
         <MenuItem>
           <ListItemIcon>
+            <DoubleArrowIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={"Tipo Relacion"}
+            onClick={() => handeClick("/dashboard/relation-type")}
+          />
+        </MenuItem>
+
+        <MenuItem>
+          <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
           <ListItemText
