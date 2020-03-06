@@ -142,7 +142,7 @@ export const create = (body: object) => async (dispatch: Function) => {
       });
       snackBarUpdate({
         payload: {
-          message: "Person Created!",
+          message: "Persona Creada!",
           type: "success",
           status: true
         }
@@ -235,7 +235,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Person Updated!",
+          message: "Persona Actualizada!",
           type: "success",
           status: true
         }
@@ -274,7 +274,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Person Removed!",
+          message: "Person Elmiminada",
           type: "success",
           status: true
         }
@@ -310,7 +310,7 @@ export const removeRelation = (relationId: number, personId: any) => async (disp
       await dispatch(searchFamilyByPerson(personId));
       snackBarUpdate({
         payload: {
-          message: "Relation Removed!",
+          message: "Relacion Eliminada!",
           type: "success",
           status: true
         }
@@ -326,6 +326,37 @@ export const removeRelation = (relationId: number, personId: any) => async (disp
       type: ACTIONS.SET_RELATION_LOADING,
       payload: false
     });
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        type: "error",
+        status: true
+      }
+    })(dispatch);
+    return error;
+  }
+};
+
+export const updateRelation = (body: any) => async (dispatch: Function) => {
+  try {
+    const { data, status } = await Person.updateRelation(body);
+    let response: any = [];
+    if (status === 200) {
+      response = {
+        data,
+        status
+      };
+      await dispatch(searchFamilyByPerson(body.personId));
+      snackBarUpdate({
+        payload: {
+          message: "Relacion Actualizada!",
+          type: "success",
+          status: true
+        }
+      })(dispatch);
+    }
+    return response;
+  } catch (error) {
     snackBarUpdate({
       payload: {
         message: error.message,
@@ -398,10 +429,6 @@ export const getReportsByPartner = (id: any) => async (dispatch: Function) => {
 };
 
 export const searchFamilyByPerson = (id: number, term: string = '') => async (dispatch: Function) => {
-  dispatch({
-    type: ACTIONS.SET_SECOND_LOADING,
-    payload: true
-  });
   try {
     const { data: { data }, status } = await Person.searchFamilyByPerson(id, term);
     let response = [];
@@ -412,10 +439,6 @@ export const searchFamilyByPerson = (id: number, term: string = '') => async (di
         payload: response
       });
     }
-    dispatch({
-      type: ACTIONS.SET_SECOND_LOADING,
-      payload: false
-    });
     return response;
   } catch (error) {
     snackBarUpdate({
@@ -425,10 +448,6 @@ export const searchFamilyByPerson = (id: number, term: string = '') => async (di
         type: "error"
       }
     })(dispatch);
-    dispatch({
-      type: ACTIONS.SET_SECOND_LOADING,
-      payload: false
-    });
     return error;
   }
 };

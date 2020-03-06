@@ -21,7 +21,7 @@ const CustomSelect: FunctionComponent<CustomSelectProps> = ({
   label
 }) => (
     <div>
-      <div>{label}</div>
+      { label && (<div>{label}</div>) }
       <div className="custom-select-container">
       <select
         ref={register({

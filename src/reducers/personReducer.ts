@@ -77,7 +77,7 @@ const personReducer = (state = initialState, action: ActionTypes) => {
     case ACTIONS.SET_PERSON_ASSIGN_PAGINATION:
       return {
         ...state,
-        pagination: action.payload
+        paginationPersonsToAssign: action.payload
       };
     case ACTIONS.GET_FAMILY_BY_PERSON:
       return {

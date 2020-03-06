@@ -4,6 +4,7 @@ type BanksInitialState = {
     list: Array<string | number>;
     loading: boolean;
     pagination: any;
+    selectedShare: any;
 }
 
 const initialState: BanksInitialState = {
@@ -15,6 +16,7 @@ const initialState: BanksInitialState = {
         prevPageUrl: null,
         currentPage: 0,
     },
+    selectedShare: {},
 };
 
 const shareReducer = (state = initialState, action: ActionTypes) => {
@@ -34,6 +36,11 @@ const shareReducer = (state = initialState, action: ActionTypes) => {
                 ...state,
                 loading: action.payload,
             };
+            case ACTIONS.SET_SELECTED_SHARE:
+                return {
+                    ...state,
+                    selectedShare: action.payload,
+                };
         default:
             return state;
     }

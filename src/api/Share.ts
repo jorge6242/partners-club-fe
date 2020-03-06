@@ -45,7 +45,10 @@ const API = {
       },
       headers: headers()
     });
-  }
+  },
+  getByPartner(id: number) {
+    return AXIOS.get(`${Prefix.api}/share-by-partner/${id}`, { headers: headers() });
+  },
 };
 
 export default API;

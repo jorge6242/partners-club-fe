@@ -142,14 +142,43 @@ export const create = (body: object) => async (dispatch: Function) => {
 };
 
 export const get = (id: number) => async (dispatch: Function) => {
+  dispatch(
+    updateModal({
+      payload: {
+        isLoader: true,
+      }
+    })
+  );
+  dispatch({
+    type: ACTIONS.SET_SELECTED_SHARE,
+    payload: {}
+  });
   try {
     const { data: { data }, status } = await API.get(id);
     let response = [];
     if (status === 200) {
       response = data;
+      dispatch({
+        type: ACTIONS.SET_SELECTED_SHARE,
+        payload: data
+      });
+      dispatch(
+        updateModal({
+          payload: {
+            isLoader: false,
+          }
+        })
+      );
     }
     return response;
   } catch (error) {
+    dispatch(
+      updateModal({
+        payload: {
+          isLoader: false,
+        }
+      })
+    );
     snackBarUpdate({
       payload: {
         message: error.message,
@@ -234,6 +263,36 @@ export const remove = (id: number) => async (dispatch: Function) => {
         }
       })(dispatch);
       dispatch(getAll());
+    }
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        type: "error",
+        status: true
+      }
+    })(dispatch);
+    return error;
+  }
+};
+
+
+export const getSharesByPartner = (id: number) => async (dispatch: Function) => {
+  try {
+    const { data: { data }, status } = await API.getByPartner(id);
+    let response = [];
+    if (status === 200) {
+      response = data;
+      const share = data.find((e: any, i: any) => i === 0);
+      dispatch({
+        type: ACTIONS.GET_ALL,
+        payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_SELECTED_SHARE,
+        payload: share
+      });
     }
     return response;
   } catch (error) {

@@ -73,7 +73,7 @@ const DataTableAssignPersons: FunctionComponent<DataTableProps> = ({
                                 <TableCell
                                     key={column.id}
                                     align={column.align}
-                                    style={{ minWidth: column.minWidth }}
+                                    style={{ minWidth: column.minWidth, fontSize: '10px' }}
                                 >
                                     {column.label}
                                 </TableCell>
@@ -92,19 +92,19 @@ const DataTableAssignPersons: FunctionComponent<DataTableProps> = ({
                                             {columns.map((column: any) => {
                                                 const value = row[column.id];
                                                 return (
-                                                    <TableCell key={column.id} align={column.align}>
+                                                    <TableCell key={column.id} align={column.align} style={{ fontSize: '10px' }}>
                                                         {column.format && typeof value === "number"
                                                             ? column.format(value)
                                                             : value}
                                                     </TableCell>
                                                 );
                                             })}
-                                            <TableCell>
+                                            <TableCell  style={{ fontSize: '10px' }}>
                                                 <div>
-                                                    <div>Seleccione</div>
                                                     <div className="custom-select-container">
                                                         <select name="relation"
                                                             onChange={(e) => handleSelect(e, row.id)}
+                                                            style={{ fontSize: '10px' }}
                                                         >
                                                             <option value="">Seleccione</option>
                                                             {
@@ -116,12 +116,14 @@ const DataTableAssignPersons: FunctionComponent<DataTableProps> = ({
                                                     </div>
                                                 </div>
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell  style={{ fontSize: '10px' }}>
                                                 <Button
                                                     variant="contained"
                                                     color="primary"
+                                                    size="small"
                                                     disabled={selectedPerson === row.id ? false : true}
                                                     onClick={() => handleAssign(row.id, relationtType)}
+                                                    style={{ fontSize: '10px' }}
                                                 >
                                                     Asignar
                                                 </Button>

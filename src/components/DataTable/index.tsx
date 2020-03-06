@@ -8,7 +8,10 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import IconButton from "@material-ui/core/IconButton";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const useStyles = makeStyles({
   root: {
@@ -18,8 +21,8 @@ const useStyles = makeStyles({
     maxHeight: 440
   },
   progress: {
-    display: 'flex',
-    justifyContent: 'left',
+    display: "flex",
+    justifyContent: "left",
     padding: 10
   }
 });
@@ -58,53 +61,55 @@ const DataTable: FunctionComponent<DataTableProps> = ({
                   {column.label}
                 </TableCell>
               ))}
-              <TableCell></TableCell>
-              <TableCell></TableCell>
+                            {handleEdit && (<TableCell style={{ minWidth: 5}}></TableCell>) }
+                            {handleDelete && (<TableCell style={{ minWidth: 5}}></TableCell>) }
             </TableRow>
           </TableHead>
           <TableBody>
-            {
-              loading ? (<TableRow className={classes.progress}><CircularProgress color="primary" /></TableRow>)
-                :
-                data.map((row: any) => {
-                  return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                      {columns.map((column: any) => {
-                        const value = row[column.id];
-                        return (
-                          <TableCell key={column.id} align={column.align}>
-                            {column.format && typeof value === "number"
-                              ? column.format(value)
-                              : value}
-                          </TableCell>
-                        );
-                      })}
-                      <TableCell>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          size="small"
-                          onClick={() => handleEdit(row.id)}
-                        >
-                          Edit
-                      </Button>
-                      </TableCell>
-                      {isDelete && (
-                        <TableCell>
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            size="small"
-                            onClick={() => handleDelete(row.id)}
-                          >
-                            Delete
-                        </Button>
+            {loading ? (
+              <TableRow className={classes.progress}>
+                <CircularProgress color="primary" />
+              </TableRow>
+            ) : (
+              data.map((row: any) => {
+                return (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                    {columns.map((column: any) => {
+                      const value = row[column.id];
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {column.format && typeof value === "number"
+                            ? column.format(value)
+                            : value}
                         </TableCell>
-                      )}
-                    </TableRow>
-                  );
-                })
-            }
+                      );
+                    })}
+                    <TableCell style={{ minWidth: 5 }}>
+                      <IconButton
+                        aria-label="delete"
+                        size="small"
+                        color="primary"
+                        onClick={() => handleEdit(row.id)}
+                      >
+                        <EditIcon fontSize="inherit" />
+                      </IconButton>
+                    </TableCell>
+                    {isDelete && (
+                      <TableCell style={{ minWidth: 5 }}>
+                        <IconButton
+                          aria-label="delete"
+                          size="small"
+                          color="secondary"
+                          onClick={() => handleDelete(row.id)}
+                        >
+                          <DeleteIcon fontSize="inherit" />
+                        </IconButton>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                );
+              })
+            )}
           </TableBody>
         </Table>
       </TableContainer>

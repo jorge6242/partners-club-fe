@@ -32,7 +32,7 @@ const Person = {
   },
   search(term: string) {
     return AXIOS.get(`${Prefix.api}/person-search?term=${term}`, {
-      headers: headers(),
+      headers: headers()
     });
   },
   report() {
@@ -44,7 +44,7 @@ const Person = {
         term,
         id
       },
-      headers: headers(),
+      headers: headers()
     });
   },
   assignPerson(data: any) {
@@ -60,14 +60,23 @@ const Person = {
     return AXIOS.get(`${Prefix.api}/search-family-by-person`, {
       params: {
         term,
-        id,
+        id
       },
-      headers: headers(),
+      headers: headers()
     });
   },
-  removeRelation(id: number) {
-    return AXIOS.delete(`${Prefix.api}/person-relation/${id}`, { headers: headers() });
+  updateRelation(data: any) {
+    return AXIOS.put(
+      `${Prefix.api}/person-relation/${data.id}`,
+      { ...data },
+      { headers: headers() }
+    );
   },
+  removeRelation(id: number) {
+    return AXIOS.delete(`${Prefix.api}/person-relation/${id}`, {
+      headers: headers()
+    });
+  }
 };
 
 export default Person;
