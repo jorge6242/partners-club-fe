@@ -7,23 +7,30 @@ import './index.sass';
 import { getAll, remove, search } from "../../actions/permissionActions";
 import { updateModal } from "../../actions/modalActions";
 import PermissionForm from "../../components/PermissionForm";
-import DataTable from '../../components/DataTable'
-import RoleColumns from '../../interfaces/RoleColumns';
+import DataTable2 from '../../components/DataTable2'
+import PermissionColumns from '../../interfaces/PermissionColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
 
-const columns: RoleColumns[] = [
-  { id: "id", label: "Id", minWidth: 170 },
+const columns: PermissionColumns[] = [
+  { 
+    id: "id", 
+    label: "Id", 
+    minWidth: 30,
+    component: (value: any) => <span>{value.value}</span> 
+  },
   {
     id: "name",
     label: "Clave",
-    minWidth: 170,
-    align: "right"
+    minWidth: 30,
+    align: "right",
+    component: (value: any) => <span>{value.value}</span>,
   },
   {
     id: "description",
     label: "Descripción",
-    minWidth: 170,
-    align: "right"
+    minWidth: 30,
+    align: "right",
+    component: (value: any) => <span>{value.value}</span>,
   },
 ];
 
@@ -85,7 +92,7 @@ export default function Permission() {
         <CustomSearch handleSearch={handleSearch} />
       </div>
       <div>
-        <DataTable
+        <DataTable2
           data={list}
           columns={columns}
           handleEdit={handleEdit}

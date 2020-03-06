@@ -7,29 +7,37 @@ import './index.sass';
 import { getAll, remove, search } from "../../actions/roleActions";
 import { updateModal } from "../../actions/modalActions";
 import RoleForm from "../../components/RoleForm";
-import DataTable from '../../components/DataTable'
+import DataTable2 from '../../components/DataTable2'
 import RoleColumns from '../../interfaces/RoleColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
 
 const columns: RoleColumns[] = [
-  { id: "id", label: "Id", minWidth: 170 },
+  {
+    id: "id",
+    label: "Id",
+    minWidth: 30,
+    component: (value: any) => <span>{value.value}</span>
+  },
   {
     id: "name",
     label: "Nombre",
-    minWidth: 170,
-    align: "right"
+    minWidth: 30,
+    align: "left",
+    component: (value: any) => <span>{value.value}</span>
   },
   {
     id: "slug",
     label: "Clave",
-    minWidth: 170,
-    align: "right"
+    minWidth: 30,
+    align: "left",
+    component: (value: any) => <span>{value.value}</span>
   },
   {
     id: "description",
     label: "Descripción",
-    minWidth: 170,
-    align: "right"
+    minWidth: 30,
+    align: "left",
+    component: (value: any) => <span>{value.value}</span>
   },
 ];
 
@@ -93,7 +101,7 @@ export default function Role() {
         <CustomSearch handleSearch={handleSearch} />
       </div>
       <div>
-        <DataTable
+        <DataTable2
           data={list}
           columns={columns}
           handleEdit={handleEdit}
