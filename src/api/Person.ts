@@ -38,7 +38,7 @@ const Person = {
   report() {
     return AXIOS.get(`${Prefix.api}/person-report`, { headers: headers() });
   },
-  searchPersonToAssign(id: number, term: string) {
+  searchPersonToAssign(id: any, term: string) {
     return AXIOS.get(`${Prefix.api}/search-person-to-assign`, {
       params: {
         term,

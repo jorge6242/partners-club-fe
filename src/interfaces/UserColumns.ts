@@ -1,7 +1,7 @@
 export default interface PersonColumn {
-    id: "id" | "name" | "email";
+    id: "id" | "name" | "email" | "roles";
     label: string;
     minWidth?: number;
-    align?: "right";
-    format?: (value: number) => string;
+    align?: "left" |"right";
+    component: any;
   }

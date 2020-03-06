@@ -19,6 +19,11 @@ import roleReducer from './roleReducer';
 import permissionReducer from './permissionReducer';
 import userReducer from './userReducer';
 import relationTypeReducer from './relationTypeReducer';
+import paymentMethodReducer from './paymentMethodReducer';
+import cardTypeReducer from './cardTypeReducer';
+import secondModalReducer from './secondModalReducer';
+import shareReducer from './shareReducer';
+import cardPersonReducer from './cardPersonReducer';
 
 const rootReducer = combineReducers({
   modalReducer,
@@ -37,7 +42,12 @@ const rootReducer = combineReducers({
   roleReducer,
   permissionReducer,
   userReducer,
-  relationTypeReducer
+  relationTypeReducer,
+  paymentMethodReducer,
+  cardTypeReducer,
+  secondModalReducer,
+  shareReducer,
+  cardPersonReducer
 });
 
 export default rootReducer;

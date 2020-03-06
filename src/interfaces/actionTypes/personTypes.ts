@@ -8,7 +8,8 @@ export const ACTIONS = {
     SET_LOADING: 'person/set_loading',
     SET_SECOND_LOADING: 'person/set_second_loading',
     SET_RELATION_LOADING: 'person/set_relation_loading',
-    SET_ASSIGN_LOADING: 'person/set_assign_loading'
+    SET_ASSIGN_LOADING: 'person/set_assign_loading',
+    SET_REPORT_BY_PARTNER_LOADING: 'person/set_report_by_partner_loading'
 };
   
   interface GetPerson {
@@ -50,6 +51,11 @@ export const ACTIONS = {
     type: typeof ACTIONS.SET_RELATION_LOADING
     payload: boolean
   }
+
+  interface SetReportByPartnerLoading {
+    type: typeof ACTIONS.SET_REPORT_BY_PARTNER_LOADING
+    payload: boolean
+  }
   
   
-  export type ActionTypes = GetPerson | GetFamilyByPerson | SetPerson | SetPersonAssignPagination | GetAllPersons | SetLoading | SetSecondLoading | SetRelationLoading
+  export type ActionTypes = GetPerson | GetFamilyByPerson | SetPerson | SetPersonAssignPagination | SetReportByPartnerLoading | GetAllPersons | SetLoading | SetSecondLoading | SetRelationLoading

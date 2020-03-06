@@ -79,7 +79,7 @@ export const search = (term: string) => async (dispatch: Function) => {
   }
 };
 
-export const searchPersonsToAssign = (id: number, term: string = '') => async (dispatch: Function) => {
+export const searchPersonsToAssign = (id: any, term: string = '') => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_SECOND_LOADING,
     payload: true
@@ -358,6 +358,42 @@ export const geReports = () => async (dispatch: Function) => {
       type: ACTIONS.SET_SECOND_LOADING,
       payload: false
     });
+  });
+};
+
+export const getReportsByPartner = (id: any) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_REPORT_BY_PARTNER_LOADING,
+    payload: true
+  });
+  Axios({
+    url: `${Prefix.api}/report-by-partner?id=${id}`,
+    method: 'GET',
+    responseType: 'blob', // important
+    headers: headers(),
+  }).then((response) => {
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'partnerReport.pdf');
+    document.body.appendChild(link);
+    link.click();
+    dispatch({
+      type: ACTIONS.SET_REPORT_BY_PARTNER_LOADING,
+      payload: false
+    });
+  }).catch(err => {
+    dispatch({
+      type: ACTIONS.SET_REPORT_BY_PARTNER_LOADING,
+      payload: false
+    });
+    snackBarUpdate({
+      payload: {
+        message: 'General Error',
+        type: "error",
+        status: true
+      }
+    })(dispatch);
   });
 };
 

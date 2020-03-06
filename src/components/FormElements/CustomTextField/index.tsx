@@ -12,10 +12,12 @@ type CustomTextFieldProps = {
   field: string;
   required?: boolean;
   register: Function;
-  errorsField: any;
-  errorsMessageField: any;
+  errorsField?: any;
+  errorsMessageField?: any;
   isEmail?: boolean;
   type?: string;
+  disable?: boolean;
+  maxLength?: number;
 };
 
 const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
@@ -26,10 +28,13 @@ const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
   errorsField,
   errorsMessageField,
   isEmail,
-  type = 'text'
+  type = 'text',
+  disable = false,
+  maxLength = 150,
 }) => (
   <TextField
     label={placeholder}
+    disabled={disable}
     size="small"
     margin="dense"
     fullWidth
@@ -37,6 +42,9 @@ const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
     placeholder={placeholder}
     name={field}
     type={type}
+    inputProps={{
+      maxLength
+    }}
     inputRef={register({
       required: required ? "Required" : false,
       pattern: isEmail ? emailPattern : null

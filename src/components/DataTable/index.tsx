@@ -83,6 +83,7 @@ const DataTable: FunctionComponent<DataTableProps> = ({
                         <Button
                           variant="contained"
                           color="primary"
+                          size="small"
                           onClick={() => handleEdit(row.id)}
                         >
                           Edit
@@ -93,6 +94,7 @@ const DataTable: FunctionComponent<DataTableProps> = ({
                           <Button
                             variant="contained"
                             color="secondary"
+                            size="small"
                             onClick={() => handleDelete(row.id)}
                           >
                             Delete

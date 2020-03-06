@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import Dashboard from "../containers/dashboard";
 import Product from "../containers/product";
 import Modal from "../components/Modal";
+import SecondModal from "../components/SecondModal";
 import MainLayout from "../Hoc/MainLayout";
 import SnackBar from "../components/SnackBar";
 import Login from "../containers/login";
@@ -26,6 +27,8 @@ import Home from "../containers/home";
 import Reports from "../containers/reports";
 import ExpirationCard from "../containers/Templates/ExpirationCard";
 import RelationType from "../containers/relationType";
+import PaymentMethod from "../containers/paymentMethod";
+import CardType from "../containers/cardType";
 
 export default function Routes() {
   const dispatch = useDispatch();
@@ -82,6 +85,8 @@ export default function Routes() {
                       />
                       <Route path="/dashboard/sexo" component={Gender} />
                       <Route path="/dashboard/relation-type" component={RelationType} />
+                      <Route path="/dashboard/payment-method" component={PaymentMethod} />
+                      <Route path="/dashboard/card-type" component={CardType} />
                     </Dashboard>
                   </Switch>
                 );
@@ -91,6 +96,7 @@ export default function Routes() {
           />
         </Switch>
         <Modal />
+        <SecondModal />
         <SnackBar />
       </MainLayout>
     </HashRouter>

@@ -238,6 +238,26 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             onClick={() => handeClick("/dashboard/user")}
           />
         </MenuItem>
+
+        <MenuItem>
+          <ListItemIcon>
+            <DoubleArrowIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={"Metodo de Pago"}
+            onClick={() => handeClick("/dashboard/payment-method")}
+          />
+        </MenuItem>
+
+        <MenuItem>
+          <ListItemIcon>
+            <DoubleArrowIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={"Tipo de Tarjeta"}
+            onClick={() => handeClick("/dashboard/card-type")}
+          />
+        </MenuItem>
       </Menu>
       <List>
       <ListItem button>

@@ -2,28 +2,43 @@ import React, { useEffect } from "react";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import { useDispatch, useSelector } from 'react-redux';
+import Chip from '@material-ui/core/Chip';
 
 import './index.sass';
 import { getAll, remove, search } from "../../actions/userActions";
 import { updateModal } from "../../actions/modalActions";
 import UserForm from "../../components/UserForm";
-import DataTable from '../../components/DataTable'
+import DataTable2 from '../../components/DataTable2'
 import UserColumns from '../../interfaces/UserColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
 
 const columns: UserColumns[] = [
-  { id: "id", label: "Id", minWidth: 170 },
+  {
+    id: "id",
+    label: "Id",
+    minWidth: 10,
+    component: (value: any) => <span>{value.value}</span>
+  },
   {
     id: "name",
     label: "Nombre",
-    minWidth: 170,
-    align: "right"
+    minWidth: 30,
+    align: "right",
+    component: (value: any) => <span>{value.value}</span>
   },
   {
     id: "email",
     label: "Correo",
-    minWidth: 170,
-    align: "right"
+    minWidth: 30,
+    align: "right",
+    component: (value: any) => <span>{value.value}</span>
+  },
+    {
+    id: "roles",
+    label: "Roles",
+    minWidth: 20,
+    align: "right",
+    component: (value: any) => value.value.map((element: any) => (<Chip label={element.name} color="primary" size="small" />)),
   },
 ];
 
@@ -88,7 +103,7 @@ export default function User() {
         <CustomSearch handleSearch={handleSearch} />
       </div>
       <div>
-        <DataTable
+        <DataTable2
           data={list}
           columns={columns}
           handleEdit={handleEdit}

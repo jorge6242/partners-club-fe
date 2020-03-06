@@ -19,24 +19,109 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Chip from '@material-ui/core/Chip';
+import PrintIcon from "@material-ui/icons/Print";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 
 import CustomSelect from "../FormElements/CustomSelect";
 import CustomTextField from "../FormElements/CustomTextField";
-import { update, create, get, searchPersonsToAssign, searchFamilyByPerson, assignPerson, removeRelation } from "../../actions/personActions";
+import {
+  update,
+  create,
+  get,
+  searchPersonsToAssign,
+  searchFamilyByPerson,
+  assignPerson,
+  removeRelation,
+  getReportsByPartner
+} from "../../actions/personActions";
 import { getAll as getStatusPersonAll } from "../../actions/statusPersonActions";
 import { getAll as getMaritalStatusAll } from "../../actions/maritalStatusActions";
 import { getAll as getGenderAll } from "../../actions/genderActions";
 import { getAll as getCountries } from "../../actions/countryActions";
 import { getAll as getProfessions } from "../../actions/professionActions";
 import { getAll as getRelationTypes } from "../../actions/relationTypeActions";
+import { getAll as getPaymentMethods } from "../../actions/paymentMethodActions";
+import {
+  getAll as getCardPerson,
+  remove as removeCardPerson
+} from "../../actions/cardPersonActions";
+import { create as createShare } from "../../actions/shareActions";
+import { updateModal } from "../../actions/secondModalActions";
 import TransferList from "../TransferList";
 import DataTableAssignPersons from "../DataTableAssignPersons";
-import PersonColumn from '../../interfaces/PersonColumn';
-import FamilyPersonColumns from '../../interfaces/FamilyPersonColumns';
+import PersonColumn from "../../interfaces/PersonColumn";
+import CardPersonColumns from "../../interfaces/CardPersonColumns";
+import FamilyPersonColumns from "../../interfaces/FamilyPersonColumns";
 import DataTable from "../DataTable";
 import DataTable2 from "../DataTable2";
-import CustomSearch from '../FormElements/CustomSearch';
+import CustomSearch from "../FormElements/CustomSearch";
+import LoadingButton from "../FormElements/LoadingButton";
+import CardPersonForm from "../CardPersonForm";
+
+const cardPersonColumns: CardPersonColumns[] = [
+  {
+    id: "id",
+    label: "ID",
+    minWidth: 5,
+    align: "left",
+    component: (value: any) => <span>{value.value}</span>
+  },
+  {
+    id: "titular",
+    label: "Titular",
+    minWidth: 20,
+    align: "left",
+    component: (value: any) => <span>{value.value}</span>
+  },
+  {
+    id: "ci",
+    label: "Cedula",
+    minWidth: 10,
+    align: "left",
+    component: (value: any) => <span>{value.value}</span>
+  },
+  {
+    id: "card_number",
+    label: "Numero",
+    minWidth: 20,
+    align: "left",
+    component: (value: any) => <span>{value.value}</span>
+  },
+  {
+    id: "sec_code",
+    label: "CVC",
+    minWidth: 10,
+    align: "left",
+    component: (value: any) => <span>{value.value}</span>
+  },
+  {
+    id: "expiration_date",
+    label: "Vence",
+    minWidth: 30,
+    align: "left",
+    component: (value: any) => <span>{value.value}</span>
+  },
+  {
+    id: "card",
+    label: "Tipo",
+    minWidth: 10,
+    align: "left",
+    component: (value: any) => <span>{value.value.description}</span>
+  },
+  {
+    id: "bank",
+    label: "Banco",
+    minWidth: 10,
+    align: "left",
+    component: (value: any) => <span>{value.value.description}</span>
+  }
+];
 
 const FamilysColumns: FamilyPersonColumns[] = [
   {
@@ -44,29 +129,33 @@ const FamilysColumns: FamilyPersonColumns[] = [
     label: "ID",
     minWidth: 170,
     align: "right",
-    component: (value: any) => <span>{value.value}</span>,
+    component: (value: any) => <span>{value.value}</span>
   },
   {
     id: "name",
     label: "Nombre",
     minWidth: 170,
     align: "right",
-    component: (value: any) => <span>{value.value}</span>,
+    component: (value: any) => <span>{value.value}</span>
   },
   {
     id: "last_name",
     label: "Apellido",
     minWidth: 170,
     align: "right",
-    component: (value: any) => <span>{value.value}</span>,
+    component: (value: any) => <span>{value.value}</span>
   },
   {
     id: "relationType",
     label: "Parentesco",
     minWidth: 170,
     align: "right",
-    component: (value: any) => (<span><strong>{value.value.description}</strong></span>),
-  },
+    component: (value: any) => (
+      <span>
+        <strong>{value.value.description}</strong>
+      </span>
+    )
+  }
 ];
 
 const columns: PersonColumn[] = [
@@ -82,7 +171,7 @@ const columns: PersonColumn[] = [
     label: "Apellido",
     minWidth: 170,
     align: "right"
-  },
+  }
 ];
 
 interface TabPanelProps {
@@ -90,7 +179,7 @@ interface TabPanelProps {
   dir?: string;
   index: any;
   value: any;
-};
+}
 
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
@@ -126,6 +215,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: theme.spacing(1),
     position: "relative",
     textAlign: "center"
+  },
+  actionButtonContainer: {
+    margin: theme.spacing(1),
+    position: "relative",
+    textAlign: "right"
   },
   buttonProgress: {
     position: "absolute",
@@ -165,7 +259,21 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontWeight: theme.typography.fontWeightRegular
   },
   swipeableViewsContainer: {
-    height: '300px',
+    height: "350px"
+  },
+  reportButtonContainer: {},
+  profileName: {
+    textAlign: "center",
+    fontWeight: "bold",
+    color: "#3f51b5",
+    fontSize: "20px"
+  },
+  cardPersonButtonContainer: {
+    textAlign: "right"
+  },
+  cardPersonButton: {
+    width: "15%",
+    fontSize: "12px"
   }
 }));
 
@@ -197,6 +305,12 @@ type FormData = {
   marital_statuses_id: number;
   countries_id: number;
   profession_list: any;
+  share_list: number;
+  person: string;
+  payment_method_id: number;
+  card_people1: number;
+  card_people2: number;
+  card_people3: number;
 };
 
 type PersonFormProps = {
@@ -204,13 +318,12 @@ type PersonFormProps = {
 };
 
 const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
-
   /* States */
   const [tempPersonId, setTempPersonId] = useState(0);
   const [expanded, setExpanded] = React.useState<string | false>("panel1");
   const [image, setImage] = useState({ preview: "", raw: "" });
   const [imageField, setImageField] = useState();
-  const [value, setTab] = useState(0);
+  const [tabValue, setTabValue] = useState(0);
   const [selectedProff, setSelectedProff] = useState<any>(null);
 
   /* Form */
@@ -223,11 +336,19 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     setValue,
     getValues
   } = useForm<FormData>();
-  const { picture, profession_list: selectedProfessions } = getValues();
+  const { picture, name, last_name } = getValues();
 
   /* Redux */
   const dispatch = useDispatch();
-  const { loading, assignLoading, relationLoading ,personsToAssign, paginationPersonsToAssign, familyByPerson } = useSelector((state: any) => state.personReducer);
+  const {
+    loading,
+    assignLoading,
+    relationLoading,
+    reportByPartnerLoading,
+    personsToAssign,
+    paginationPersonsToAssign,
+    familyByPerson
+  } = useSelector((state: any) => state.personReducer);
   const { list: statusPersonList } = useSelector(
     (state: any) => state.statusPersonReducer
   );
@@ -236,8 +357,22 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   );
   const { countries } = useSelector((state: any) => state.countryReducer);
   const { list: genderList } = useSelector((state: any) => state.genderReducer);
-  const { professions: professionList, } = useSelector((state: any) => state.professionReducer);
-  const { list: relationTypeList, } = useSelector((state: any) => state.relationTypeReducer);
+  const { professions: professionList } = useSelector(
+    (state: any) => state.professionReducer
+  );
+  const { list: relationTypeList } = useSelector(
+    (state: any) => state.relationTypeReducer
+  );
+  const { loading: shareLoading } = useSelector(
+    (state: any) => state.shareReducer
+  );
+  const { loading: cardPersonLoading, list: cardPersonList } = useSelector(
+    (state: any) => state.cardPersonReducer
+  );
+  const { list: paymentMethodList } = useSelector(
+    (state: any) => state.paymentMethodReducer
+  );
+
   const disableTabs = tempPersonId > 0 ? false : true;
 
   /* Styles */
@@ -246,11 +381,11 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   const theme = useTheme();
 
   const handleChange = (event: React.ChangeEvent<{}>, tabValue: number) => {
-    setTab(tabValue);
+    setTabValue(tabValue);
   };
 
   const handleChangeIndex = (index: number) => {
-    setTab(index);
+    setTabValue(index);
   };
 
   const handleExpandedPanel = (panel: string) => (
@@ -266,11 +401,13 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     dispatch(getGenderAll());
     dispatch(getCountries());
     dispatch(getRelationTypes());
+    dispatch(getPaymentMethods());
     async function fetch() {
       dispatch(getProfessions());
       if (id) {
         dispatch(searchPersonsToAssign(id));
-        dispatch(searchFamilyByPerson(id))
+        dispatch(searchFamilyByPerson(id));
+        dispatch(getCardPerson(id));
         const response: any = await dispatch(get(id));
         const {
           name,
@@ -299,7 +436,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
           status_person_id,
           marital_statuses_id,
           countries_id,
-          professions,
+          professions
         } = response;
         setValue("name", name);
         setValue("last_name", last_name);
@@ -330,9 +467,9 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
         if (professions) {
           const list = professions.map((element: any) => element.id);
           setValue("profession_list", JSON.stringify(list));
-          setSelectedProff(professions)
+          setSelectedProff(professions);
         } else {
-          setSelectedProff([])
+          setSelectedProff([]);
         }
         setTempPersonId(id);
       }
@@ -383,8 +520,84 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
 
   const onProfessionsChange = (event: any) => {
     setValue("profession_list", JSON.stringify(event));
-  }
+  };
 
+  const handleAssign = (personRelated: number, relationType: number) => {
+    const data = {
+      base_id: id,
+      related_id: personRelated,
+      relation_type_id: relationType
+    };
+    dispatch(assignPerson(data));
+  };
+
+  const handleChangePage = (newPage: number) => {
+    // const page = pagination.currentPage === 1 ? 2 : newPage;
+    // dispatch(getAll(page, pagination.perPage))
+  };
+
+  const handlePerPage = (page: number, perPage: number) => {
+    // dispatch(getAll(page, perPage))
+  };
+
+  const handleSearch = (event: any) => {
+    dispatch(searchPersonsToAssign(id, event.value));
+  };
+
+  const handleDeleteRelation = (relationId: number) => {
+    dispatch(removeRelation(relationId, id));
+  };
+
+  const handleCardPerson = () => {
+    dispatch(
+      updateModal({
+        payload: {
+          status: true,
+          element: <div> Example second modal </div>,
+          customSize: "large"
+        }
+      })
+    );
+  };
+
+  const handleReportByPartner = () => {
+    dispatch(getReportsByPartner(id));
+  };
+
+  const handleShare = () => {
+    // const {  } = getValues();
+    const data = {
+      father_action_number: 12345,
+      people_id: 1
+    };
+    dispatch(createShare(data));
+  };
+
+  const handleCardPersonCreate = () => {
+    dispatch(
+      updateModal({
+        payload: {
+          status: true,
+          element: <CardPersonForm personId={id} />
+        }
+      })
+    );
+  };
+
+  const handleCardPersonEdit = (cardPersonId: number) => {
+    dispatch(
+      updateModal({
+        payload: {
+          status: true,
+          element: <CardPersonForm personId={id} id={cardPersonId} />
+        }
+      })
+    );
+  };
+
+  const handleCardPersonDelete = (personCardId: number) => {
+    dispatch(removeCardPerson(personCardId, id));
+  };
 
   const renderMainData = () => {
     return (
@@ -547,7 +760,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     );
   };
 
-  const renderContacData = () => {
+  const renderAddressData = () => {
     return (
       <Grid container spacing={2}>
         <Grid item xs={3}>
@@ -690,31 +903,178 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     );
   };
 
-  const handleAssign = (personRelated: number, relationType: number) => {
-    const data = {
-      base_id: id,
-      related_id: personRelated,
-      relation_type_id: relationType
-    }
-    dispatch(assignPerson(data))
-  }
-
-  const handleChangePage = (newPage: number) => {
-    // const page = pagination.currentPage === 1 ? 2 : newPage;
-    // dispatch(getAll(page, pagination.perPage))
+  const renderPaymentMethod = () => {
+    return (
+      <TableContainer component={Paper}>
+        <Table size="small" aria-label="a dense table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="left">Accion</TableCell>
+              <TableCell align="left">Forma de Pago</TableCell>
+              <TableCell align="left">Tarjeta 1</TableCell>
+              <TableCell align="left">Tarjeta 2</TableCell>
+              <TableCell align="left">Tarjeta 3</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell align="left">34534</TableCell>
+              <TableCell align="left">
+                <CustomSelect
+                  selectionMessage="Seleccione"
+                  field="payment_method_id"
+                  required
+                  register={register}
+                  errorsMessageField={
+                    errors.payment_method_id && errors.payment_method_id.message
+                  }
+                >
+                  {paymentMethodList.map((item: any) => (
+                    <option key={item.id} value={item.id}>
+                      {item.description}
+                    </option>
+                  ))}
+                </CustomSelect>
+              </TableCell>
+              <TableCell align="left">
+              <CustomSelect
+                  selectionMessage="Seleccione"
+                  field="card_people1"
+                  required
+                  register={register}
+                  errorsMessageField={
+                    errors.card_people1 && errors.card_people1.message
+                  }
+                >
+                  {cardPersonList.map((item: any) => (
+                    <option key={item.id} value={item.id}>
+                      {item.card_number}
+                    </option>
+                  ))}
+                </CustomSelect>
+              </TableCell>
+              <TableCell align="left">
+              <CustomSelect
+                  selectionMessage="Seleccione"
+                  field="card_people3"
+                  required
+                  register={register}
+                  errorsMessageField={
+                    errors.card_people3 && errors.card_people3.message
+                  }
+                >
+                  {cardPersonList.map((item: any) => (
+                    <option key={item.id} value={item.id}>
+                      {item.card_number}
+                    </option>
+                  ))}
+                </CustomSelect>
+              </TableCell>
+              <TableCell align="left">
+              <CustomSelect
+                  selectionMessage="Seleccione"
+                  field="card_people2"
+                  required
+                  register={register}
+                  errorsMessageField={
+                    errors.card_people2 && errors.card_people2.message
+                  }
+                >
+                  {cardPersonList.map((item: any) => (
+                    <option key={item.id} value={item.id}>
+                      {item.card_number}
+                    </option>
+                  ))}
+                </CustomSelect>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
   };
 
-  const handlePerPage = (page: number, perPage: number) => {
-    // dispatch(getAll(page, perPage))
-  }
+  const renderShareData = () => {
+    return (
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <CustomSelect
+            label="Accion"
+            selectionMessage="Seleccione Accion"
+            field="share_list"
+            register={register}
+            errorsMessageField={errors.share_list && errors.share_list.message}
+          >
+            <option value={0}> 23123 </option>
+            <option value={1}> 21232 </option>
+            <option value={2}> 53445 </option>
+            <option value={3}> 95675 </option>
+          </CustomSelect>
+        </Grid>
+        <Grid item xs={12}>
+          <strong>Persona:</strong>Jorge Gomez
+        </Grid>
+        <Grid item xs={12}>
+          <strong>Cedula:</strong> 123456
+        </Grid>
+        <Grid item xs={12}>
+          <strong>Direccion:</strong> Direccion de ejemplo
+        </Grid>
+        <Grid item xs={12}>
+          <strong>Telefono:</strong> 0424556788
+        </Grid>
+        <Grid item xs={12}>
+          <div className={classes.actionButtonContainer}>
+            <Button
+              type="button"
+              fullWidth
+              variant="contained"
+              color="primary"
+              disabled={shareLoading}
+              className={classes.submit}
+              onClick={handleShare}
+            >
+              Guardar
+            </Button>
+            {shareLoading && (
+              <CircularProgress size={24} className={classes.buttonProgress} />
+            )}
+          </div>
+        </Grid>
+      </Grid>
+    );
+  };
 
-  const handleSearch = (event: any) => {
-    dispatch(searchPersonsToAssign(event.value))
-  }
-
-  const handleDeleteRelation = (relationId: number) => {
-    dispatch(removeRelation(relationId,id));
-  }
+  const renderCardPersonData = () => {
+    return (
+      <Grid container spacing={2}>
+        <Grid item xs={12} className="card-person-data-table">
+          <DataTable2
+            data={cardPersonList}
+            columns={cardPersonColumns}
+            handleEdit={handleCardPersonEdit}
+            isDelete
+            handleDelete={handleCardPersonDelete}
+            loading={cardPersonLoading}
+            fontSize="10px"
+          />
+        </Grid>
+        <Grid item xs={12} className={classes.cardPersonButtonContainer}>
+          <Button
+            size="small"
+            type="button"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.cardPersonButton}
+            onClick={handleCardPersonCreate}
+          >
+            Incluir Tarjeta
+          </Button>
+        </Grid>
+      </Grid>
+    );
+  };
 
   let imagePreview = picture;
   if (image.preview) imagePreview = image.preview;
@@ -728,24 +1088,34 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
         >
           <Grid container spacing={2}>
             <Grid item xs={2}>
-              <Card className={classes.pictureContainer}>
-                <CardActionArea onClick={() => handleImage()}>
-                  <CardMedia className={classes.media} image={imagePreview} />
-                </CardActionArea>
-              </Card>
-              <input
-                style={{ display: "none" }}
-                type="file"
-                id="load_image"
-                accept="image/*"
-                ref={triggerClick}
-                onChange={loadImage}
-              />
-              <input
-                style={{ display: "none" }}
-                name="picture"
-                ref={register}
-              />
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Card className={classes.pictureContainer}>
+                    <CardActionArea onClick={() => handleImage()}>
+                      <CardMedia
+                        className={classes.media}
+                        image={imagePreview}
+                      />
+                    </CardActionArea>
+                  </Card>
+                  <input
+                    style={{ display: "none" }}
+                    type="file"
+                    id="load_image"
+                    accept="image/*"
+                    ref={triggerClick}
+                    onChange={loadImage}
+                  />
+                  <input
+                    style={{ display: "none" }}
+                    name="picture"
+                    ref={register}
+                  />
+                </Grid>
+                <Grid item xs={12} className={classes.profileName}>
+                  {name} {last_name}
+                </Grid>
+              </Grid>
             </Grid>
 
             <Grid item xs={10}>
@@ -753,7 +1123,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                 <div className={classes.root}>
                   <AppBar position="static" color="default">
                     <Tabs
-                      value={value}
+                      value={tabValue}
                       onChange={handleChange}
                       indicatorColor="primary"
                       textColor="primary"
@@ -770,11 +1140,11 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                   </AppBar>
                   <SwipeableViews
                     axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-                    index={value}
+                    index={tabValue}
                     onChangeIndex={handleChangeIndex}
                     className={classes.swipeableViewsContainer}
                   >
-                    <TabPanel value={value} index={0} dir={theme.direction}>
+                    <TabPanel value={tabValue} index={0} dir={theme.direction}>
                       <div className={classes.root}>
                         <ExpansionPanel
                           expanded={expanded === "panel1"}
@@ -809,7 +1179,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                             </Typography>
                           </ExpansionPanelSummary>
                           <ExpansionPanelDetails>
-                            {renderContacData()}
+                            {renderAddressData()}
                           </ExpansionPanelDetails>
                         </ExpansionPanel>
 
@@ -849,22 +1219,23 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                           <ExpansionPanelDetails>
                             <Grid container spacing={3}>
                               {/* <Grid item xs={12}> <Autocomplete /> </Grid> */}
-                              <Grid item xs={12} justify="flex-start"> {professionList.length > 0 && selectedProff && (
-                                <TransferList
-                                  data={professionList}
-                                  selectedData={selectedProff}
-                                  leftTitle="Profesiones"
-                                  onSelectedList={onProfessionsChange}
-                                />
-                              )}
+                              <Grid item xs={12} justify="flex-start">
+                                
+                                {professionList.length > 0 && selectedProff && (
+                                  <TransferList
+                                    data={professionList}
+                                    selectedData={selectedProff}
+                                    leftTitle="Profesiones"
+                                    onSelectedList={onProfessionsChange}
+                                  />
+                                )}
                                 <input
                                   style={{ display: "none" }}
                                   name="profession_list"
                                   ref={register}
-                                /> </Grid>
+                                />
+                              </Grid>
                             </Grid>
-
-
                           </ExpansionPanelDetails>
                         </ExpansionPanel>
 
@@ -888,11 +1259,13 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                         </ExpansionPanel>
                       </div>
                     </TabPanel>
-                    <TabPanel value={value} index={1} dir={theme.direction}>
+                    <TabPanel value={tabValue} index={1} dir={theme.direction}>
                       <div className={classes.root}>
                         <ExpansionPanel
                           expanded={expanded === "panel-familiars-assing"}
-                          onChange={handleExpandedPanel("panel-familiars-assing")}
+                          onChange={handleExpandedPanel(
+                            "panel-familiars-assing"
+                          )}
                         >
                           <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
@@ -947,25 +1320,93 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                                   loading={relationLoading}
                                 />
                               </Grid>
+                              <Grid
+                                item
+                                xs={12}
+                                className={classes.reportButtonContainer}
+                              >
+                                <LoadingButton
+                                  Icon={PrintIcon}
+                                  loading={reportByPartnerLoading}
+                                  handleClick={handleReportByPartner}
+                                />
+                              </Grid>
                             </Grid>
-
                           </ExpansionPanelDetails>
                         </ExpansionPanel>
                       </div>
                     </TabPanel>
-                    <TabPanel value={value} index={2} dir={theme.direction}>
-                      Pagos
+                    <TabPanel value={tabValue} index={2} dir={theme.direction}>
+                      <div className={classes.root}>
+                        <ExpansionPanel
+                          expanded={expanded === "panel-share"}
+                          onChange={handleExpandedPanel("panel-share")}
+                        >
+                          <ExpansionPanelSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel-share-content"
+                            id="panel-share-header"
+                          >
+                            <Typography className={classes.heading}>
+                              Facturar a nombre de
+                            </Typography>
+                          </ExpansionPanelSummary>
+                          <ExpansionPanelDetails>
+                            {renderShareData()}
+                          </ExpansionPanelDetails>
+                        </ExpansionPanel>
+
+                        <ExpansionPanel
+                          expanded={expanded === "panel-credit-card"}
+                          onChange={handleExpandedPanel("panel-credit-card")}
+                        >
+                          <ExpansionPanelSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel-credit-card-content"
+                            id="panel-credit-card-header"
+                          >
+                            <Typography className={classes.heading}>
+                              Tarjetas de Credito
+                            </Typography>
+                          </ExpansionPanelSummary>
+                          <ExpansionPanelDetails>
+                            {renderCardPersonData()}
+                          </ExpansionPanelDetails>
+                        </ExpansionPanel>
+
+                        <ExpansionPanel
+                          expanded={expanded === "panel-payment-method"}
+                          onChange={handleExpandedPanel("panel-payment-method")}
+                        >
+                          <ExpansionPanelSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel-payment-method-content"
+                            id="panel-payment-method-header"
+                          >
+                            <Typography className={classes.heading}>
+                              Forma de Pago
+                            </Typography>
+                          </ExpansionPanelSummary>
+                          <ExpansionPanelDetails>
+                            <Grid container spacing={2}>
+                              <Grid item xs={12}>
+                                {renderPaymentMethod()}
+                              </Grid>
+                            </Grid>
+                          </ExpansionPanelDetails>
+                        </ExpansionPanel>
+                      </div>
                     </TabPanel>
-                    <TabPanel value={value} index={3} dir={theme.direction}>
+                    <TabPanel value={tabValue} index={3} dir={theme.direction}>
                       Notas
                     </TabPanel>
-                    <TabPanel value={value} index={4} dir={theme.direction}>
+                    <TabPanel value={tabValue} index={4} dir={theme.direction}>
                       Expedientes
                     </TabPanel>
-                    <TabPanel value={value} index={5} dir={theme.direction}>
+                    <TabPanel value={tabValue} index={5} dir={theme.direction}>
                       Lockers
                     </TabPanel>
-                    <TabPanel value={value} index={6} dir={theme.direction}>
+                    <TabPanel value={tabValue} index={6} dir={theme.direction}>
                       Actividades
                     </TabPanel>
                   </SwipeableViews>
@@ -974,21 +1415,26 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             </Grid>
           </Grid>
 
-          <div className={classes.wrapper}>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              disabled={loading}
-              className={classes.submit}
-            >
-              {tempPersonId > 0 ? "Update" : "Create"}
-            </Button>
-            {loading && (
-              <CircularProgress size={24} className={classes.buttonProgress} />
-            )}
-          </div>
+          {tabValue !== 2 && (
+            <div className={classes.wrapper}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                disabled={loading}
+                className={classes.submit}
+              >
+                {tempPersonId > 0 ? "Update" : "Create"}
+              </Button>
+              {loading && (
+                <CircularProgress
+                  size={24}
+                  className={classes.buttonProgress}
+                />
+              )}
+            </div>
+          )}
         </form>
       </div>
     </Container>

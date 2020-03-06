@@ -6,6 +6,7 @@ type InitialState = {
   secondLoading: boolean;
   assignLoading: boolean;
   relationLoading: boolean;
+  reportByPartnerLoading: boolean;
   selectedPerson: any;
   personsToAssign: any;
   paginationPersonsToAssign: any;
@@ -17,6 +18,7 @@ const initialState: InitialState = {
   loading: false,
   assignLoading: false,
   relationLoading: false,
+  reportByPartnerLoading: false,
   secondLoading: false,
   selectedPerson: null,
   personsToAssign: [],
@@ -26,7 +28,7 @@ const initialState: InitialState = {
     prevPageUrl: null,
     currentPage: 0
   },
-  familyByPerson: [],
+  familyByPerson: []
 };
 
 const personReducer = (state = initialState, action: ActionTypes) => {
@@ -57,22 +59,27 @@ const personReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         secondLoading: action.payload
       };
-      case ACTIONS.SET_ASSIGN_LOADING:
-        return {
-          ...state,
-          assignLoading: action.payload
-        };
-        case ACTIONS.SET_RELATION_LOADING:
-          return {
-            ...state,
-            relationLoading: action.payload
-          };
+    case ACTIONS.SET_ASSIGN_LOADING:
+      return {
+        ...state,
+        assignLoading: action.payload
+      };
+    case ACTIONS.SET_REPORT_BY_PARTNER_LOADING:
+      return {
+        ...state,
+        reportByPartnerLoading: action.payload
+      };
+    case ACTIONS.SET_RELATION_LOADING:
+      return {
+        ...state,
+        relationLoading: action.payload
+      };
     case ACTIONS.SET_PERSON_ASSIGN_PAGINATION:
       return {
         ...state,
         pagination: action.payload
       };
-          case ACTIONS.GET_FAMILY_BY_PERSON:
+    case ACTIONS.GET_FAMILY_BY_PERSON:
       return {
         ...state,
         familyByPerson: action.payload

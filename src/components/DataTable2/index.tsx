@@ -9,6 +9,9 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import CircularProgress from '@material-ui/core/CircularProgress';
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles({
     root: {
@@ -21,7 +24,10 @@ const useStyles = makeStyles({
         display: 'flex',
         justifyContent: 'left',
         padding: 10
-    }
+    },
+    head: {
+        fontSize: '10px',
+    },
 });
 
 interface DataTableProps {
@@ -31,6 +37,7 @@ interface DataTableProps {
     handleEdit?: any;
     handleDelete?: any;
     loading?: boolean;
+    fontSize?: string;
 }
 
 const DataTable2: FunctionComponent<DataTableProps> = ({
@@ -39,10 +46,10 @@ const DataTable2: FunctionComponent<DataTableProps> = ({
     isDelete = true,
     handleEdit,
     handleDelete,
-    loading
+    loading,
+    fontSize = '14px'
 }) => {
     const classes = useStyles();
-
     return (
         <Paper className={classes.root}>
             <TableContainer className={classes.container}>
@@ -53,13 +60,13 @@ const DataTable2: FunctionComponent<DataTableProps> = ({
                                 <TableCell
                                     key={column.id}
                                     align={column.align}
-                                    style={{ minWidth: column.minWidth }}
+                                    style={{ minWidth: column.minWidth, fontSize }}
                                 >
                                     {column.label}
                                 </TableCell>
                             ))}
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
+                            {handleEdit && (<TableCell style={{ minWidth: 5}}></TableCell>) }
+                            {handleDelete && (<TableCell style={{ minWidth: 5}}></TableCell>) }
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -72,7 +79,7 @@ const DataTable2: FunctionComponent<DataTableProps> = ({
                                             {columns.map((column: any) => {
                                                 const value = row[column.id];
                                                 return (
-                                                    <TableCell key={column.id} align={column.align}>
+                                                    <TableCell key={column.id} align={column.align} style={{ fontSize }}>
                                                         {column.format && typeof value === "number"
                                                             ? column.format(value)
                                                             : createElement(column.component, { value })}
@@ -81,26 +88,28 @@ const DataTable2: FunctionComponent<DataTableProps> = ({
                                             })}
                                             {
                                                 handleEdit && (
-                                                    <TableCell>
-                                                        <Button
-                                                            variant="contained"
+                                                    <TableCell style={{ minWidth: 5, fontSize }}>
+                                                        <IconButton
+                                                            aria-label="delete"
+                                                            size="small"
                                                             color="primary"
                                                             onClick={() => handleEdit(row.id)}
                                                         >
-                                                            Edit
-                          </Button>
+                                                            <EditIcon fontSize="inherit" />
+                                                        </IconButton>
                                                     </TableCell>
                                                 )
                                             }
                                             {isDelete && (
-                                                <TableCell>
-                                                    <Button
-                                                        variant="contained"
+                                                <TableCell style={{ minWidth: 5, fontSize }}>
+                                                    <IconButton
+                                                        aria-label="delete"
+                                                        size="small"
                                                         color="secondary"
                                                         onClick={() => handleDelete(row.id)}
                                                     >
-                                                        Delete
-                        </Button>
+                                                        <DeleteIcon fontSize="inherit" />
+                                                    </IconButton>
                                                 </TableCell>
                                             )}
                                         </TableRow>

@@ -8,7 +8,7 @@ type CustomSelectProps = {
   register: Function;
   errorsMessageField: any;
   selectionMessage?: string;
-  label: string;
+  label?: string;
 };
 
 const CustomSelect: FunctionComponent<CustomSelectProps> = ({
