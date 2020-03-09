@@ -32,8 +32,14 @@ const API = {
       { headers: headers() }
     );
   },
-  remove(id: number) {
-    return AXIOS.delete(`${Prefix.api}/card-person/${id}`, { headers: headers() });
+  remove(id: number,share: number, order: number) {
+    console.log('order', order);
+    return AXIOS.delete(`${Prefix.api}/card-person/${id}`, {
+    data: {
+      share,
+      order
+    }, 
+    headers: headers() });
   },
 };
 

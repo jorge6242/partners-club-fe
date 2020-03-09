@@ -2,10 +2,10 @@ import AXIOS from "../config/Axios";
 import headers from "../helpers/headers";
 import Prefix from "../config/ApiPrefix";
 
-const API = {
+const TransactionType = {
   getAll(data: number, perPage: number) {
     const page = data ? data : 1;
-    return AXIOS.get(`${Prefix.api}/share`, {
+    return AXIOS.get(`${Prefix.api}/transaction-type`, {
       params: {
         page,
         perPage
@@ -15,7 +15,7 @@ const API = {
   },
   create(data: any) {
     return AXIOS.post(
-      `${Prefix.api}/share`,
+      `${Prefix.api}/transaction-type`,
       {
         ...data
       },
@@ -23,11 +23,11 @@ const API = {
     );
   },
   get(id: number) {
-    return AXIOS.get(`${Prefix.api}/share/${id}`, { headers: headers() });
+    return AXIOS.get(`${Prefix.api}/transaction-type/${id}`, { headers: headers() });
   },
   update(data: any) {
     return AXIOS.put(
-      `${Prefix.api}/share/${data.id}`,
+      `${Prefix.api}/transaction-type/${data.id}`,
       {
         ...data
       },
@@ -35,28 +35,17 @@ const API = {
     );
   },
   remove(id: number) {
-    return AXIOS.delete(`${Prefix.api}/share/${id}`, { headers: headers() });
+    return AXIOS.delete(`${Prefix.api}/transaction-type/${id}`, { headers: headers() });
   },
   search(term: string, perPage: number) {
-    return AXIOS.get(`${Prefix.api}/share-search`, {
+    return AXIOS.get(`${Prefix.api}/transaction-type-search`, {
       params: {
         term,
         perPage
       },
       headers: headers()
     });
-  },
-  getByPartner(id: number) {
-    return AXIOS.get(`${Prefix.api}/share-by-partner/${id}`, { headers: headers() });
-  },
-  searchToAssign(term: string) {
-    return AXIOS.get(`${Prefix.api}/search-to-assign`, {
-      params: {
-        term,
-      },
-      headers: headers()
-    });
-  },
+  }
 };
 
-export default API;
+export default TransactionType;

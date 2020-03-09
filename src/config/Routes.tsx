@@ -29,10 +29,27 @@ import ExpirationCard from "../containers/Templates/ExpirationCard";
 import RelationType from "../containers/relationType";
 import PaymentMethod from "../containers/paymentMethod";
 import CardType from "../containers/cardType";
+import { getAll as getStatusPersonAll } from "../actions/statusPersonActions";
+import { getAll as getMaritalStatusAll } from "../actions/maritalStatusActions";
+import { getAll as getGenderAll } from "../actions/genderActions";
+import { getAll as getCountries } from "../actions/countryActions";
+import { getAll as getRelationTypes } from "../actions/relationTypeActions";
+import { getAll as getPaymentMethods } from "../actions/paymentMethodActions";
+import TransactionType from "../containers/transactionType";
+import ShareMovement from "../containers/shareMovement";
 
 export default function Routes() {
   const dispatch = useDispatch();
   const token = SecureStorage.getItem("token");
+
+  useEffect(() => {
+    dispatch(getStatusPersonAll());
+    dispatch(getMaritalStatusAll());
+    dispatch(getGenderAll());
+    dispatch(getCountries());
+    dispatch(getRelationTypes());
+    dispatch(getPaymentMethods());
+  },[])
 
   useEffect(() => {
     dispatch(checkLogin());
@@ -70,6 +87,8 @@ export default function Routes() {
                       <Route path="/dashboard/banco" component={Bank} />
                       <Route path="/dashboard/pais" component={Country} />
                       <Route path="/dashboard/deporte" component={Sport} />
+                      <Route path="/dashboard/transaction-type" component={TransactionType} />
+                      <Route path="/dashboard/share-movement" component={ShareMovement} />
                       <Route
                         path="/dashboard/profesion"
                         component={Profession}

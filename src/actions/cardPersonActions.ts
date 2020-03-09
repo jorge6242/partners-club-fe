@@ -2,6 +2,7 @@ import API from "../api/CardPerson";
 import snackBarUpdate from "./snackBarActions";
 import { updateModal } from "./secondModalActions";
 import { ACTIONS } from '../interfaces/actionTypes/cardPersonTypes';
+import { getSharesByPartner } from "./shareActions";
 
 export const getAll = (id: number) => async (dispatch: Function) => {
   dispatch({
@@ -58,6 +59,7 @@ export const create = (body: any) => async (dispatch: Function) => {
         }
       })(dispatch);
       dispatch(getAll(body.people_id));
+      dispatch(getSharesByPartner(body.share));
       dispatch(
         updateModal({
           payload: {
@@ -94,14 +96,26 @@ export const create = (body: any) => async (dispatch: Function) => {
 };
 
 export const get = (id: number) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_LOADING,
+    payload: true
+  });
   try {
     const { data: { data }, status } = await API.get(id);
     let response = [];
     if (status === 200) {
       response = data;
+      dispatch({
+        type: ACTIONS.SET_LOADING,
+        payload: false
+      });
     }
     return response;
   } catch (error) {
+    dispatch({
+      type: ACTIONS.SET_LOADING,
+      payload: false
+    });
     snackBarUpdate({
       payload: {
         message: error.message,
@@ -142,6 +156,7 @@ export const update = (body: any) => async (dispatch: Function) => {
         })
       );
       dispatch(getAll(body.people_id));
+      dispatch(getSharesByPartner(body.share));
       dispatch({
         type: ACTIONS.SET_LOADING,
         payload: false
@@ -169,9 +184,9 @@ export const update = (body: any) => async (dispatch: Function) => {
   }
 };
 
-export const remove = (id: number, personId: any) => async (dispatch: Function) => {
+export const remove = (id: number, personId: any, share: number, order: number) => async (dispatch: Function) => {
   try {
-    const { data, status } = await API.remove(id);
+    const { data, status } = await API.remove(id, share, order);
     let response: any = [];
     if (status === 200) {
       response = {
@@ -186,6 +201,7 @@ export const remove = (id: number, personId: any) => async (dispatch: Function) 
         }
       })(dispatch);
       dispatch(getAll(personId));
+      dispatch(getSharesByPartner(share));
     }
     return response;
   } catch (error) {

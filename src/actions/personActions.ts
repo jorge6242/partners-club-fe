@@ -497,3 +497,77 @@ export const assignPerson = (body: any) => async (dispatch: Function) => {
     return error;
   }
 };
+
+export const searchPartnersToAssign = (term: string) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_PARTNERS_LOADING,
+    payload: true
+  });
+  try {
+    const { data: { data }, status } = await Person.searchToAssign(term);
+    let response = [];
+    console.log('data ', data);
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_PARTNERS_TO_ASSIGN,
+        payload: response
+      });
+    }
+    dispatch({
+      type: ACTIONS.SET_PARTNERS_LOADING,
+      payload: false
+    });
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_PARTNERS_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
+export const searchTitularToAssign = (term: string) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_TITULAR_LOADING,
+    payload: true
+  });
+  try {
+    const { data: { data }, status } = await Person.searchToAssign(term);
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_TITULAR_TO_ASSIGN,
+        payload: response
+      });
+    }
+    dispatch({
+      type: ACTIONS.SET_TITULAR_LOADING,
+      payload: false
+    });
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_TITULAR_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+

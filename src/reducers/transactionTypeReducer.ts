@@ -1,16 +1,13 @@
-import {  ACTIONS, ActionTypes } from '../interfaces/actionTypes/shareTypes';
+import {  ACTIONS, ActionTypes } from '../interfaces/actionTypes/transactionTypeTypes';
 
 type BanksInitialState = {
     list: Array<string | number>;
-    shareToAssignList: Array<string | number>;
     loading: boolean;
     pagination: any;
-    selectedShare: any;
 }
 
 const initialState: BanksInitialState = {
     list: [],
-    shareToAssignList: [],
     loading: false,
     pagination: {
         total: 0,
@@ -18,20 +15,14 @@ const initialState: BanksInitialState = {
         prevPageUrl: null,
         currentPage: 0,
     },
-    selectedShare: {},
 };
 
-const shareReducer = (state = initialState, action: ActionTypes) => {
+const transactionTypeReducer = (state = initialState, action: ActionTypes) => {
     switch (action.type) {
         case ACTIONS.GET_ALL:
             return {
                 ...state,
                 list: action.payload,
-            };
-            case ACTIONS.GET_SHARE_TO_ASSIGN:
-            return {
-                ...state,
-                shareToAssignList: action.payload,
             };
             case ACTIONS.SET_PAGINATION:
                 return {
@@ -43,14 +34,9 @@ const shareReducer = (state = initialState, action: ActionTypes) => {
                 ...state,
                 loading: action.payload,
             };
-            case ACTIONS.SET_SELECTED_SHARE:
-                return {
-                    ...state,
-                    selectedShare: action.payload,
-                };
         default:
             return state;
     }
 };
 
-export default shareReducer;
+export default transactionTypeReducer;

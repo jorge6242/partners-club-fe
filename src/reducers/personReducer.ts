@@ -2,9 +2,13 @@ import { ACTIONS, ActionTypes } from "../interfaces/actionTypes/personTypes";
 
 type InitialState = {
   persons: Array<string | number>;
+  partnersToAssign: Array<string | number>;
+  titularToAssign: Array<string | number>;
   loading: boolean;
   secondLoading: boolean;
   assignLoading: boolean;
+  setPartnersLoading: boolean;
+  setTitularLoading: boolean;
   relationLoading: boolean;
   reportByPartnerLoading: boolean;
   selectedPerson: any;
@@ -28,7 +32,11 @@ const initialState: InitialState = {
     prevPageUrl: null,
     currentPage: 0
   },
-  familyByPerson: []
+  familyByPerson: [],
+  partnersToAssign: [],
+  titularToAssign: [],
+  setPartnersLoading: false,
+  setTitularLoading: false,
 };
 
 const personReducer = (state = initialState, action: ActionTypes) => {
@@ -43,6 +51,17 @@ const personReducer = (state = initialState, action: ActionTypes) => {
       return {
         ...state,
         personsToAssign: action.payload
+      };
+
+    case ACTIONS.GET_PARTNERS_TO_ASSIGN:
+      return {
+        ...state,
+        partnersToAssign: action.payload
+      };
+    case ACTIONS.GET_TITULAR_TO_ASSIGN:
+      return {
+        ...state,
+        titularToAssign: action.payload
       };
     case ACTIONS.SET_PERSON:
       return {
@@ -74,6 +93,16 @@ const personReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         relationLoading: action.payload
       };
+      case ACTIONS.SET_PARTNERS_LOADING:
+        return {
+          ...state,
+          setPartnersLoading: action.payload
+        };
+        case ACTIONS.SET_TITULAR_LOADING:
+          return {
+            ...state,
+            setTitularLoading: action.payload
+          };
     case ACTIONS.SET_PERSON_ASSIGN_PAGINATION:
       return {
         ...state,

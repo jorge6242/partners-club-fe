@@ -1,5 +1,6 @@
 export const ACTIONS = {
     GET_ALL: 'share/get_all',
+    GET_SHARE_TO_ASSIGN: 'share/get_share_to_assign',
     GET: 'share/get',
     SET_LOADING: 'share/set_loading',
     SET_PAGINATION: 'share/set_pagination',
@@ -13,6 +14,11 @@ export const ACTIONS = {
   
   interface GetAll {
     type: typeof ACTIONS.GET_ALL
+    payload: Array<string|number>
+  }
+
+  interface GetShareToAssign {
+    type: typeof ACTIONS.GET_SHARE_TO_ASSIGN
     payload: Array<string|number>
   }
   
@@ -32,4 +38,4 @@ export const ACTIONS = {
   }
   
   
-  export type ActionTypes = Get | GetAll | SetLoading | SetPagination | SetSelectedShare
+  export type ActionTypes = Get | GetShareToAssign | GetAll | SetLoading | SetPagination | SetSelectedShare

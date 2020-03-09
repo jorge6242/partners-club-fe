@@ -284,6 +284,27 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             onClick={() => handeClick("/dashboard/socio")}
           />
         </ListItem>
+        
+        <ListItem button>
+          <ListItemIcon>
+            <DoubleArrowIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={"Tipos de transacion"}
+            onClick={() => handeClick("/dashboard/transaction-type")}
+          />
+        </ListItem>
+
+        <ListItem button>
+          <ListItemIcon>
+            <DoubleArrowIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={"Movimientos de Acciones"}
+            onClick={() => handeClick("/dashboard/share-movement")}
+          />
+        </ListItem>
+
         <ListItem button>
           <ListItemIcon>
             <ListAltIcon />

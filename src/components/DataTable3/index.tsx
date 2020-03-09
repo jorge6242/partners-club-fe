@@ -1,5 +1,5 @@
-import React, { FunctionComponent } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { FunctionComponent, createElement } from "react";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -9,10 +9,11 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { TablePagination } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
+import Switch, { SwitchClassKey, SwitchProps } from "@material-ui/core/Switch";
+import { green } from "@material-ui/core/colors";
 
 const useStyles = makeStyles({
   root: {
@@ -25,45 +26,59 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "left",
     padding: 10
+  },
+  head: {
+    fontSize: "10px"
   }
 });
 
 interface DataTableProps {
-  rows: any;
-  pagination?: any;
+  data: any;
   columns: any;
   isDelete?: boolean;
-  handleEdit: Function;
+  handleEdit?: any;
   handleDelete?: any;
+  handleSwitch?: any;
   loading?: boolean;
-  onChangePage: any;
-  onChangePerPage: any;
+  fontSize?: string;
 }
 
-const DataTable1: FunctionComponent<DataTableProps> = ({
-  rows = [],
-  pagination,
+const GreenSwitch = withStyles({
+  switchBase: {
+    color: '#e74c3c',
+    "&$checked": {
+      color: '#27ae60'
+    },
+    "&$checked + $track": {
+      backgroundColor: green[500]
+    }
+  },
+  checked: {},
+  track: {}
+})(Switch);
+
+const DataTable3: FunctionComponent<DataTableProps> = ({
+  data,
   columns,
   isDelete = true,
+  handleSwitch,
   handleEdit,
   handleDelete,
   loading,
-  onChangePage,
-  onChangePerPage
+  fontSize = "14px"
 }) => {
   const classes = useStyles();
+  const [state, setState] = React.useState({
+    checkedA: true,
+    checkedB: true,
+    checkedC: true
+  });
 
-  const handlePage = (event: unknown, newPage: number) => {
-    const page = pagination.currentPage === 1 ? 2 : newPage;
-    onChangePage(page);
-  };
-
-  const handleChangeRowsPerPage = (
+  const handleChange = (name: string) => (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    onChangePerPage(pagination.currentPage, event.target.value);
+    setState({ ...state, [name]: event.target.checked });
   };
-
   return (
     <Paper className={classes.root}>
       <TableContainer className={classes.container}>
@@ -74,12 +89,13 @@ const DataTable1: FunctionComponent<DataTableProps> = ({
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  style={{ minWidth: column.minWidth, fontSize }}
                 >
                   {column.label}
                 </TableCell>
               ))}
-              {handleEdit && <TableCell  style={{ minWidth: 5 }}></TableCell>}
+              {handleSwitch && <TableCell style={{ minWidth: 5 }}></TableCell>}
+              {handleEdit && <TableCell style={{ minWidth: 5 }}></TableCell>}
               {handleDelete && <TableCell style={{ minWidth: 5 }}></TableCell>}
             </TableRow>
           </TableHead>
@@ -89,38 +105,50 @@ const DataTable1: FunctionComponent<DataTableProps> = ({
                 <CircularProgress color="primary" />
               </TableRow>
             ) : (
-              rows.map((row: any) => {
+              data.map((row: any) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                     {columns.map((column: any) => {
                       const value = row[column.id];
                       return (
-                        <TableCell key={column.id} align={column.align}>
+                        <TableCell
+                          key={column.id}
+                          align={column.align}
+                          style={{ fontSize }}
+                        >
                           {column.format && typeof value === "number"
                             ? column.format(value)
-                            : value}
+                            : createElement(column.component, { value })}
                         </TableCell>
                       );
                     })}
+                    {handleSwitch && (
+                      <TableCell style={{ minWidth: 5, fontSize }}>
+                        <GreenSwitch
+                          checked={row.status === "1" ?  true : false}
+                          onChange={() => handleSwitch(row.id, row.status)}
+                        />
+                      </TableCell>
+                    )}
                     {handleEdit && (
-                      <TableCell  align="right" style={{ minWidth: 5 }}>
+                      <TableCell style={{ minWidth: 5, fontSize }}>
                         <IconButton
                           aria-label="delete"
                           size="small"
                           color="primary"
-                          onClick={() => handleEdit(row.id)}
+                          onClick={() => handleEdit(row)}
                         >
                           <EditIcon fontSize="inherit" />
                         </IconButton>
                       </TableCell>
                     )}
                     {isDelete && (
-                      <TableCell  align="right" style={{ minWidth: 5 }}>
+                      <TableCell style={{ minWidth: 5, fontSize }}>
                         <IconButton
                           aria-label="delete"
                           size="small"
                           color="secondary"
-                          onClick={() => handleDelete(row.id)}
+                          onClick={() => handleDelete(row)}
                         >
                           <DeleteIcon fontSize="inherit" />
                         </IconButton>
@@ -133,18 +161,8 @@ const DataTable1: FunctionComponent<DataTableProps> = ({
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        labelRowsPerPage="Filas"
-        rowsPerPageOptions={[5, 10, 20, 30, 40]}
-        component="div"
-        count={pagination.total}
-        rowsPerPage={pagination.perPage}
-        page={pagination.prevPageUrl === null ? 0 : pagination.currentPage}
-        onChangePage={handlePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
     </Paper>
   );
 };
 
-export default DataTable1;
+export default DataTable3;

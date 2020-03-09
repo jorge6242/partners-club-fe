@@ -48,13 +48,7 @@ import {
   getReportsByPartner,
   updateRelation
 } from "../../actions/personActions";
-import { getAll as getStatusPersonAll } from "../../actions/statusPersonActions";
-import { getAll as getMaritalStatusAll } from "../../actions/maritalStatusActions";
-import { getAll as getGenderAll } from "../../actions/genderActions";
-import { getAll as getCountries } from "../../actions/countryActions";
 import { getAll as getProfessions } from "../../actions/professionActions";
-import { getAll as getRelationTypes } from "../../actions/relationTypeActions";
-import { getAll as getPaymentMethods } from "../../actions/paymentMethodActions";
 
 import {
   getAll as getCardPerson,
@@ -72,8 +66,8 @@ import DataTableAssignPersons from "../DataTableAssignPersons";
 import PersonColumn from "../../interfaces/PersonColumn";
 import CardPersonColumns from "../../interfaces/CardPersonColumns";
 import FamilyPersonColumns from "../../interfaces/FamilyPersonColumns";
-import DataTable from "../DataTable";
 import DataTable2 from "../DataTable2";
+import DataTable3 from "../DataTable3";
 import CustomSearch from "../FormElements/CustomSearch";
 import LoadingButton from "../FormElements/LoadingButton";
 import CardPersonForm from "../CardPersonForm";
@@ -141,18 +135,20 @@ const cardPersonColumns: CardPersonColumns[] = [
     component: (value: any) => <span>{value.value.description}</span>
   },
   {
-    id: "order",
+    id: "orderDetail",
     label: "Orden",
     minWidth: 10,
     align: "left",
-    component: (value: any) => <Chip
-    label={value.value}
-    style={{
-      fontSize: "10px"
-    }}
-    size="small"
-    color="primary"
-  />
+    component: (value: any) => (
+      <Chip
+        label={value.value}
+        style={{
+          fontSize: "10px"
+        }}
+        size="small"
+        color="primary"
+      />
+    )
   }
 ];
 
@@ -389,7 +385,7 @@ function getParsePerson(data: any, classes: any) {
     <Grid container spacing={1} className={classes.parsedPersonContainer}>
       <Grid item xs={3} className={classes.parsedPersonContainerTitle}>
         <Paper className={classes.parsedPersonContainerDetail}>
-          <strong>Tipo Persona:</strong>{" "}
+          <strong>Tipo Persona:</strong>
           {type_person === 1 ? "Natural" : "Empresa"}
         </Paper>
       </Grid>
@@ -400,25 +396,25 @@ function getParsePerson(data: any, classes: any) {
       </Grid>
       <Grid item xs={3}>
         <Paper className={classes.parsedPersonContainerDetail}>
-          {" "}
+          
           <strong>Cedula:</strong> {rif_ci}
         </Paper>
       </Grid>
       <Grid item xs={3}>
         <Paper className={classes.parsedPersonContainerDetail}>
-          {" "}
+          
           <strong>Direccion:</strong> {address}
         </Paper>
       </Grid>
       <Grid item xs={3}>
         <Paper className={classes.parsedPersonContainerDetail}>
-          {" "}
+          
           <strong>Telefono:</strong> {telephone1}
         </Paper>
       </Grid>
       <Grid item xs={3}>
         <Paper className={classes.parsedPersonContainerDetail}>
-          {" "}
+          
           <strong>Correo:</strong> {primary_email}
         </Paper>
       </Grid>
@@ -508,12 +504,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
 
   useEffect(() => {
     setSelectedProff([]);
-    dispatch(getStatusPersonAll());
-    dispatch(getMaritalStatusAll());
-    dispatch(getGenderAll());
-    dispatch(getCountries());
-    dispatch(getRelationTypes());
-    dispatch(getPaymentMethods());
     async function fetch() {
       dispatch(getProfessions());
       if (id) {
@@ -600,7 +590,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
 
   const handleForm = async (form: object) => {
     if (tempPersonId > 0) {
-      dispatch(update({ id: tempPersonId, ...form }));
+      dispatch(update({ id: tempPersonId, ...form, }));
     } else {
       const response: any = await dispatch(
         create({ ...form, id_card_picture: "ssssss" })
@@ -693,25 +683,31 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
       updateModal({
         payload: {
           status: true,
-          element: <CardPersonForm personId={id} share={selectedShare.id} />
+          element: <CardPersonForm personId={id} share={selectedShare} />
         }
       })
     );
   };
 
-  const handleCardPersonEdit = (cardPersonId: number) => {
+  const handleCardPersonEdit = (row: any) => {
     dispatch(
       updateModal({
         payload: {
           status: true,
-          element: <CardPersonForm personId={id} id={cardPersonId} share={selectedShare.id} />
+          element: (
+            <CardPersonForm
+              personId={id}
+              id={row.id}
+              share={selectedShare}
+            />
+          )
         }
       })
     );
   };
 
-  const handleCardPersonDelete = (personCardId: number) => {
-    dispatch(removeCardPerson(personCardId, id));
+  const handleCardPersonDelete = (row: any) => {
+    dispatch(removeCardPerson(row.id, id, selectedShare.id, row.order));
   };
 
   const handleShareSelect = (event: any) => {
@@ -1052,14 +1048,23 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                 {share_number}
               </TableCell>
               <TableCell align="left" style={{ fontSize: "12px" }}>
-                
+                <CustomSelect
+                  selectionMessage="Seleccione"
+                  field="payment_method_id"
+                  register={register}
+                  errorsMessageField={
+                    errors.payment_method_id && errors.payment_method_id.message
+                  }
+                >
+                  {paymentMethodList.map((item: any) => (
+                    <option key={item.id} value={item.id}>
+                      {item.description}
+                    </option>
+                  ))}
+                </CustomSelect>
               </TableCell>
-              <TableCell align="left" style={{ fontSize: "12px" }}>
-                
-              </TableCell>
-              <TableCell align="left" style={{ fontSize: "12px" }}>
-                
-              </TableCell>
+              <TableCell align="left" style={{ fontSize: "12px" }}></TableCell>
+              <TableCell align="left" style={{ fontSize: "12px" }}></TableCell>
               <TableCell align="left" style={{ fontSize: "12px" }}>
                 <div className="custom-select-container">
                   <select
@@ -1110,16 +1115,22 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   };
 
   const renderCardPersonData = () => {
-    const { tarjeta_primaria, tarjeta_secundaria, tarjeta_terciaria } = selectedShare;
+    const {
+      tarjeta_primaria,
+      tarjeta_secundaria,
+      tarjeta_terciaria
+    } = selectedShare;
     const dataList = [];
-    tarjeta_primaria && dataList.push({...tarjeta_primaria, order: "Primario"});
-    tarjeta_secundaria && dataList.push({...tarjeta_secundaria, order: "Secundario"});
-    tarjeta_terciaria && dataList.push({...tarjeta_terciaria, order: "Terciario"});
-    console.log('dataList ', dataList);
+    tarjeta_primaria &&
+      dataList.push({ ...tarjeta_primaria, orderDetail: "Primario", order: 1 });
+    tarjeta_secundaria &&
+      dataList.push({ ...tarjeta_secundaria, orderDetail: "Secundario", order: 2  });
+    tarjeta_terciaria &&
+      dataList.push({ ...tarjeta_terciaria, orderDetail: "Terciario", order: 3  });
     return (
       <Grid container spacing={2}>
         <Grid item xs={12} className="card-person-data-table">
-          <DataTable2
+          <DataTable3
             data={dataList}
             columns={cardPersonColumns}
             handleEdit={handleCardPersonEdit}
@@ -1129,19 +1140,23 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             fontSize="10px"
           />
         </Grid>
-        <Grid item xs={12} className={classes.cardPersonButtonContainer}>
-          <Button
-            size="small"
-            type="button"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.cardPersonButton}
-            onClick={() => handleCardPersonCreate()}
-          >
-            Incluir Tarjeta
-          </Button>
-        </Grid>
+        {!selectedShare.tarjeta_primaria ||
+          !selectedShare.tarjeta_secundaria ||
+          !selectedShare.tarjeta_terciaria  && (
+            <Grid item xs={12} className={classes.cardPersonButtonContainer}>
+              <Button
+                size="small"
+                type="button"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.cardPersonButton}
+                onClick={() => handleCardPersonCreate()}
+              >
+                Incluir Tarjeta
+              </Button>
+            </Grid>
+          )}
       </Grid>
     );
   };

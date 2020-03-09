@@ -24,6 +24,8 @@ import cardTypeReducer from './cardTypeReducer';
 import secondModalReducer from './secondModalReducer';
 import shareReducer from './shareReducer';
 import cardPersonReducer from './cardPersonReducer';
+import transactionTypeReducer from './transactionTypeReducer';
+import shareMovementReducer from './shareMovementReducer';
 
 const rootReducer = combineReducers({
   modalReducer,
@@ -47,7 +49,9 @@ const rootReducer = combineReducers({
   cardTypeReducer,
   secondModalReducer,
   shareReducer,
-  cardPersonReducer
+  cardPersonReducer,
+  transactionTypeReducer,
+  shareMovementReducer
 });
 
 export default rootReducer;

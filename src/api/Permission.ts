@@ -28,10 +28,20 @@ const API = {
     );
   },
   remove(id: number) {
-    return AXIOS.delete(`${Prefix.api}/permission/${id}`, { headers: headers() });
+    return AXIOS.delete(`${Prefix.api}/permission/${id}`, {
+      headers: headers()
+    });
   },
   search(term: string) {
-    return AXIOS.get(`${Prefix.api}/permission-search?term=${term}`, { headers: headers() });
+    return AXIOS.get(`${Prefix.api}/permission-search?term=${term}`, {
+      headers: headers()
+    });
+  },
+  searchToAssign(term: string) {
+    return AXIOS.get(`${Prefix.api}/search-person-to-assign`, {
+      params: { term },
+      headers: headers()
+    });
   }
 };
 

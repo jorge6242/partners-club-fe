@@ -1,7 +1,7 @@
-import API from "../api/Share";
-import snackBarUpdate from "./snackBarActions";
-import { updateModal } from "./modalActions";
-import { ACTIONS } from '../interfaces/actionTypes/shareTypes';
+import API from "../api/TransactionType";
+import snackBarUpdate from "../actions/snackBarActions";
+import { updateModal } from "../actions/modalActions";
+import { ACTIONS } from '../interfaces/actionTypes/transactionTypeTypes';
 
 export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch: Function) => {
   dispatch({
@@ -109,11 +109,20 @@ export const create = (body: object) => async (dispatch: Function) => {
       createresponse = response;
       snackBarUpdate({
         payload: {
-          message: "Share Created!",
+          message: "Transaction Created!",
           type: "success",
           status: true
         }
       })(dispatch);
+      dispatch(getAll());
+      dispatch(
+        updateModal({
+          payload: {
+            status: false,
+            element: null
+          }
+        })
+      );
       dispatch({
         type: ACTIONS.SET_LOADING,
         payload: false
@@ -142,43 +151,14 @@ export const create = (body: object) => async (dispatch: Function) => {
 };
 
 export const get = (id: number) => async (dispatch: Function) => {
-  dispatch(
-    updateModal({
-      payload: {
-        isLoader: true,
-      }
-    })
-  );
-  dispatch({
-    type: ACTIONS.SET_SELECTED_SHARE,
-    payload: {}
-  });
   try {
     const { data: { data }, status } = await API.get(id);
     let response = [];
     if (status === 200) {
       response = data;
-      dispatch({
-        type: ACTIONS.SET_SELECTED_SHARE,
-        payload: data
-      });
-      dispatch(
-        updateModal({
-          payload: {
-            isLoader: false,
-          }
-        })
-      );
     }
     return response;
   } catch (error) {
-    dispatch(
-      updateModal({
-        payload: {
-          isLoader: false,
-        }
-      })
-    );
     snackBarUpdate({
       payload: {
         message: error.message,
@@ -205,7 +185,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Share Updated!",
+          message: "Transaction Updated!",
           type: "success",
           status: true
         }
@@ -257,7 +237,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Share Removed!",
+          message: "Transaction Removed!",
           type: "success",
           status: true
         }
@@ -273,73 +253,6 @@ export const remove = (id: number) => async (dispatch: Function) => {
         status: true
       }
     })(dispatch);
-    return error;
-  }
-};
-
-
-export const getSharesByPartner = (id: number) => async (dispatch: Function) => {
-  try {
-    const { data: { data }, status } = await API.getByPartner(id);
-    let response = [];
-    if (status === 200) {
-      response = data;
-      const share = data.find((e: any, i: any) => i === 0);
-      dispatch({
-        type: ACTIONS.GET_ALL,
-        payload: response
-      });
-      dispatch({
-        type: ACTIONS.SET_SELECTED_SHARE,
-        payload: share
-      });
-    }
-    return response;
-  } catch (error) {
-    snackBarUpdate({
-      payload: {
-        message: error.message,
-        type: "error",
-        status: true
-      }
-    })(dispatch);
-    return error;
-  }
-};
-
-export const searchToAssign = (term: string) => async (dispatch: Function) => {
-  dispatch({
-    type: ACTIONS.SET_LOADING,
-    payload: true
-  });
-  try {
-    const { data: { data }, status } = await API.searchToAssign(term);
-    let response = [];
-    if (status === 200) {
-      console.log('data ', data);
-      response = data;
-      dispatch({
-        type: ACTIONS.GET_SHARE_TO_ASSIGN,
-        payload: response
-      });
-    }
-    dispatch({
-      type: ACTIONS.SET_LOADING,
-      payload: false
-    });
-    return response;
-  } catch (error) {
-    snackBarUpdate({
-      payload: {
-        message: error.message,
-        status: true,
-        type: "error"
-      }
-    })(dispatch);
-    dispatch({
-      type: ACTIONS.SET_LOADING,
-      payload: false
-    });
     return error;
   }
 };

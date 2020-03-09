@@ -76,7 +76,15 @@ const Person = {
     return AXIOS.delete(`${Prefix.api}/person-relation/${id}`, {
       headers: headers()
     });
-  }
+  },
+  searchToAssign(term: string) {
+    return AXIOS.get(`${Prefix.api}/search-person-to-assign`, {
+      params: {
+        term,
+      },
+      headers: headers()
+    });
+  },
 };
 
 export default Person;
