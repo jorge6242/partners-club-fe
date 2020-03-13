@@ -104,7 +104,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     if(location.pathname === '/dashboard') {
       history.push('/dashboard/main');
     }
-  }, []);
+  }, [history, location]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);

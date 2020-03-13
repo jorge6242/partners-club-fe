@@ -1,10 +1,25 @@
 import React, { FunctionComponent } from "react";
 import TextField from "@material-ui/core/TextField";
-import moment from 'moment';
 
-const emailPattern = {
+const email = {
   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-  message: "invalid email address"
+  message: "Correo invalido"
+}
+
+const numbers = {
+  value : new RegExp('^[0-9]+$'),
+  message: "Solo numeros"
+}
+
+function getPattern(type: string){
+  switch (type) {
+    case 'email':
+      return email;
+      case 'number':
+      return numbers;
+    default:
+      return {};
+  }
 }
 
 type CustomTextFieldProps = {
@@ -14,10 +29,10 @@ type CustomTextFieldProps = {
   register: Function;
   errorsField?: any;
   errorsMessageField?: any;
-  isEmail?: boolean;
   type?: string;
   disable?: boolean;
   maxLength?: number;
+  inputType?: string;
 };
 
 const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
@@ -27,10 +42,10 @@ const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
   register,
   errorsField,
   errorsMessageField,
-  isEmail,
   type = 'text',
   disable = false,
   maxLength = 150,
+  inputType,
 }) => (
   <TextField
     label={placeholder}
@@ -47,7 +62,7 @@ const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
     }}
     inputRef={register({
       required: required ? "Required" : false,
-      pattern: isEmail ? emailPattern : null
+      pattern: inputType ? getPattern(inputType) : null
     })}
     InputLabelProps={{
       shrink: true,

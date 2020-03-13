@@ -110,7 +110,6 @@ const ShareTypeForm: FunctionComponent<ShareTypeFormProps> = ({
             errorsMessageField={
               errors.description && errors.description.message
             }
-            isEmail={false}
           />
 
           <CustomTextField
@@ -120,7 +119,6 @@ const ShareTypeForm: FunctionComponent<ShareTypeFormProps> = ({
             register={register}
             errorsField={errors.code}
             errorsMessageField={errors.code && errors.code.message}
-            isEmail={false}
           />
 
           <div className={classes.wrapper}>

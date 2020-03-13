@@ -64,7 +64,7 @@ type FormComponentProps = {
 const RoleForm: FunctionComponent<FormComponentProps> = ({ id }) => {
   const classes = useStyles();
   const [selectedData, setSelectedData] = useState<any>([]);
-  const { handleSubmit, register, errors, reset, setValue, getValues } = useForm<
+  const { handleSubmit, register, errors, reset, setValue } = useForm<
     FormData
   >();
   const loading = useSelector((state: any) => state.roleReducer.loading);

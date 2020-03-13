@@ -67,17 +67,6 @@ const DataTable2: FunctionComponent<DataTableProps> = ({
   fontSize = "14px"
 }) => {
   const classes = useStyles();
-  const [state, setState] = React.useState({
-    checkedA: true,
-    checkedB: true,
-    checkedC: true
-  });
-
-  const handleChange = (name: string) => (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setState({ ...state, [name]: event.target.checked });
-  };
   return (
     <Paper className={classes.root}>
       <TableContainer className={classes.container}>

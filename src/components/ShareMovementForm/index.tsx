@@ -9,12 +9,11 @@ import { useDispatch, useSelector } from "react-redux";
 import Grid from "@material-ui/core/Grid";
 import _ from "lodash";
 import moment from 'moment';
-import parse from 'html-react-parser';
 
 import CustomTextField from "../FormElements/CustomTextField";
-import { update, create, get } from "../../actions/shareMovementActions";
+import { create } from "../../actions/shareMovementActions";
 import { searchToAssign, reset as resetShare } from "../../actions/shareActions";
-import AutoComplete from "../AutoComplete";
+
 import {
   searchPartnersToAssign,
   searchTitularToAssign
@@ -127,7 +126,7 @@ const ShareMovementForm: FunctionComponent<ShareMovementFormProps> = ({
         setValue('currency_rate_id',selectedTransaction.currency_id);
       }
     } 
-  }, [watch])
+  }, [watch, setValue, transactionTypeList])
 
   const handleForm = (form: object) => {
     dispatch(create({...form, number_procesed: 1 , created: moment().format()}));
@@ -282,7 +281,6 @@ const ShareMovementForm: FunctionComponent<ShareMovementFormProps> = ({
                   errorsMessageField={
                     errors.description && errors.description.message
                   }
-                  isEmail={false}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -316,7 +314,6 @@ const ShareMovementForm: FunctionComponent<ShareMovementFormProps> = ({
                   errorsMessageField={
                     errors.number_sale_price && errors.number_sale_price.message
                   }
-                  isEmail={false}
                 />
               </Grid>
               </Grid>

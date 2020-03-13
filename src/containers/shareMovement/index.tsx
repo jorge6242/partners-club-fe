@@ -4,7 +4,7 @@ import AddIcon from "@material-ui/icons/Add";
 import { useDispatch, useSelector } from 'react-redux';
 
 import './index.sass';
-import { getAll, remove, search } from "../../actions/shareMovementActions";
+import { getAll, search } from "../../actions/shareMovementActions";
 import { updateModal } from "../../actions/modalActions";
 import ShareMovemenForm from "../../components/ShareMovementForm";
 import DataTable4 from '../../components/DataTable4'

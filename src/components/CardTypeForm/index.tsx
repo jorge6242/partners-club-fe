@@ -109,7 +109,6 @@ const CardTypeForm: FunctionComponent<CardTypeFormProps> = ({ id }) => {
             errorsMessageField={
               errors.description && errors.description.message
             }
-            isEmail={false}
           />
 
           <div className={classes.wrapper}>

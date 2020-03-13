@@ -109,7 +109,6 @@ const PaymentMethodForm: FunctionComponent<PaymentMethodFormProps> = ({ id }) =>
             errorsMessageField={
               errors.description && errors.description.message
             }
-            isEmail={false}
           />
 
           <div className={classes.wrapper}>

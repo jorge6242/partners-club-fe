@@ -67,7 +67,6 @@ export function setupInterceptors() {
           return response;
         },
         error => {
-        let data: any = { code: 500 };
         if (error.response && error.response.status === 401) {;
             if(window.location.pathname !== '/' && error.response.data.message === "Unauthenticated."){
                 // console.log('error.response.data.message ', error.response.data.message);

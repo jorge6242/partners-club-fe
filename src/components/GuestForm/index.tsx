@@ -15,8 +15,6 @@ import CardMedia from "@material-ui/core/CardMedia";
 import CustomTextField from "../FormElements/CustomTextField";
 import { createGuest } from "../../actions/personActions";
 import CustomSelect from "../FormElements/CustomSelect";
-import { updateModal } from "../../actions/secondModalActions";
-import snackBarUpdate from "../../actions/snackBarActions";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -99,7 +97,7 @@ const GuestForm: FunctionComponent<GuestFormProps> = ({
   useEffect(() => {
     console.log("identification ", identification);
     setValue("rif_ci", identification);
-  }, []);
+  }, [setValue, identification]);
 
   useEffect(() => {
     return () => {
@@ -194,7 +192,6 @@ const GuestForm: FunctionComponent<GuestFormProps> = ({
                     register={register}
                     errorsField={errors.name}
                     errorsMessageField={errors.name && errors.name.message}
-                    isEmail={false}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -207,7 +204,6 @@ const GuestForm: FunctionComponent<GuestFormProps> = ({
                     errorsMessageField={
                       errors.last_name && errors.last_name.message
                     }
-                    isEmail={false}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -218,7 +214,6 @@ const GuestForm: FunctionComponent<GuestFormProps> = ({
                     register={register}
                     errorsField={errors.rif_ci}
                     errorsMessageField={errors.rif_ci && errors.rif_ci.message}
-                    isEmail={false}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -230,7 +225,7 @@ const GuestForm: FunctionComponent<GuestFormProps> = ({
                     errorsMessageField={
                       errors.primary_email && errors.primary_email.message
                     }
-                    isEmail
+                    inputType="email"
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -242,7 +237,7 @@ const GuestForm: FunctionComponent<GuestFormProps> = ({
                     errorsMessageField={
                       errors.telephone1 && errors.telephone1.message
                     }
-                    isEmail={false}
+                    inputType="number"
                   />
                 </Grid>
                 <Grid item xs={6}>

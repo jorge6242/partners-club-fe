@@ -3,7 +3,6 @@ import Card from "@material-ui/core/Card";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Fab from "@material-ui/core/Fab";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import "./index.sass";
 

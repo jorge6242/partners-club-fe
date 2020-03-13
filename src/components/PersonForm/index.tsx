@@ -55,10 +55,8 @@ import {
   remove as removeCardPerson
 } from "../../actions/cardPersonActions";
 import {
-  create as createShare,
   getSharesByPartner,
   get as getShare,
-  update as updateShare,
   reset as resetShare
 } from "../../actions/shareActions";
 import { updateModal } from "../../actions/secondModalActions";
@@ -448,7 +446,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   const dispatch = useDispatch();
   const {
     loading,
-    assignLoading,
     relationLoading,
     reportByPartnerLoading,
     personsToAssign,
@@ -470,7 +467,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     (state: any) => state.relationTypeReducer
   );
   const {
-    loading: shareLoading,
     sharesByPartner,
     selectedShare
   } = useSelector((state: any) => state.shareReducer);
@@ -671,15 +667,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     dispatch(getReportsByPartner(id));
   };
 
-  const handleShare = () => {
-    // const {  } = getValues();
-    const data = {
-      father_action_number: 12345,
-      people_id: 1
-    };
-    dispatch(createShare(data));
-  };
-
   const handleCardPersonCreate = () => {
     dispatch(
       updateModal({
@@ -759,6 +746,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             register={register}
             errorsField={errors.rif_ci}
             errorsMessageField={errors.rif_ci && errors.rif_ci.message}
+            inputType="number"
           />
         </Grid>
         <Grid item xs={3}>
@@ -769,6 +757,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             register={register}
             errorsField={errors.passport}
             errorsMessageField={errors.passport && errors.passport.message}
+            inputType="number"
           />
         </Grid>
         <Grid item xs={3}>
@@ -781,6 +770,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             errorsMessageField={
               errors.card_number && errors.card_number.message
             }
+            inputType="number"
           />
         </Grid>
         <Grid item xs={3}>
@@ -951,7 +941,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             errorsMessageField={
               errors.primary_email && errors.primary_email.message
             }
-            isEmail
+            inputType="email"
           />
         </Grid>
         <Grid item xs={3}>
@@ -963,7 +953,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             errorsMessageField={
               errors.secondary_email && errors.secondary_email.message
             }
-            isEmail
+            inputType="email"
           />
         </Grid>
 
@@ -974,6 +964,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             register={register}
             errorsField={errors.telephone1}
             errorsMessageField={errors.telephone1 && errors.telephone1.message}
+            inputType="number"
           />
         </Grid>
         <Grid item xs={3}>
@@ -983,6 +974,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             register={register}
             errorsField={errors.telephone2}
             errorsMessageField={errors.telephone2 && errors.telephone2.message}
+            inputType="number"
           />
         </Grid>
         <Grid item xs={3}>
@@ -994,6 +986,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             errorsMessageField={
               errors.phone_mobile1 && errors.phone_mobile1.message
             }
+            inputType="number"
           />
         </Grid>
         <Grid item xs={3}>
@@ -1005,6 +998,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             errorsMessageField={
               errors.phone_mobile2 && errors.phone_mobile2.message
             }
+            inputType="number"
           />
         </Grid>
         <Grid item xs={3}>
@@ -1014,6 +1008,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             register={register}
             errorsField={errors.fax}
             errorsMessageField={errors.fax && errors.fax.message}
+            inputType="number"
           />
         </Grid>
       </Grid>
@@ -1021,7 +1016,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   };
 
   const renderPaymentMethod = () => {
-    const { payment_method_id, share_number } = selectedShare;
+    const { share_number } = selectedShare;
     return (
       <TableContainer component={Paper}>
         <Table size="small" aria-label="a dense table">
@@ -1087,32 +1082,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
           </TableBody>
         </Table>
       </TableContainer>
-    );
-  };
-
-  const renderInvoicePerson = () => {
-    const { facturador } = selectedShare;
-    return (
-      <Grid container spacing={2}>
-        {/* <Grid item xs={12}>
-          <div className={classes.actionButtonContainer}>
-            <Button
-              type="button"
-              fullWidth
-              variant="contained"
-              color="primary"
-              disabled={shareLoading}
-              className={classes.submit}
-              onClick={() => handleShare()}
-            >
-              Guardar
-            </Button>
-            {shareLoading && (
-              <CircularProgress size={24} className={classes.buttonProgress} />
-            )}
-          </div>
-        </Grid> */}
-      </Grid>
     );
   };
 

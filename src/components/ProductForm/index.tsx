@@ -118,7 +118,6 @@ const ProductForm: FunctionComponent<ProductFormProps> = ({ id }) => {
             errorsMessageField={
               errors.description && errors.description.message
             }
-            isEmail={false}
           />
           <CustomTextField
             placeholder="Price"
@@ -127,7 +126,6 @@ const ProductForm: FunctionComponent<ProductFormProps> = ({ id }) => {
             register={register}
             errorsField={errors.price}
             errorsMessageField={errors.price && errors.price.message}
-            isEmail={false}
           />
 
           <CustomSelect

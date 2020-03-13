@@ -14,11 +14,9 @@ import {
   update,
   create,
   get,
-  getAll as getCardPersons
 } from "../../actions/cardPersonActions";
 import { getAll as getCardTypes } from "../../actions/cardTypeActions";
 import { getAll as getBanks } from "../../actions/bankActions";
-import snackBarUpdate from "../../actions/snackBarActions";
 
 const options = [
   { id: 1, hidden: false, description: "Primaria" },
@@ -138,7 +136,7 @@ const CardPersonForm: FunctionComponent<CardPersonFormProps> = ({
       }
     }
     fetch();
-  }, [id, dispatch, setValue, personId, share]);
+  }, [id, dispatch, setValue, personId, share, cardOptions]);
 
   useEffect(() => {
     return () => {
@@ -174,7 +172,6 @@ const CardPersonForm: FunctionComponent<CardPersonFormProps> = ({
                 register={register}
                 errorsField={errors.titular}
                 errorsMessageField={errors.titular && errors.titular.message}
-                isEmail={false}
               />
             </Grid>
             <Grid item xs={6}>
@@ -185,7 +182,6 @@ const CardPersonForm: FunctionComponent<CardPersonFormProps> = ({
                 register={register}
                 errorsField={errors.ci}
                 errorsMessageField={errors.ci && errors.ci.message}
-                isEmail={false}
               />
             </Grid>
             <Grid item xs={6}>
@@ -198,7 +194,6 @@ const CardPersonForm: FunctionComponent<CardPersonFormProps> = ({
                 errorsMessageField={
                   errors.card_number && errors.card_number.message
                 }
-                isEmail={false}
                 maxLength={16}
               />
             </Grid>
@@ -210,7 +205,6 @@ const CardPersonForm: FunctionComponent<CardPersonFormProps> = ({
                 register={register}
                 errorsField={errors.sec_code}
                 errorsMessageField={errors.sec_code && errors.sec_code.message}
-                isEmail={false}
                 maxLength={3}
               />
             </Grid>
@@ -225,7 +219,6 @@ const CardPersonForm: FunctionComponent<CardPersonFormProps> = ({
                   errors.expiration_date && errors.expiration_date.message
                 }
                 type="date"
-                isEmail={false}
               />
             </Grid>
             <Grid item xs={6}>

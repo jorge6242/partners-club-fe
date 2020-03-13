@@ -110,7 +110,6 @@ const LocationForm: FunctionComponent<LocationFormProps> = ({
             errorsMessageField={
               errors.description && errors.description.message
             }
-            isEmail={false}
           />
 
           <CustomTextField
@@ -120,7 +119,6 @@ const LocationForm: FunctionComponent<LocationFormProps> = ({
             register={register}
             errorsField={errors.status}
             errorsMessageField={errors.status && errors.status.message}
-            isEmail={false}
           />
 
           <div className={classes.wrapper}>

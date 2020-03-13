@@ -37,13 +37,13 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function ExpirationCard() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { loading, secondLoading, persons } = useSelector(
+  const { loading, secondLoading } = useSelector(
     (state: any) => state.personReducer
   );
 
   useEffect(() => {
     dispatch(getAll());
-  }, []);
+  }, [dispatch]);
 
   const handleReport = () => {
     dispatch(geReports());

@@ -20,6 +20,7 @@ export const ACTIONS = {
   SET_GUEST_BY_PARTNER_LOADING: "person/set_guest_by_partner_loading",
   SET_SELECTED_FAMILIES_BY_PARTNER: "person/set_selected_families_by_partner",
   CLEAR: "person/clear",
+  SET_PAGINATION: 'person/set_pagination',
 };
 
 interface GetPerson {
@@ -117,6 +118,11 @@ interface Clear {
   payload: Array<string | number>;
 }
 
+interface SetPagination {
+  type: typeof ACTIONS.SET_PAGINATION
+  payload: Array<string|number>
+}
+
 export type ActionTypes =
   | GetPerson
   | GetFamilyByPerson
@@ -136,4 +142,5 @@ export type ActionTypes =
   | SetSelectedFamiliesByPartnet
   | Clear
   | GetGuestByPartner
-  | SetGuestByPartnerLoading;
+  | SetGuestByPartnerLoading
+  | SetPagination;

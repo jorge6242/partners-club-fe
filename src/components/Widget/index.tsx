@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from "react";
 import Card from "@material-ui/core/Card";
 import Avatar from "@material-ui/core/Avatar";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 
 import "./index.sass";

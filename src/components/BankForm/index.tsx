@@ -109,7 +109,6 @@ const BankForm: FunctionComponent<BankFormProps> = ({ id }) => {
             errorsMessageField={
               errors.description && errors.description.message
             }
-            isEmail={false}
           />
 
           <div className={classes.wrapper}>

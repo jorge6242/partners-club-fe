@@ -19,6 +19,7 @@ type InitialState = {
   familiesPartnerCardLoading: boolean;
   guestByPartnerLoading: boolean;
   familyByPerson: Array<string | number>;
+  pagination: any;
 };
 
 const initialState: InitialState = {
@@ -45,6 +46,12 @@ const initialState: InitialState = {
   familiesPartnerCardLoading: false,
   guestByPartner: {},
   guestByPartnerLoading: false,
+  pagination: {
+    total: 0,
+    perPage: 0,
+    prevPageUrl: null,
+    currentPage: 0,
+}
 };
 
 const personReducer = (state = initialState, action: ActionTypes) => {
@@ -54,6 +61,11 @@ const personReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         persons: action.payload
       };
+      case ACTIONS.SET_PAGINATION:
+        return {
+            ...state,
+            pagination: action.payload,
+        };
     case ACTIONS.GET_GUEST_BY_PARTNER:
       return {
         ...state,

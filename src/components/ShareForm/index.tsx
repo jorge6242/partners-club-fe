@@ -10,11 +10,8 @@ import Grid from "@material-ui/core/Grid";
 import _ from "lodash";
 
 import CustomTextField from "../FormElements/CustomTextField";
-import CustomSelect from "../FormElements/CustomSelect";
 import {
-  update,
   create,
-  get,
   searchToAssign,
   reset as resetShare
 } from "../../actions/shareActions";
@@ -82,7 +79,7 @@ const ShareForm: FunctionComponent<ShareFormProps> = ({ id }) => {
 
   useEffect(() => {
     dispatch(getList());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (shareTypeList) {
@@ -141,7 +138,6 @@ const ShareForm: FunctionComponent<ShareFormProps> = ({ id }) => {
                 errorsMessageField={
                   errors.share_number && errors.share_number.message
                 }
-                isEmail={false}
               />
             </Grid>
             <Grid item xs={6}>

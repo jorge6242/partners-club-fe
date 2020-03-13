@@ -110,7 +110,6 @@ const TransactionTypeForm: FunctionComponent<TransactionTypeFormProps> = ({
             errorsMessageField={
               errors.description && errors.description.message
             }
-            isEmail={false}
           />
 
           <CustomTextField
@@ -120,7 +119,6 @@ const TransactionTypeForm: FunctionComponent<TransactionTypeFormProps> = ({
             register={register}
             errorsField={errors.rate}
             errorsMessageField={errors.rate && errors.rate.message}
-            isEmail={false}
           />
 
           <div className={classes.wrapper}>

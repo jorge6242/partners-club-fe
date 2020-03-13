@@ -8,19 +8,29 @@ import headers from "../helpers/headers";
 
 import Prefix from "../config/ApiPrefix";
 
-export const getAll = () => async (dispatch: Function) => {
+export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,
     payload: true
   });
   try {
-    const { data: { data }, status } = await Person.getAll();
+    const { data: { data }, status } = await Person.getAll(page, perPage);
     let response = [];
     if (status === 200) {
-      response = data;
+      const pagination = {
+        total: data.total,
+        perPage: data.per_page,
+        prevPageUrl: data.prev_page_url,
+        currentPage: data.current_page,
+      }
+      response = data.data;
       dispatch({
         type: ACTIONS.GET_ALL,
         payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_PAGINATION,
+        payload: pagination
       });
       dispatch({
         type: ACTIONS.SET_LOADING,

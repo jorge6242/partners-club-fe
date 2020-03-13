@@ -3,8 +3,15 @@ import headers from "../helpers/headers";
 import Prefix from "../config/ApiPrefix";
 
 const Person = {
-  getAll() {
-    return AXIOS.get(`${Prefix.api}/person`, { headers: headers() });
+  getAll(data: number, perPage: number) {
+    const page = data ? data : 1;
+    return AXIOS.get(`${Prefix.api}/person`, {
+      params: {
+        page,
+        perPage
+      },
+      headers: headers()
+    });
   },
   create(data: any) {
     return AXIOS.post(
@@ -80,16 +87,22 @@ const Person = {
   searchToAssign(term: string) {
     return AXIOS.get(`${Prefix.api}/search-person-to-assign`, {
       params: {
-        term,
+        term
       },
       headers: headers()
     });
   },
-  getFamiliesPartnerByCard(card: string = ""){
-    return AXIOS.get(`${Prefix.api}/get-families-partner-by-card`, { params: { card }, headers: headers() });
+  getFamiliesPartnerByCard(card: string = "") {
+    return AXIOS.get(`${Prefix.api}/get-families-partner-by-card`, {
+      params: { card },
+      headers: headers()
+    });
   },
-  getGuestByPartner(identification: string = ""){
-    return AXIOS.get(`${Prefix.api}/get-guest-by-partner`, { params: { identification }, headers: headers() });
+  getGuestByPartner(identification: string = "") {
+    return AXIOS.get(`${Prefix.api}/get-guest-by-partner`, {
+      params: { identification },
+      headers: headers()
+    });
   }
 };
 

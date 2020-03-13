@@ -109,7 +109,6 @@ const CountryForm: FunctionComponent<CountryFormProps> = ({ id }) => {
             errorsMessageField={
               errors.description && errors.description.message
             }
-            isEmail={false}
           />
 
           <div className={classes.wrapper}>

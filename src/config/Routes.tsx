@@ -56,7 +56,7 @@ export default function Routes() {
     dispatch(getPaymentMethods());
     dispatch(getTransactionTypes());
     dispatch(getCurrencies());
-  },[])
+  },[dispatch])
 
   useEffect(() => {
     dispatch(checkLogin());

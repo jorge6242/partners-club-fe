@@ -3,5 +3,5 @@ export default interface PersonColumn {
     label: string;
     minWidth?: number;
     align?: "right";
-    format?: (value: number) => string;
+    component?: any;
   }

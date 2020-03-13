@@ -1,4 +1,4 @@
-import React, { useEffect, FunctionComponent, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
@@ -10,7 +10,6 @@ import Grid from "@material-ui/core/Grid";
 import _ from "lodash";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -19,8 +18,7 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
-import CustomTextField from "../FormElements/CustomTextField";
-import { update, create, get } from "../../actions/accessControlActions";
+import { create } from "../../actions/accessControlActions";
 import {
   getFamiliesPartnerByCard,
   clear,
@@ -155,7 +153,7 @@ export default function AccessControlForm() {
       reset();
       dispatch(clear());
     };
-  }, [reset]);
+  }, [reset, dispatch]);
 
   const handleForm = async (form: object) => {
     const familyValues = getKeys(selectedFamilies);
