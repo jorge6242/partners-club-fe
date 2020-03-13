@@ -20,9 +20,8 @@ const CustomSelect: FunctionComponent<CustomSelectProps> = ({
   selectionMessage = 'Seleccione',
   label
 }) => (
-    <div>
-      { label && (<div>{label}</div>) }
       <div className="custom-select-container">
+      { label && (<div className="custom-select-container__label">{label}</div>) }
       <select
         ref={register({
           required: required ? "Required" : false
@@ -33,7 +32,6 @@ const CustomSelect: FunctionComponent<CustomSelectProps> = ({
         {children}
       </select>
       <div className="custom-select-container__message">{errorsMessageField}</div>
-    </div>
     </div>
   );
 

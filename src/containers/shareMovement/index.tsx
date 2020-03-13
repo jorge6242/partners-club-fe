@@ -7,23 +7,79 @@ import './index.sass';
 import { getAll, remove, search } from "../../actions/shareMovementActions";
 import { updateModal } from "../../actions/modalActions";
 import ShareMovemenForm from "../../components/ShareMovementForm";
-import DataTable1 from '../../components/DataTable1'
+import DataTable4 from '../../components/DataTable4'
 import ShareMovementColumns from '../../interfaces/ShareMovementColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
 
 const columns: ShareMovementColumns[] = [
-  { id: "id", label: "Id", minWidth: 10 },
+  { 
+    id: "id", 
+    label: "Id", 
+    minWidth: 10,
+    component: (value: any) => <span>{value.value}</span>
+  },
+  {
+    id: "transaction",
+    label: "Tipo",
+    minWidth: 30,
+    align: "left",
+    
+    component: (value: any) => <span>{value.value.description}</span>
+  },
+  {
+    id: "share",
+    label: "N° Accion",
+    minWidth: 30,
+    align: "left",
+    
+    component: (value: any) => <span>{value.value.share_number}</span>
+  },
+  {
+    id: "partner",
+    label: "Socio",
+    minWidth: 30,
+    align: "left",
+    
+    component: (value: any) => <span>{value.value.name} {value.value.last_name}</span>
+  },
+  {
+    id: "titular",
+    label: "Titular",
+    minWidth: 30,
+    align: "left",
+    
+    component: (value: any) => <span>{value.value.name} {value.value.last_name}</span>
+  },
   {
     id: "description",
     label: "Description",
     minWidth: 30,
-    align: "right"
+    align: "left",
+    component: (value: any) => <span>{value.value}</span>
   },
   {
     id: "rate",
     label: "Tarifa",
     minWidth: 30,
-    align: "right"
+    align: "left",
+    
+    component: (value: any) => <span>{value.value}</span>
+  },
+  {
+    id: "number_sale_price",
+    label: "Precio Venta",
+    minWidth: 30,
+    align: "left",
+    
+    component: (value: any) => <span>{value.value}</span>
+  },
+  {
+    id: "number_procesed",
+    label: "N° Procesado",
+    minWidth: 30,
+    align: "left",
+    
+    component: (value: any) => <span>{value.value}</span>
   },
 ];
 
@@ -37,17 +93,6 @@ export default function ShareMovement() {
     fetchData();
   }, [dispatch]);
 
-  const handleEdit = (id: number) => {
-    dispatch(
-      updateModal({
-        payload: {
-          status: true,
-          element: <ShareMovemenForm id={id} />
-        }
-      })
-    );
-  };
-
   const handleCreate = () => {
     dispatch(
       updateModal({
@@ -58,10 +103,6 @@ export default function ShareMovement() {
       })
     );
   }
-
-  const handleDelete = (id: number) => {
-    dispatch(remove(id));
-  };
 
   const handleSearch = (event: any) => {
     if (event.value.trim() === '') {
@@ -94,13 +135,10 @@ export default function ShareMovement() {
         <CustomSearch handleSearch={handleSearch} />
       </div>
       <div>
-        <DataTable1
+        <DataTable4
           rows={list}
           pagination={pagination}
           columns={columns}
-          handleEdit={handleEdit}
-          isDelete
-          handleDelete={handleDelete}
           loading={loading}
           onChangePage={handleChangePage}
           onChangePerPage={handlePerPage}

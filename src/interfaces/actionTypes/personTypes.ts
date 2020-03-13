@@ -10,10 +10,16 @@ export const ACTIONS = {
   SET_RELATION_LOADING: "person/set_relation_loading",
   SET_ASSIGN_LOADING: "person/set_assign_loading",
   SET_REPORT_BY_PARTNER_LOADING: "person/set_report_by_partner_loading",
+  SET_FAMILIES_PARTNER_CARD_LOADING: "person/set_families_partner_card_loading",
   GET_PARTNERS_TO_ASSIGN: "person/get_partners_to_assign",
   GET_TITULAR_TO_ASSIGN: "person/get_titular_to_assign",
+  GET_FAMILIES_PARTNER_BY_CARD: "person/get_families_partner_card",
+  GET_GUEST_BY_PARTNER: "person/get_guest_by_partner",
   SET_PARTNERS_LOADING: "person/set_partners_loading",
   SET_TITULAR_LOADING: "person/set_titular_loading",
+  SET_GUEST_BY_PARTNER_LOADING: "person/set_guest_by_partner_loading",
+  SET_SELECTED_FAMILIES_BY_PARTNER: "person/set_selected_families_by_partner",
+  CLEAR: "person/clear",
 };
 
 interface GetPerson {
@@ -21,8 +27,18 @@ interface GetPerson {
   payload: Array<string | number>;
 }
 
+interface GetGuestByPartner {
+  type: typeof ACTIONS.GET_GUEST_BY_PARTNER;
+  payload: object;
+}
+
 interface GetFamilyByPerson {
   type: typeof ACTIONS.GET_FAMILY_BY_PERSON;
+  payload: Array<string | number>;
+}
+
+interface GetFamiliesPartnerByCard {
+  type: typeof ACTIONS.GET_FAMILIES_PARTNER_BY_CARD;
   payload: Array<string | number>;
 }
 
@@ -71,6 +87,16 @@ interface SetReportByPartnerLoading {
   payload: boolean;
 }
 
+interface SetFamiliesPartnerCardLoading {
+  type: typeof ACTIONS.SET_FAMILIES_PARTNER_CARD_LOADING;
+  payload: boolean;
+}
+
+interface SetGuestByPartnerLoading {
+  type: typeof ACTIONS.SET_GUEST_BY_PARTNER_LOADING;
+  payload: boolean;
+}
+
 interface GetPartnersToAssign {
   type: typeof ACTIONS.GET_PARTNERS_TO_ASSIGN;
   payload: boolean;
@@ -81,9 +107,20 @@ interface GetTitularToAssign {
   payload: boolean;
 }
 
+interface SetSelectedFamiliesByPartnet {
+  type: typeof ACTIONS.SET_SELECTED_FAMILIES_BY_PARTNER;
+  payload: Array<string | number>;
+}
+
+interface Clear {
+  type: typeof ACTIONS.CLEAR;
+  payload: Array<string | number>;
+}
+
 export type ActionTypes =
   | GetPerson
   | GetFamilyByPerson
+  | GetFamiliesPartnerByCard
   | SetPerson
   | SetPersonAssignPagination
   | SetReportByPartnerLoading
@@ -94,4 +131,9 @@ export type ActionTypes =
   | GetPartnersToAssign
   | GetTitularToAssign
   | SetPartnersLoading
-  | SetTitularLoading;
+  | SetTitularLoading
+  | SetFamiliesPartnerCardLoading
+  | SetSelectedFamiliesByPartnet
+  | Clear
+  | GetGuestByPartner
+  | SetGuestByPartnerLoading;

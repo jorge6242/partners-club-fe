@@ -13,6 +13,9 @@ const TransactionType = {
       headers: headers()
     });
   },
+  getList() {
+    return AXIOS.get(`${Prefix.api}/transaction-type-list`, { headers: headers() });
+  },
   create(data: any) {
     return AXIOS.post(
       `${Prefix.api}/transaction-type`,

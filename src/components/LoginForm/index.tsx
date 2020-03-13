@@ -3,7 +3,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import CircularProgress from '@material-ui/core/CircularProgress';
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.primary.main
   },
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -58,10 +58,10 @@ const LoginForm: FunctionComponent<LoginFormProps> = ({ handleForm, loading }) =
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
+          <SupervisorAccountIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Login
+          Control de Socios
         </Typography>
         <form
           className={classes.form}

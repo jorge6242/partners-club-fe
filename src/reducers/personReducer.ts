@@ -3,6 +3,8 @@ import { ACTIONS, ActionTypes } from "../interfaces/actionTypes/personTypes";
 type InitialState = {
   persons: Array<string | number>;
   partnersToAssign: Array<string | number>;
+  familiesPartnerByCard: Array<string | number>;
+  guestByPartner: object;
   titularToAssign: Array<string | number>;
   loading: boolean;
   secondLoading: boolean;
@@ -14,6 +16,8 @@ type InitialState = {
   selectedPerson: any;
   personsToAssign: any;
   paginationPersonsToAssign: any;
+  familiesPartnerCardLoading: boolean;
+  guestByPartnerLoading: boolean;
   familyByPerson: Array<string | number>;
 };
 
@@ -37,6 +41,10 @@ const initialState: InitialState = {
   titularToAssign: [],
   setPartnersLoading: false,
   setTitularLoading: false,
+  familiesPartnerByCard: [],
+  familiesPartnerCardLoading: false,
+  guestByPartner: {},
+  guestByPartnerLoading: false,
 };
 
 const personReducer = (state = initialState, action: ActionTypes) => {
@@ -46,11 +54,22 @@ const personReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         persons: action.payload
       };
+    case ACTIONS.GET_GUEST_BY_PARTNER:
+      return {
+        ...state,
+        guestByPartner: action.payload
+      };
 
     case ACTIONS.GET_PERSON_TO_ASSIGN:
       return {
         ...state,
         personsToAssign: action.payload
+      };
+
+    case ACTIONS.GET_FAMILIES_PARTNER_BY_CARD:
+      return {
+        ...state,
+        familiesPartnerByCard: action.payload
       };
 
     case ACTIONS.GET_PARTNERS_TO_ASSIGN:
@@ -93,16 +112,26 @@ const personReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         relationLoading: action.payload
       };
-      case ACTIONS.SET_PARTNERS_LOADING:
-        return {
-          ...state,
-          setPartnersLoading: action.payload
-        };
-        case ACTIONS.SET_TITULAR_LOADING:
-          return {
-            ...state,
-            setTitularLoading: action.payload
-          };
+    case ACTIONS.SET_PARTNERS_LOADING:
+      return {
+        ...state,
+        setPartnersLoading: action.payload
+      };
+    case ACTIONS.SET_TITULAR_LOADING:
+      return {
+        ...state,
+        setTitularLoading: action.payload
+      };
+    case ACTIONS.SET_GUEST_BY_PARTNER_LOADING:
+      return {
+        ...state,
+        guestByPartnerLoading: action.payload
+      };
+    case ACTIONS.SET_FAMILIES_PARTNER_CARD_LOADING:
+      return {
+        ...state,
+        familiesPartnerCardLoading: action.payload
+      };
     case ACTIONS.SET_PERSON_ASSIGN_PAGINATION:
       return {
         ...state,
@@ -112,6 +141,11 @@ const personReducer = (state = initialState, action: ActionTypes) => {
       return {
         ...state,
         familyByPerson: action.payload
+      };
+    case ACTIONS.CLEAR:
+      return {
+        ...state,
+        familiesPartnerByCard: initialState.familiesPartnerByCard
       };
     default:
       return state;

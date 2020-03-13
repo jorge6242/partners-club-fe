@@ -1,6 +1,7 @@
 import Person from "../api/Person";
 import snackBarUpdate from "../actions/snackBarActions";
 import { updateModal } from "../actions/modalActions";
+import { updateModal as updateSecondModal } from "../actions/secondModalActions";
 import { ACTIONS } from '../interfaces/actionTypes/personTypes';
 import Axios from '../config/Axios';
 import headers from "../helpers/headers";
@@ -79,13 +80,13 @@ export const search = (term: string) => async (dispatch: Function) => {
   }
 };
 
-export const searchPersonsToAssign = (id: any, term: string = '') => async (dispatch: Function) => {
+export const searchPersonToAssignFamily = (id: any, term: string = '') => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_SECOND_LOADING,
     payload: true
   });
   try {
-    const { data: { data }, status } = await Person.searchPersonToAssign(id, term);
+    const { data: { data }, status } = await Person.searchPersonToAssignFamily(id, term);
     let response = [];
     if (status === 200) {
       const pagination = {
@@ -94,6 +95,7 @@ export const searchPersonsToAssign = (id: any, term: string = '') => async (disp
         prevPageUrl: data.prev_page_url,
         currentPage: data.current_page,
       }
+      console.log('data ', data);
       response = data.data;
       dispatch({
         type: ACTIONS.GET_PERSON_TO_ASSIGN,
@@ -148,6 +150,62 @@ export const create = (body: object) => async (dispatch: Function) => {
         }
       })(dispatch);
       dispatch(getAll());
+      dispatch({
+        type: ACTIONS.SET_LOADING,
+        payload: false
+      });
+    }
+    return createresponse;
+  } catch (error) {
+    let message = 'General Error';
+    if (error && error.response) {
+      const { data: { message: msg } } = error.response; 
+      message = msg
+    }
+    snackBarUpdate({
+      payload: {
+        message,
+        type: "error",
+        status: true
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
+
+export const createGuest = (body: any, refresh: Function) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_LOADING,
+    payload: true
+  });
+  try {
+    const response = await Person.create(body);
+    const { status, data: { data } } = response;
+    let createresponse: any = [];
+    if (status === 200 || status === 201) {
+      createresponse = { ...data };
+      snackBarUpdate({
+        payload: {
+          message: "Invitado Registrado",
+          type: "success",
+          status: true
+        }
+      })(dispatch);
+      await dispatch(getAll());
+      refresh(body.rif_ci);
+      dispatch(
+        updateSecondModal({
+          payload: {
+            status: false,
+            element: null
+          }
+        })
+      );
       dispatch({
         type: ACTIONS.SET_LOADING,
         payload: false
@@ -570,4 +628,90 @@ export const searchTitularToAssign = (term: string) => async (dispatch: Function
     return error;
   }
 };
+
+export const getFamiliesPartnerByCard = (card: string) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_FAMILIES_PARTNER_CARD_LOADING,
+    payload: true
+  });
+  dispatch({
+    type: ACTIONS.GET_FAMILIES_PARTNER_BY_CARD,
+    payload: {}
+  });
+  dispatch({
+    type: ACTIONS.GET_GUEST_BY_PARTNER,
+    payload: {}
+  });
+  try {
+    const { data: { data }, status } = await Person.getFamiliesPartnerByCard(card);
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_FAMILIES_PARTNER_BY_CARD,
+        payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_FAMILIES_PARTNER_CARD_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_FAMILIES_PARTNER_CARD_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
+export const getGuestByPartner = (identification: string) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_GUEST_BY_PARTNER_LOADING,
+    payload: true
+  });
+  dispatch({
+    type: ACTIONS.GET_GUEST_BY_PARTNER,
+    payload: {}
+  });
+  try {
+    const { data: { data }, status } = await Person.getGuestByPartner(identification);
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_GUEST_BY_PARTNER,
+        payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_GUEST_BY_PARTNER_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_GUEST_BY_PARTNER_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
+export const clear = () => ({ type: ACTIONS.CLEAR });
 

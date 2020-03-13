@@ -107,6 +107,14 @@ export const create = (body: object) => async (dispatch: Function) => {
     let createresponse: any = [];
     if (status === 200 || status === 201) {
       createresponse = response;
+      dispatch(
+        updateModal({
+          payload: {
+            status: false,
+            element: null,
+          }
+        })
+      );
       snackBarUpdate({
         payload: {
           message: "Share Created!",
@@ -114,6 +122,7 @@ export const create = (body: object) => async (dispatch: Function) => {
           status: true
         }
       })(dispatch);
+      dispatch(getAll());
       dispatch({
         type: ACTIONS.SET_LOADING,
         payload: false
@@ -286,7 +295,7 @@ export const getSharesByPartner = (id: number) => async (dispatch: Function) => 
       response = data;
       const share = data.find((e: any, i: any) => i === 0);
       dispatch({
-        type: ACTIONS.GET_ALL,
+        type: ACTIONS.GET_SHARES_BY_PARTNER,
         payload: response
       });
       dispatch({
@@ -309,7 +318,7 @@ export const getSharesByPartner = (id: number) => async (dispatch: Function) => 
 
 export const searchToAssign = (term: string) => async (dispatch: Function) => {
   dispatch({
-    type: ACTIONS.SET_LOADING,
+    type: ACTIONS.SET_SHARE_TO_ASSIGN_LOADING,
     payload: true
   });
   try {
@@ -324,7 +333,7 @@ export const searchToAssign = (term: string) => async (dispatch: Function) => {
       });
     }
     dispatch({
-      type: ACTIONS.SET_LOADING,
+      type: ACTIONS.SET_SHARE_TO_ASSIGN_LOADING,
       payload: false
     });
     return response;
@@ -337,9 +346,11 @@ export const searchToAssign = (term: string) => async (dispatch: Function) => {
       }
     })(dispatch);
     dispatch({
-      type: ACTIONS.SET_LOADING,
+      type: ACTIONS.SET_SHARE_TO_ASSIGN_LOADING,
       payload: false
     });
     return error;
   }
 };
+
+export const reset = () => ({ type: ACTIONS.RESET});

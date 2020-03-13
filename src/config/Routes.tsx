@@ -35,8 +35,13 @@ import { getAll as getGenderAll } from "../actions/genderActions";
 import { getAll as getCountries } from "../actions/countryActions";
 import { getAll as getRelationTypes } from "../actions/relationTypeActions";
 import { getAll as getPaymentMethods } from "../actions/paymentMethodActions";
+import { getList as getTransactionTypes } from "../actions/transactionTypeActions";
+import { getList as getCurrencies } from "../actions/currencyActions";
 import TransactionType from "../containers/transactionType";
 import ShareMovement from "../containers/shareMovement";
+import ShareType from "../containers/shareType";
+import Share from "../containers/share";
+import Location from "../containers/location";
 
 export default function Routes() {
   const dispatch = useDispatch();
@@ -49,6 +54,8 @@ export default function Routes() {
     dispatch(getCountries());
     dispatch(getRelationTypes());
     dispatch(getPaymentMethods());
+    dispatch(getTransactionTypes());
+    dispatch(getCurrencies());
   },[])
 
   useEffect(() => {
@@ -106,6 +113,9 @@ export default function Routes() {
                       <Route path="/dashboard/relation-type" component={RelationType} />
                       <Route path="/dashboard/payment-method" component={PaymentMethod} />
                       <Route path="/dashboard/card-type" component={CardType} />
+                      <Route path="/dashboard/share-type" component={ShareType} />
+                      <Route path="/dashboard/share" exact component={Share} />
+                      <Route path="/dashboard/location" exact component={Location} />
                     </Dashboard>
                   </Switch>
                 );

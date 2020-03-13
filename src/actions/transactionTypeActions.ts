@@ -49,6 +49,43 @@ export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch
   }
 };
 
+export const getList = () => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_LOADING,
+    payload: true
+  });
+  try {
+    const { data: { data }, status } = await API.getList();
+    let response = [];
+    if (status === 200) {
+
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_LIST,
+        payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
 export const search = (term: string, perPage: number = 8) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,

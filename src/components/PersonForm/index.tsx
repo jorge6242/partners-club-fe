@@ -41,7 +41,7 @@ import {
   update,
   create,
   get,
-  searchPersonsToAssign,
+  searchPersonToAssignFamily,
   searchFamilyByPerson,
   assignPerson,
   removeRelation,
@@ -58,7 +58,8 @@ import {
   create as createShare,
   getSharesByPartner,
   get as getShare,
-  update as updateShare
+  update as updateShare,
+  reset as resetShare
 } from "../../actions/shareActions";
 import { updateModal } from "../../actions/secondModalActions";
 import TransferList from "../TransferList";
@@ -470,7 +471,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   );
   const {
     loading: shareLoading,
-    list: getShareList,
+    sharesByPartner,
     selectedShare
   } = useSelector((state: any) => state.shareReducer);
   const { loading: cardPersonLoading, list: cardPersonList } = useSelector(
@@ -509,7 +510,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
       if (id) {
         Promise.all([
           dispatch(getSharesByPartner(id)),
-          dispatch(searchPersonsToAssign(id)),
+          dispatch(searchPersonToAssignFamily(id)),
           dispatch(searchFamilyByPerson(id)),
           dispatch(getCardPerson(id))
         ]);
@@ -585,8 +586,9 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   useEffect(() => {
     return () => {
       reset();
+      dispatch(resetShare());
     };
-  }, [reset]);
+  }, [reset,dispatch]);
 
   const handleForm = async (form: object) => {
     if (tempPersonId > 0) {
@@ -648,7 +650,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   };
 
   const handleSearch = (event: any) => {
-    dispatch(searchPersonsToAssign(id, event.value));
+    dispatch(searchPersonToAssignFamily(id, event.value));
   };
 
   const handleDeleteRelation = (relationId: number) => {
@@ -1120,13 +1122,23 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
       tarjeta_secundaria,
       tarjeta_terciaria
     } = selectedShare;
+    const cardList = [];
     const dataList = [];
-    tarjeta_primaria &&
+
+    if(tarjeta_primaria) {
       dataList.push({ ...tarjeta_primaria, orderDetail: "Primario", order: 1 });
-    tarjeta_secundaria &&
+      cardList.push({ ...tarjeta_primaria });
+    }
+
+    if(tarjeta_secundaria) {
       dataList.push({ ...tarjeta_secundaria, orderDetail: "Secundario", order: 2  });
-    tarjeta_terciaria &&
+      cardList.push({ ...tarjeta_secundaria });
+    }
+
+    if(tarjeta_terciaria) {
       dataList.push({ ...tarjeta_terciaria, orderDetail: "Terciario", order: 3  });
+      cardList.push({ ...tarjeta_terciaria });
+    }
     return (
       <Grid container spacing={2}>
         <Grid item xs={12} className="card-person-data-table">
@@ -1140,9 +1152,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             fontSize="10px"
           />
         </Grid>
-        {!selectedShare.tarjeta_primaria ||
-          !selectedShare.tarjeta_secundaria ||
-          !selectedShare.tarjeta_terciaria  && (
+        { cardList.length < 3 && (
             <Grid item xs={12} className={classes.cardPersonButtonContainer}>
               <Button
                 size="small"
@@ -1200,7 +1210,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                 <Grid item xs={12} className={classes.profileName}>
                   {name} {last_name}
                 </Grid>
-                {getShareList.length > 0 && (
+                {sharesByPartner.length > 0 && (
                   <Grid item xs={12}>
                     <div className="custom-select-container">
                       <select
@@ -1208,7 +1218,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                         onChange={handleShareSelect}
                         style={{ fontSize: "13px" }}
                       >
-                        {getShareList.map((item: any, i: number) => (
+                        {sharesByPartner.map((item: any, i: number) => (
                           <option value={item.id}>{item.share_number}</option>
                         ))}
                       </select>

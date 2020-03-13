@@ -26,6 +26,10 @@ import shareReducer from './shareReducer';
 import cardPersonReducer from './cardPersonReducer';
 import transactionTypeReducer from './transactionTypeReducer';
 import shareMovementReducer from './shareMovementReducer';
+import currencyReducer from './currencyReducer';
+import shareTypeReducer from './shareTypeReducer';
+import locationReducer from './locationReducer';
+import accessControlReducer from './accessControlReducer';
 
 const rootReducer = combineReducers({
   modalReducer,
@@ -51,7 +55,11 @@ const rootReducer = combineReducers({
   shareReducer,
   cardPersonReducer,
   transactionTypeReducer,
-  shareMovementReducer
+  shareMovementReducer,
+  currencyReducer,
+  shareTypeReducer,
+  locationReducer,
+  accessControlReducer
 });
 
 export default rootReducer;

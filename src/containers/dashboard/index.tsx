@@ -16,6 +16,7 @@ import LockIcon from '@material-ui/icons/Lock';
 import PersonIcon from '@material-ui/icons/Person';
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import PeopleIcon from '@material-ui/icons/People';
+import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak';
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -35,6 +36,8 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 
 import { logout } from "../../actions/loginActions";
+import AccessControlForm from "../../components/AccessControlForm";
+import { updateModal } from "../../actions/modalActions";
 
 const drawerWidth = 240;
 
@@ -121,6 +124,18 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleAccessControl = () => {
+    dispatch(
+      updateModal({
+        payload: {
+          status: true,
+          element: <AccessControlForm />,
+          customSize: 'medium'
+        }
+      })
+    );
+  }
 
   const drawer = (
     <div>
@@ -258,6 +273,26 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             onClick={() => handeClick("/dashboard/card-type")}
           />
         </MenuItem>
+
+        <MenuItem>
+          <ListItemIcon>
+            <DoubleArrowIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={"Tipo de Accion"}
+            onClick={() => handeClick("/dashboard/share-type")}
+          />
+        </MenuItem>
+
+        <MenuItem>
+          <ListItemIcon>
+            <DoubleArrowIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={"Ubicacion"}
+            onClick={() => handeClick("/dashboard/location")}
+          />
+        </MenuItem>
       </Menu>
       <List>
       <ListItem button>
@@ -300,6 +335,16 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             <DoubleArrowIcon />
           </ListItemIcon>
           <ListItemText
+            primary={"Acciones"}
+            onClick={() => handeClick("/dashboard/share")}
+          />
+        </ListItem>
+
+        <ListItem button>
+          <ListItemIcon>
+            <DoubleArrowIcon />
+          </ListItemIcon>
+          <ListItemText
             primary={"Movimientos de Acciones"}
             onClick={() => handeClick("/dashboard/share-movement")}
           />
@@ -312,6 +357,16 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
           <ListItemText
             primary={"Reportes"}
             onClick={() => handeClick("/dashboard/reports")}
+          />
+        </ListItem>
+
+        <ListItem button>
+          <ListItemIcon>
+            <CenterFocusWeakIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={"Control de Acceso"}
+            onClick={() => handleAccessControl()}
           />
         </ListItem>
       </List>

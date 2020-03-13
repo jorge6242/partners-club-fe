@@ -1,6 +1,7 @@
 export const ACTIONS = {
     GET_ALL: 'transaction-type/get_all',
     GET: 'transaction-type/get',
+    GET_LIST: 'transaction-type/get_list',
     SET_LOADING: 'transaction-type/set_loading',
     SET_PAGINATION: 'transaction-type/set_pagination',
 };
@@ -12,6 +13,11 @@ export const ACTIONS = {
   
   interface GetAll {
     type: typeof ACTIONS.GET_ALL
+    payload: Array<string|number>
+  }
+
+  interface GetList {
+    type: typeof ACTIONS.GET_LIST
     payload: Array<string|number>
   }
   
@@ -26,4 +32,4 @@ export const ACTIONS = {
   }
   
   
-  export type ActionTypes = Get | GetAll | SetLoading | SetPagination
+  export type ActionTypes = Get | GetAll | SetLoading | SetPagination | GetList

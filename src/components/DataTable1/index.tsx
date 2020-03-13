@@ -33,7 +33,7 @@ interface DataTableProps {
   pagination?: any;
   columns: any;
   isDelete?: boolean;
-  handleEdit: Function;
+  handleEdit?: Function;
   handleDelete?: any;
   loading?: boolean;
   onChangePage: any;
@@ -114,7 +114,7 @@ const DataTable1: FunctionComponent<DataTableProps> = ({
                         </IconButton>
                       </TableCell>
                     )}
-                    {isDelete && (
+                    {handleDelete && (
                       <TableCell  align="right" style={{ minWidth: 5 }}>
                         <IconButton
                           aria-label="delete"

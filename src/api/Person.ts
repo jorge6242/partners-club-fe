@@ -38,8 +38,8 @@ const Person = {
   report() {
     return AXIOS.get(`${Prefix.api}/person-report`, { headers: headers() });
   },
-  searchPersonToAssign(id: any, term: string) {
-    return AXIOS.get(`${Prefix.api}/search-person-to-assign`, {
+  searchPersonToAssignFamily(id: any, term: string) {
+    return AXIOS.get(`${Prefix.api}/search-person-to-assign-family`, {
       params: {
         term,
         id
@@ -85,6 +85,12 @@ const Person = {
       headers: headers()
     });
   },
+  getFamiliesPartnerByCard(card: string = ""){
+    return AXIOS.get(`${Prefix.api}/get-families-partner-by-card`, { params: { card }, headers: headers() });
+  },
+  getGuestByPartner(identification: string = ""){
+    return AXIOS.get(`${Prefix.api}/get-guest-by-partner`, { params: { identification }, headers: headers() });
+  }
 };
 
 export default Person;

@@ -24,6 +24,11 @@ type AutoCompleteProps = {
     handleSearch: any;
     getOptionLabel: Function;
     handleSelectShare: Function;
+    errorsField?: any;
+    errorsMessageField?: any;
+    required?: boolean;
+    field: string;
+    register: Function;
   };
 
 const AutoComplete: FunctionComponent<AutoCompleteProps> = ({
@@ -33,6 +38,11 @@ const AutoComplete: FunctionComponent<AutoCompleteProps> = ({
     getOptionLabel,
     handleSelectShare,
     label,
+    errorsField,
+    errorsMessageField,
+    required,
+    field,
+    register,
   }) => {
     const classes = useStyles();
 
@@ -49,18 +59,24 @@ const AutoComplete: FunctionComponent<AutoCompleteProps> = ({
         <Autocomplete
             id="asynchronous-demo"
             freeSolo
-            onInputChange={(e:any, v:any) =>_.debounce(handleSearch(e,v),2000)}
+            onInputChange={_.debounce(handleSearch,1000)}
             getOptionLabel={(option: any) => getOptionLabel(option)}
             getOptionSelected={(option: any, value: any) => handleSelectShare(option, value)}
             options={options}
             loading={loading}
-            blurOnSelect={false}
             // defaultValue={seledtedData ? seledtedData : null}
             renderInput={params => (
                 <TextField
                     {...params}
                     label={label}
                     fullWidth
+                    name={field}
+                    inputRef={register({
+                        required: required ? "Required" : false,
+                      })}
+                    required={errorsField ? true : false}
+                    error={errorsField ? true : false}
+                    helperText={errorsField && errorsMessageField}
                     InputProps={{
                         ...params.InputProps,
                         startAdornment: (

@@ -7,10 +7,14 @@ import handleDebounce from '../../../helpers/handleDebounce';
 
 type CustomSearchdProps = {
     handleSearch: Function;
+    label?: string;
+    errorsField? : any;
 };
 
 const CustomTextField: FunctionComponent<CustomSearchdProps> = ({
-    handleSearch
+    handleSearch,
+    label,
+    errorsField,
 }) => (
         <Grid container spacing={1} alignItems="flex-end">
             <Grid item>
@@ -19,8 +23,10 @@ const CustomTextField: FunctionComponent<CustomSearchdProps> = ({
             <Grid item>
                 <TextField
                     id="input-with-icon-grid"
-                    label="Search"
+                    label={label || "Search"}
                     onChange={handleDebounce(handleSearch, 1000)}
+                    required={errorsField ? true : false}
+                    error={errorsField ? true : false}
                 />
             </Grid>
         </Grid>)
