@@ -34,6 +34,10 @@ import Button from "@material-ui/core/Button";
 import { useDispatch } from "react-redux";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import IconExpandLess from '@material-ui/icons/ExpandLess'
+import IconExpandMore from '@material-ui/icons/ExpandMore'
+import IconLibraryBooks from '@material-ui/icons/LibraryBooks'
+import Collapse from '@material-ui/core/Collapse'
 
 import { logout } from "../../actions/loginActions";
 import AccessControlForm from "../../components/AccessControlForm";
@@ -99,9 +103,14 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log('location ', location.pathname);
-    if(location.pathname === '/dashboard') {
+  const [open, setOpen] = React.useState(false)
+
+  function handleClick() {
+    setOpen(!open)
+  }
+
+  useEffect(() => { 
+    if (location.pathname === '/dashboard') {
       history.push('/dashboard/main');
     }
   }, [history, location]);
@@ -118,7 +127,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
   const handleLogout = () => dispatch(logout());
 
   const handleMenu = (event: any) => {
-    setAnchorEl(event.currentTarget);
+      setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
@@ -137,165 +146,55 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     );
   }
 
+  const renderMenu = (Icon: React.ReactType, title: string, route: string) => (
+    <MenuItem>
+      <ListItemIcon>
+        <Icon />
+      </ListItemIcon>
+      <ListItemText
+        primary={title}
+        onClick={() => handeClick(route)}
+      />
+    </MenuItem>
+  )
+
   const drawer = (
     <div>
       <div className={classes.toolbar} />
       <Divider />
       <Menu
-        id="simple-menu"
+        id="report-menu"
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem>
-          <ListItemIcon>
-            <PeopleIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={"Roles"}
-            onClick={() => handeClick("/dashboard/role")}
-          />
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <LockIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={"Permisos"}
-            onClick={() => handeClick("/dashboard/permission")}
-          />
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <AccountBalanceIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={"Banco"}
-            onClick={() => handeClick("/dashboard/banco")}
-          />
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <DoubleArrowIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={"Pais"}
-            onClick={() => handeClick("/dashboard/pais")}
-          />
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <SportsBaseballIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={"Deporte"}
-            onClick={() => handeClick("/dashboard/deporte")}
-          />
-        </MenuItem>
-
-        <MenuItem>
-          <ListItemIcon>
-            <DoubleArrowIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={"Profesion"}
-            onClick={() => handeClick("/dashboard/profesion")}
-          />
-        </MenuItem>
-
-        <MenuItem>
-          <ListItemIcon>
-            <DoubleArrowIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={"Estado Civil"}
-            onClick={() => handeClick("/dashboard/estado-civil")}
-          />
-        </MenuItem>
-
-        <MenuItem>
-          <ListItemIcon>
-            <DoubleArrowIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={"Estatus"}
-            onClick={() => handeClick("/dashboard/status-persona")}
-          />
-        </MenuItem>
-
-        <MenuItem>
-          <ListItemIcon>
-            <DoubleArrowIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={"Sexo"}
-            onClick={() => handeClick("/dashboard/sexo")}
-          />
-        </MenuItem>
-
-        <MenuItem>
-          <ListItemIcon>
-            <DoubleArrowIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={"Tipo Relacion"}
-            onClick={() => handeClick("/dashboard/relation-type")}
-          />
-        </MenuItem>
-
-        <MenuItem>
-          <ListItemIcon>
-            <PersonIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={"Usuario"}
-            onClick={() => handeClick("/dashboard/user")}
-          />
-        </MenuItem>
-
-        <MenuItem>
-          <ListItemIcon>
-            <DoubleArrowIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={"Metodo de Pago"}
-            onClick={() => handeClick("/dashboard/payment-method")}
-          />
-        </MenuItem>
-
-        <MenuItem>
-          <ListItemIcon>
-            <DoubleArrowIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={"Tipo de Tarjeta"}
-            onClick={() => handeClick("/dashboard/card-type")}
-          />
-        </MenuItem>
-
-        <MenuItem>
-          <ListItemIcon>
-            <DoubleArrowIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={"Tipo de Accion"}
-            onClick={() => handeClick("/dashboard/share-type")}
-          />
-        </MenuItem>
-
-        <MenuItem>
-          <ListItemIcon>
-            <DoubleArrowIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={"Ubicacion"}
-            onClick={() => handeClick("/dashboard/location")}
-          />
-        </MenuItem>
+        {renderMenu(ListAltIcon, "Reporte General", "/dashboard/general-report")}
+      </Menu>
+      <Menu
+        id="maintenance-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        {renderMenu(PeopleIcon, "Roles", "/dashboard/role")}
+        {renderMenu(LockIcon, "Permisos", "/dashboard/permission")}
+        {renderMenu(AccountBalanceIcon, "Banco", "/dashboard/banco")}
+        {renderMenu(DoubleArrowIcon, "Pais", "/dashboard/pais")}
+        {renderMenu(SportsBaseballIcon, "Deporte", "/dashboard/deporte")}
+        {renderMenu(DoubleArrowIcon, "Profesion", "/dashboard/profesion")}
+        {renderMenu(DoubleArrowIcon, "Estado Civil", "/dashboard/estado-civil")}
+        {renderMenu(DoubleArrowIcon, "Estatus", "/dashboard/status-persona")}
+        {renderMenu(DoubleArrowIcon, "Sexo", "/dashboard/sexo")}
+        {renderMenu(DoubleArrowIcon, "Tipo Relacion", "/dashboard/relation-type")}
+        {renderMenu(DoubleArrowIcon, "Metodo de Pago", "/dashboard/payment-method")}
+        {renderMenu(DoubleArrowIcon, "Tipo de Tarjeta", "/dashboard/card-type")}
+        {renderMenu(DoubleArrowIcon, "Tipo de Accion", "/dashboard/share-type")}
+        {renderMenu(DoubleArrowIcon, "Ubicacion", "/dashboard/location")}>
       </Menu>
       <List>
-      <ListItem button>
+        <ListItem button>
           <ListItemIcon>
             <DashboardIcon />
           </ListItemIcon>
@@ -304,7 +203,10 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             onClick={() => handeClick("/dashboard/main")}
           />
         </ListItem>
-        <ListItem button onClick={handleMenu}>
+        <ListItem 
+          button 
+          onClick={handleMenu} 
+          id="maintenance-menu">
           <ListItemIcon>
             <BuildIcon />
           </ListItemIcon>
@@ -319,7 +221,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             onClick={() => handeClick("/dashboard/socio")}
           />
         </ListItem>
-        
+
         <ListItem button>
           <ListItemIcon>
             <DoubleArrowIcon />
@@ -350,15 +252,30 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
           />
         </ListItem>
 
-        <ListItem button>
-          <ListItemIcon>
-            <ListAltIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={"Reportes"}
-            onClick={() => handeClick("/dashboard/reports")}
-          />
-        </ListItem>
+        <ListItem button onClick={handleClick}>
+        <ListItemIcon >
+          <IconLibraryBooks />
+        </ListItemIcon>
+        <ListItemText primary="Reportes" />
+        {open ? <IconExpandLess /> : <IconExpandMore />}
+      </ListItem>
+
+
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <Divider />
+        <List component="div" disablePadding>
+          <ListItem button   onClick={() => handeClick("/dashboard/report-general")}>
+            <ListItemText inset primary="Reporte General" />
+          </ListItem>
+          <ListItem button >
+            <ListItemText inset primary="Reporte de Socio" />
+          </ListItem>
+            <ListItem button >
+              <ListItemText inset primary="Reporte de Invitado" />
+            </ListItem>
+        </List>
+      </Collapse>
+
 
         <ListItem button>
           <ListItemIcon>

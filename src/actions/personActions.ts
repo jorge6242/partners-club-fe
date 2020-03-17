@@ -725,3 +725,65 @@ export const getGuestByPartner = (identification: string) => async (dispatch: Fu
 
 export const clear = () => ({ type: ACTIONS.CLEAR });
 
+export const filter  = (body: object) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_LOADING,
+    payload: true
+  });
+  try {
+    const { data: { data }, status } = await Person.filter(body);
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_ALL,
+        payload: response
+      });
+    }
+    dispatch({
+      type: ACTIONS.SET_LOADING,
+      payload: false
+    });
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
+export const filterReport  = (body: object) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_SECOND_LOADING,
+    payload: true
+  });
+  Axios({
+    url: `${Prefix.api}/person-filter-report`,
+    method: 'GET',
+    responseType: 'blob', // important
+    params: { ...body },
+    headers: headers(),
+  }).then((response) => {
+    console.log('response ', response);
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'generalReport.pdf');
+    document.body.appendChild(link);
+    link.click();
+    dispatch({
+      type: ACTIONS.SET_SECOND_LOADING,
+      payload: false
+    });
+  });
+};
+

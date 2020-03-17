@@ -95,7 +95,6 @@ const GuestForm: FunctionComponent<GuestFormProps> = ({
   const { picture } = getValues();
 
   useEffect(() => {
-    console.log("identification ", identification);
     setValue("rif_ci", identification);
   }, [setValue, identification]);
 

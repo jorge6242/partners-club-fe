@@ -24,8 +24,18 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "left",
     padding: 10
-  }
-});
+  },
+  tableCellHeader: { 
+    paddingLeft: 0,
+    paddingRight: 0,
+    '&:first-child': {
+      paddingLeft: 10
+    },
+    '&:last-child': {
+      paddingRight: 10
+    }
+  },
+  });
 
 interface DataTableProps {
   rows: any;
@@ -37,6 +47,7 @@ interface DataTableProps {
   loading?: boolean;
   onChangePage: any;
   onChangePerPage: any;
+  fontSize?: string;
 }
 
 const DataTable4: FunctionComponent<DataTableProps> = ({
@@ -48,7 +59,8 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
   handleDelete,
   loading,
   onChangePage,
-  onChangePerPage
+  onChangePerPage,
+  fontSize = '12px'
 }) => {
   const classes = useStyles();
 
@@ -73,12 +85,15 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  className={classes.tableCellHeader}
+                  style={{
+                    minWidth: column.minWidth, fontSize
+                  }}
                 >
                   {column.label}
                 </TableCell>
               ))}
-              {handleEdit && <TableCell  style={{ minWidth: 5 }}></TableCell>}
+              {handleEdit && <TableCell style={{ minWidth: 5 }}></TableCell>}
               {handleDelete && <TableCell style={{ minWidth: 5 }}></TableCell>}
             </TableRow>
           </TableHead>
@@ -88,47 +103,47 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                 <CircularProgress color="primary" />
               </TableRow>
             ) : (
-              rows.map((row: any) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                    {columns.map((column: any) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : createElement(column.component, { value })}
+                rows.map((row: any) => {
+                  return (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                      {columns.map((column: any) => {
+                        const value = row[column.id];
+                        return (
+                          <TableCell key={column.id} align={column.align} className={classes.tableCellHeader} style={{ fontSize  }} >
+                            {column.format && typeof value === "number"
+                              ? column.format(value)
+                              : createElement(column.component, { value })}
+                          </TableCell>
+                        );
+                      })}
+                      {handleEdit && (
+                        <TableCell align="right" style={{ minWidth: 5 }}>
+                          <IconButton
+                            aria-label="delete"
+                            size="small"
+                            color="primary"
+                            onClick={() => handleEdit(row.id)}
+                          >
+                            <EditIcon fontSize="inherit" />
+                          </IconButton>
                         </TableCell>
-                      );
-                    })}
-                    {handleEdit && (
-                      <TableCell  align="right" style={{ minWidth: 5 }}>
-                        <IconButton
-                          aria-label="delete"
-                          size="small"
-                          color="primary"
-                          onClick={() => handleEdit(row.id)}
-                        >
-                          <EditIcon fontSize="inherit" />
-                        </IconButton>
-                      </TableCell>
-                    )}
-                    {handleDelete && (
-                      <TableCell  align="right" style={{ minWidth: 5 }}>
-                        <IconButton
-                          aria-label="delete"
-                          size="small"
-                          color="secondary"
-                          onClick={() => handleDelete(row.id)}
-                        >
-                          <DeleteIcon fontSize="inherit" />
-                        </IconButton>
-                      </TableCell>
-                    )}
-                  </TableRow>
-                );
-              })
-            )}
+                      )}
+                      {handleDelete && (
+                        <TableCell align="right" style={{ minWidth: 5 }}>
+                          <IconButton
+                            aria-label="delete"
+                            size="small"
+                            color="secondary"
+                            onClick={() => handleDelete(row.id)}
+                          >
+                            <DeleteIcon fontSize="inherit" />
+                          </IconButton>
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  );
+                })
+              )}
           </TableBody>
         </Table>
       </TableContainer>

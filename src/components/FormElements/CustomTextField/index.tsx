@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from "react";
 import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 const email = {
   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
@@ -33,6 +34,7 @@ type CustomTextFieldProps = {
   disable?: boolean;
   maxLength?: number;
   inputType?: string;
+  Icon?: React.ReactType;
 };
 
 const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
@@ -46,6 +48,7 @@ const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
   disable = false,
   maxLength = 150,
   inputType,
+  Icon
 }) => (
   <TextField
     label={placeholder}
@@ -66,6 +69,13 @@ const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
     })}
     InputLabelProps={{
       shrink: true,
+    }}
+    InputProps={{
+      startAdornment: Icon ? (
+        <InputAdornment position="start">
+          <Icon />
+        </InputAdornment>
+      ) : null 
     }}
     required={errorsField ? true : false}
     error={errorsField ? true : false}

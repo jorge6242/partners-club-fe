@@ -103,7 +103,19 @@ const Person = {
       params: { identification },
       headers: headers()
     });
-  }
+  },
+  filter(queryString: object) {
+    return AXIOS.get(`${Prefix.api}/person-filter`, {
+      params: { ...queryString },
+      headers: headers()
+    });
+  },
+  filterReport(queryString: object) {
+    return AXIOS.get(`${Prefix.api}/person-filter-report`, {
+      params: { ...queryString },
+      headers: headers()
+    });
+  },
 };
 
 export default Person;
