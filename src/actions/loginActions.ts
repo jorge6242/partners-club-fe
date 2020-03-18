@@ -3,6 +3,7 @@ import AXIOS from '../config/Axios'
 import SecureStorage from '../config/SecureStorage'
 import snackBarUpdate from '../actions/snackBarActions';
 import { ACTIONS } from '../interfaces/actionTypes/loginTypes';
+// import history from '../config/History';
 
 export const login = (body: object) => async (dispatch: Function) => {
     dispatch({ type: ACTIONS.SET_LOADING, payload: true })
@@ -67,10 +68,10 @@ export function setupInterceptors() {
           return response;
         },
         error => {
-        if (error.response && error.response.status === 401) {;
-            if(window.location.pathname !== '/' && error.response.data.message === "Unauthenticated."){
-                // console.log('error.response.data.message ', error.response.data.message);
-            }
+        if (error.response && error.response.status === 401) {
+            // if(history.location.hash !== '' && history.location.hash !== '#/' && error.response.data.message === "Unauthenticated.") {
+            //     window.location.href = '/';
+            // }
           }
           return Promise.reject(error);
         },

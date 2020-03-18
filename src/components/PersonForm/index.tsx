@@ -364,6 +364,8 @@ type FormData = {
   card_people1: number;
   card_people2: number;
   card_people3: number;
+  country_list: any;
+  sport_list: any;
 };
 
 type PersonFormProps = {
@@ -429,6 +431,8 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   const [imageField, setImageField] = useState();
   const [tabValue, setTabValue] = useState(0);
   const [selectedProff, setSelectedProff] = useState<any>(null);
+  const [selectedCountries, setSelectedCountries] = useState<Array<string | number>>([]);
+  const [selectedSports, setSelectedSports] = useState<Array<string | number>>([]);
 
   /* Form */
 
@@ -444,6 +448,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
 
   /* Redux */
   const dispatch = useDispatch();
+  
   const {
     loading,
     relationLoading,
@@ -455,11 +460,13 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   const { list: statusPersonList } = useSelector(
     (state: any) => state.statusPersonReducer
   );
+
   const { list: maritalStatusList } = useSelector(
     (state: any) => state.maritalStatusReducer
   );
-  const { countries } = useSelector((state: any) => state.countryReducer);
+  const { countries: countryList } = useSelector((state: any) => state.countryReducer);
   const { list: genderList } = useSelector((state: any) => state.genderReducer);
+  const { sports: sportList } = useSelector((state: any) => state.sportReducer);
   const { professions: professionList } = useSelector(
     (state: any) => state.professionReducer
   );
@@ -538,7 +545,9 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
           status_person_id,
           marital_statuses_id,
           countries_id,
-          professions
+          professions,
+          countries,
+          sports,
         } = response;
         setValue("name", name);
         setValue("last_name", last_name);
@@ -566,6 +575,20 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
         setValue("status_person_id", status_person_id);
         setValue("marital_statuses_id", marital_statuses_id);
         setValue("countries_id", countries_id);
+        if (countries.length > 0) {
+          const list = countries.map((element: any) => element.id);
+          setValue("country_list", JSON.stringify(list));
+          setSelectedCountries(countries);
+        } else {
+          setSelectedCountries([]);
+        }
+        if (sports.length > 0) {
+          const list = sports.map((element: any) => element.id);
+          setValue("sport_list", JSON.stringify(list));
+          setSelectedSports(sports);
+        } else {
+          setSelectedSports([]);
+        }
         if (professions) {
           const list = professions.map((element: any) => element.id);
           setValue("profession_list", JSON.stringify(list));
@@ -623,6 +646,14 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
 
   const onProfessionsChange = (event: any) => {
     setValue("profession_list", JSON.stringify(event));
+  };
+
+  const onCountriesChange = (event: any) => {
+    setValue("country_list", JSON.stringify(event));
+  };
+
+    const onSportsChange = (event: any) => {
+    setValue("sport_list", JSON.stringify(event));
   };
 
   const handleAssign = async (personRelated: number, relationType: number) => {
@@ -889,7 +920,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
               errors.countries_id && errors.countries_id.message
             }
           >
-            {countries.map((item: any) => (
+            {countryList.map((item: any) => (
               <option key={item.id} value={item.id}>
                 {item.description}
               </option>
@@ -1140,6 +1171,8 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     );
   };
 
+  const getNacionalityLabel = (row: any) => row.citizenship;
+
   let imagePreview = picture;
   if (image.preview) imagePreview = image.preview;
   return (
@@ -1297,7 +1330,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                           </ExpansionPanelSummary>
                           <ExpansionPanelDetails>
                             <Grid container spacing={3}>
-                              {/* <Grid item xs={12}> <Autocomplete /> </Grid> */}
                               <Grid item xs={12} justify="flex-start">
                                 {professionList.length > 0 && selectedProff && (
                                   <TransferList
@@ -1332,7 +1364,39 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                             </Typography>
                           </ExpansionPanelSummary>
                           <ExpansionPanelDetails>
-                            campos de otros
+                          <Grid container spacing={3}>
+                              <Grid item xs={12} justify="flex-start">
+                                {countryList.length > 0 && (
+                                  <TransferList
+                                    data={countryList}
+                                    selectedData={selectedCountries}
+                                    leftTitle="Nacionalidades"
+                                    onSelectedList={onCountriesChange}
+                                    getLabel={getNacionalityLabel}
+                                  />
+                                )}
+                                <input
+                                  style={{ display: "none" }}
+                                  name="country_list"
+                                  ref={register}
+                                />
+                              </Grid>
+                              <Grid item xs={12} justify="flex-start">
+                                {sportList.length > 0 && (
+                                  <TransferList
+                                    data={sportList}
+                                    selectedData={selectedSports}
+                                    leftTitle="Deportes"
+                                    onSelectedList={onSportsChange}
+                                  />
+                                )}
+                                <input
+                                  style={{ display: "none" }}
+                                  name="sport_list"
+                                  ref={register}
+                                />
+                              </Grid>
+                            </Grid>
                           </ExpansionPanelDetails>
                         </ExpansionPanel>
                       </div>

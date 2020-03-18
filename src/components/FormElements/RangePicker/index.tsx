@@ -2,7 +2,6 @@ import React, { FunctionComponent } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from "@material-ui/core/Grid";
-import moment from 'moment';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

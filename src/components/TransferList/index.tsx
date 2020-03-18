@@ -21,10 +21,11 @@ const useStyles = makeStyles((theme: Theme) =>
     cardHeader: {
       padding: theme.spacing(1, 2),
       color: '#2980b9',
+      fontWeigth: 'bold',
     },
     list: {
+      height: 150,
       width: 200,
-      height: 230,
       backgroundColor: theme.palette.background.paper,
       overflow: "auto"
     },
@@ -51,13 +52,15 @@ type TransferListProps = {
   leftTitle: any;
   selectedData: any;
   onSelectedList: Function;
+  getLabel?: Function;
 };
 
 const TransferList: FunctionComponent<TransferListProps> = ({
   data,
   leftTitle,
   onSelectedList,
-  selectedData
+  selectedData,
+  getLabel,
 }) => {
   const classes = useStyles();
   const [checked, setChecked] = React.useState<number[]>([]);
@@ -152,6 +155,7 @@ const TransferList: FunctionComponent<TransferListProps> = ({
       <List className={classes.list} dense component="div" role="list">
         {items.map((value: any, i: number) => {
           const labelId = `transfer-list-all-item-${value}-label`;
+          const label = getLabel ? getLabel(value) : value.description;
           return (
             <ListItem
               key={i}
@@ -168,7 +172,7 @@ const TransferList: FunctionComponent<TransferListProps> = ({
                   inputProps={{ "aria-labelledby": labelId }}
                 />
               </ListItemIcon>
-              <ListItemText id={labelId} primary={value.description} />
+              <ListItemText id={labelId} primary={label} />
             </ListItem>
           );
         })}

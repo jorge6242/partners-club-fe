@@ -37,6 +37,7 @@ import { getAll as getRelationTypes } from "../actions/relationTypeActions";
 import { getAll as getPaymentMethods } from "../actions/paymentMethodActions";
 import { getList as getTransactionTypes } from "../actions/transactionTypeActions";
 import { getList as getCurrencies } from "../actions/currencyActions";
+import { getAll as getSports } from "../actions/sportActions";
 import TransactionType from "../containers/transactionType";
 import ShareMovement from "../containers/shareMovement";
 import ShareType from "../containers/shareType";
@@ -49,15 +50,18 @@ export default function Routes() {
   const token = SecureStorage.getItem("token");
 
   useEffect(() => {
-    dispatch(getStatusPersonAll());
-    dispatch(getMaritalStatusAll());
-    dispatch(getGenderAll());
-    dispatch(getCountries());
-    dispatch(getRelationTypes());
-    dispatch(getPaymentMethods());
-    dispatch(getTransactionTypes());
-    dispatch(getCurrencies());
-  },[dispatch])
+    if(window.location.pathname !== '/') {
+      dispatch(getStatusPersonAll());
+      dispatch(getMaritalStatusAll());
+      dispatch(getGenderAll());
+      dispatch(getCountries());
+      dispatch(getRelationTypes());
+      dispatch(getPaymentMethods());
+      dispatch(getTransactionTypes());
+      dispatch(getCurrencies());
+      dispatch(getSports());
+    }
+  },[dispatch, token])
 
   useEffect(() => {
     dispatch(checkLogin());
@@ -72,7 +76,6 @@ export default function Routes() {
       <MainLayout>
         <Switch>
           <Route path="/" exact component={Login} />
-          <Route path="/login" exact component={Login} />
           <Route path="/template/expiration-cards" component={ExpirationCard} />
           <Route
             path="/dashboard"

@@ -13,7 +13,6 @@ import SportsBaseballIcon from '@material-ui/icons/SportsBaseball';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import LockIcon from '@material-ui/icons/Lock';
-import PersonIcon from '@material-ui/icons/Person';
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import PeopleIcon from '@material-ui/icons/People';
 import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak';
@@ -42,6 +41,15 @@ import Collapse from '@material-ui/core/Collapse'
 import { logout } from "../../actions/loginActions";
 import AccessControlForm from "../../components/AccessControlForm";
 import { updateModal } from "../../actions/modalActions";
+import { getAll as getStatusPersonAll } from "../../actions/statusPersonActions";
+import { getAll as getMaritalStatusAll } from "../../actions/maritalStatusActions";
+import { getAll as getGenderAll } from "../../actions/genderActions";
+import { getAll as getCountries } from "../../actions/countryActions";
+import { getAll as getRelationTypes } from "../../actions/relationTypeActions";
+import { getAll as getPaymentMethods } from "../../actions/paymentMethodActions";
+import { getList as getTransactionTypes } from "../../actions/transactionTypeActions";
+import { getList as getCurrencies } from "../../actions/currencyActions";
+import { getAll as getSports } from "../../actions/sportActions";
 
 const drawerWidth = 240;
 
@@ -108,6 +116,18 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
   function handleClick() {
     setOpen(!open)
   }
+
+  useEffect(() => {
+    dispatch(getStatusPersonAll());
+    dispatch(getMaritalStatusAll());
+    dispatch(getGenderAll());
+    dispatch(getCountries());
+    dispatch(getRelationTypes());
+    dispatch(getPaymentMethods());
+    dispatch(getTransactionTypes());
+    dispatch(getCurrencies());
+    dispatch(getSports());
+  },[dispatch])
 
   useEffect(() => { 
     if (location.pathname === '/dashboard') {

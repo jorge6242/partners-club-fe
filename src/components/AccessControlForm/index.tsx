@@ -105,6 +105,10 @@ const useStyles = makeStyles(theme => ({
   heading: {
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular
+  },
+  partnerContainer: {
+    height: 230,
+    overflow: 'auto',
   }
 }));
 
@@ -513,7 +517,7 @@ export default function AccessControlForm() {
                 })}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} className={classes.partnerContainer}>
               {familiesPartnerCardLoading ? (
                 <div className={classes.progressContainer}>
                   <CircularProgress color="primary" size={40} />

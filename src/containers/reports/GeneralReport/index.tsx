@@ -4,18 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from "@material-ui/core/styles";
 import { useForm } from 'react-hook-form';
 import SearchIcon from "@material-ui/icons/Search";
-import Fab from '@material-ui/core/Fab';
 import Button from '@material-ui/core/Button';
-import moment from 'moment';
 import Chip from "@material-ui/core/Chip";
 
 import { getAll, filter, filterReport } from "../../../actions/personActions";
-import CustomSearch from '../../../components/FormElements/CustomSearch';
 import PersonColumn from '../../../interfaces/PersonColumn';
 import DataTable4 from "../../../components/DataTable4";
 import PrintIcon from "@material-ui/icons/Print";
 import LoadingButton from "../../../components/FormElements/LoadingButton";
-import TextField from "@material-ui/core/TextField";
 import CustomTextField from '../../../components/FormElements/CustomTextField'
 import CustomSelect from "../../../components/FormElements/CustomSelect";
 import RangePicker from "../../../components/FormElements/RangePicker";
