@@ -300,7 +300,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
           <List dense>
             {renderSecondMenu(IconLibraryBooks, "General", "/dashboard/report-general")}
             {renderSecondMenu(IconLibraryBooks, "Acciones", "/dashboard/report-general")}
-            {renderSecondMenu(IconLibraryBooks, "Control de Accesso", "/dashboard/share-report")}
+            {renderSecondMenu(IconLibraryBooks, "Control de Acceso", "/dashboard/access-control-report")}
           </List>
         </Collapse>
 

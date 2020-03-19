@@ -45,6 +45,7 @@ import Share from "../containers/share";
 import Location from "../containers/location";
 import GeneralReport from "../containers/reports/GeneralReport";
 import SharesReport from "../containers/reports/SharesReport";
+import AccessControlReport from "../containers/reports/AccessControlReport";
 
 export default function Routes() {
   const dispatch = useDispatch();
@@ -123,6 +124,7 @@ export default function Routes() {
                       <Route path="/dashboard/location" exact component={Location} />
                       <Route path="/dashboard/report-general" exact component={GeneralReport} />
                       <Route path="/dashboard/share-report" exact component={SharesReport} />
+                      <Route path="/dashboard/access-control-report" exact component={AccessControlReport} />
                     </Dashboard>
                   </Switch>
                 );

@@ -363,7 +363,7 @@ export default function AccessControlForm() {
                           >
                             <CardHeader
                               titleTypographyProps={{ variant: "subtitle1" }}
-                              title={element.relationType}
+                              title={element.relationship.relation_type.description}
                               className={classes.cardHeader}
                             />
                             <CardActionArea>

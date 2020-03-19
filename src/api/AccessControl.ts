@@ -48,7 +48,23 @@ const API = {
       },
       headers: headers()
     });
-  }
+  },
+  filter(form: object, page: number, perPage: number) {
+    return AXIOS.get(`${Prefix.api}/access-control-filter`, {
+      params: {
+        page: page ? page : 1,
+        perPage,
+        ...form,
+      },
+      headers: headers()
+    });
+  },
+  filterReport(queryString: object) {
+    return AXIOS.get(`${Prefix.api}/person-filter-report`, {
+      params: { ...queryString },
+      headers: headers()
+    });
+  },
 };
 
 export default API;

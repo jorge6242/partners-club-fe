@@ -68,7 +68,7 @@ const API = {
     });
   },
   filterReport(queryString: object) {
-    return AXIOS.get(`${Prefix.api}/person-filter-report`, {
+    return AXIOS.get(`${Prefix.api}/share-filter-report`, {
       params: { ...queryString },
       headers: headers()
     });
