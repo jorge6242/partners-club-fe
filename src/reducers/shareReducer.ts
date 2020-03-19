@@ -6,6 +6,7 @@ type BanksInitialState = {
   shareToAssignList: Array<string | number>;
   shareToAssignLoading: boolean;
   loading: boolean;
+  reportLoading: boolean;
   pagination: any;
   selectedShare: any;
 };
@@ -14,6 +15,7 @@ const initialState: BanksInitialState = {
   list: [],
   shareToAssignList: [],
   loading: false,
+  reportLoading: false,
   shareToAssignLoading: false,
   pagination: {
     total: 0,
@@ -52,6 +54,11 @@ const shareReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         loading: action.payload
       };
+      case ACTIONS.SET_REPORT_LOADING:
+        return {
+          ...state,
+          reportLoading: action.payload
+        };
     case ACTIONS.SET_SHARE_TO_ASSIGN_LOADING:
       return {
         ...state,

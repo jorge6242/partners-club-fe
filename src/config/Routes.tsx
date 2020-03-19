@@ -44,6 +44,7 @@ import ShareType from "../containers/shareType";
 import Share from "../containers/share";
 import Location from "../containers/location";
 import GeneralReport from "../containers/reports/GeneralReport";
+import SharesReport from "../containers/reports/SharesReport";
 
 export default function Routes() {
   const dispatch = useDispatch();
@@ -121,6 +122,7 @@ export default function Routes() {
                       <Route path="/dashboard/share" exact component={Share} />
                       <Route path="/dashboard/location" exact component={Location} />
                       <Route path="/dashboard/report-general" exact component={GeneralReport} />
+                      <Route path="/dashboard/share-report" exact component={SharesReport} />
                     </Dashboard>
                   </Switch>
                 );

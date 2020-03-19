@@ -4,6 +4,7 @@ type BanksInitialState = {
     list: Array<string | number>;
     loading: boolean;
     pagination: any;
+    listData: Array <string | number>;
 }
 
 const initialState: BanksInitialState = {
@@ -15,6 +16,7 @@ const initialState: BanksInitialState = {
         prevPageUrl: null,
         currentPage: 0,
     },
+    listData: [],
 };
 
 const transactionTypeReducer = (state = initialState, action: ActionTypes) => {
@@ -24,6 +26,11 @@ const transactionTypeReducer = (state = initialState, action: ActionTypes) => {
                 ...state,
                 list: action.payload,
             };
+            case ACTIONS.GET_LIST:
+                return {
+                    ...state,
+                    listData: action.payload,
+                };
             case ACTIONS.SET_PAGINATION:
                 return {
                     ...state,

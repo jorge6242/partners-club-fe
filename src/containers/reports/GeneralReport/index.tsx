@@ -173,6 +173,7 @@ type FormData = {
   age_end: string;
   profession_id: string;
   sport_id: string;
+  isPartner: string;
 };
 
 
@@ -207,12 +208,14 @@ export default function GeneralReport() {
   };
 
   const handleChangePage = (newPage: number) => {
+    const form = getValues();
     const page = pagination.currentPage === 1 ? 2 : newPage;
-    dispatch(getAll(page, pagination.perPage))
+    dispatch(filter(form,page, pagination.perPage))
   };
 
   const handlePerPage = (page: number, perPage: number) => {
-    dispatch(getAll(page, perPage))
+    const form = getValues();
+    dispatch(filter(form,page, perPage))
   }
 
   const getReport = () => {
@@ -247,6 +250,21 @@ export default function GeneralReport() {
             alignItems="center"
             className={classes.filtersContainer}
           >
+          <Grid item xs={2}>
+              <CustomSelect
+                label="Condicion"
+                selectionMessage="Seleccione Tipo"
+                field="isPartner"
+                register={register}
+                errorsMessageField={
+                  errors.isPartner && errors.isPartner.message
+                }
+              >
+                <option value={1}> Socios </option>
+                <option value={2}> Familiares </option>
+                <option value={3}> Invitados </option>
+              </CustomSelect>
+            </Grid>
 
             <Grid item xs={2}>
               <CustomTextField

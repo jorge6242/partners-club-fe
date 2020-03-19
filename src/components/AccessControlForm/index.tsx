@@ -162,7 +162,7 @@ export default function AccessControlForm() {
   const handleForm = async (form: object) => {
     const familyValues = getKeys(selectedFamilies);
     const family = familyValues.length > 0 ? familyValues : null;
-    const created = moment().format();
+    const created = moment().format('YYYY-MM-DD');
     const status = 1;
     const body = { ...form, family, status, created };
     await dispatch(create(body));

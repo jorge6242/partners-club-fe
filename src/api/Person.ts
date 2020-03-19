@@ -104,9 +104,13 @@ const Person = {
       headers: headers()
     });
   },
-  filter(queryString: object) {
+  filter(form: object, page: number, perPage: number) {
     return AXIOS.get(`${Prefix.api}/person-filter`, {
-      params: { ...queryString },
+      params: { 
+        page: page ? page : 1,
+        perPage,
+        ...form,
+      },
       headers: headers()
     });
   },

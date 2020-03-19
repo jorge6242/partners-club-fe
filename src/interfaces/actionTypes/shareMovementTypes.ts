@@ -1,5 +1,6 @@
 export const ACTIONS = {
     GET_ALL: 'share-movement/get_all',
+    GET_LIST: 'share-movement/get_list',
     GET: 'share-movement/get',
     SET_LOADING: 'share-movement/set_loading',
     SET_PAGINATION: 'share-movement/set_pagination',
@@ -7,6 +8,11 @@ export const ACTIONS = {
   
   interface Get {
     type: typeof ACTIONS.GET
+    payload: Array<string|number>
+  }
+
+  interface GetList {
+    type: typeof ACTIONS.GET_LIST
     payload: Array<string|number>
   }
   
@@ -26,4 +32,4 @@ export const ACTIONS = {
   }
   
   
-  export type ActionTypes = Get | GetAll | SetLoading | SetPagination
+  export type ActionTypes = Get | GetAll | SetLoading | SetPagination | GetList;

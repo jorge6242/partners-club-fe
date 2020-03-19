@@ -88,6 +88,9 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       justifyContent: "space-between",
       width: "100%"
+    },
+    menuContainer: {
+      fontSize: '10px',
     }
   })
 );
@@ -127,9 +130,9 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     dispatch(getTransactionTypes());
     dispatch(getCurrencies());
     dispatch(getSports());
-  },[dispatch])
+  }, [dispatch])
 
-  useEffect(() => { 
+  useEffect(() => {
     if (location.pathname === '/dashboard') {
       history.push('/dashboard/main');
     }
@@ -147,7 +150,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
   const handleLogout = () => dispatch(logout());
 
   const handleMenu = (event: any) => {
-      setAnchorEl(event.currentTarget);
+    setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
@@ -165,8 +168,19 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
       })
     );
   }
-
   const renderMenu = (Icon: React.ReactType, title: string, route: string) => (
+    <ListItem button>
+      <ListItemIcon>
+        <Icon />
+      </ListItemIcon>
+      <ListItemText
+        primary={title}
+        onClick={() => handeClick(route)}
+      />
+    </ListItem>
+  )
+
+  const renderSubMenu = (Icon: React.ReactType, title: string, route: string) => (
     <MenuItem>
       <ListItemIcon>
         <Icon />
@@ -176,6 +190,15 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
         onClick={() => handeClick(route)}
       />
     </MenuItem>
+  )
+
+  const renderSecondMenu = (Icon: React.ReactType, title: string, route: string) => (
+    <ListItem button onClick={() => handeClick(route)}>
+      <ListItemIcon>
+        <Icon />
+      </ListItemIcon>
+      <ListItemText primary={title} />
+    </ListItem>
   )
 
   const drawer = (
@@ -189,7 +212,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        {renderMenu(ListAltIcon, "Reporte General", "/dashboard/general-report")}
+        {renderSubMenu(ListAltIcon, "Reporte General", "/dashboard/general-report")}
       </Menu>
       <Menu
         id="maintenance-menu"
@@ -198,34 +221,26 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        {renderMenu(PeopleIcon, "Roles", "/dashboard/role")}
-        {renderMenu(LockIcon, "Permisos", "/dashboard/permission")}
-        {renderMenu(AccountBalanceIcon, "Banco", "/dashboard/banco")}
-        {renderMenu(DoubleArrowIcon, "Pais", "/dashboard/pais")}
-        {renderMenu(SportsBaseballIcon, "Deporte", "/dashboard/deporte")}
-        {renderMenu(DoubleArrowIcon, "Profesion", "/dashboard/profesion")}
-        {renderMenu(DoubleArrowIcon, "Estado Civil", "/dashboard/estado-civil")}
-        {renderMenu(DoubleArrowIcon, "Estatus", "/dashboard/status-persona")}
-        {renderMenu(DoubleArrowIcon, "Sexo", "/dashboard/sexo")}
-        {renderMenu(DoubleArrowIcon, "Tipo Relacion", "/dashboard/relation-type")}
-        {renderMenu(DoubleArrowIcon, "Metodo de Pago", "/dashboard/payment-method")}
-        {renderMenu(DoubleArrowIcon, "Tipo de Tarjeta", "/dashboard/card-type")}
-        {renderMenu(DoubleArrowIcon, "Tipo de Accion", "/dashboard/share-type")}
-        {renderMenu(DoubleArrowIcon, "Ubicacion", "/dashboard/location")}>
+        {renderSubMenu(PeopleIcon, "Roles", "/dashboard/role")}
+        {renderSubMenu(LockIcon, "Permisos", "/dashboard/permission")}
+        {renderSubMenu(AccountBalanceIcon, "Banco", "/dashboard/banco")}
+        {renderSubMenu(DoubleArrowIcon, "Pais", "/dashboard/pais")}
+        {renderSubMenu(SportsBaseballIcon, "Deporte", "/dashboard/deporte")}
+        {renderSubMenu(DoubleArrowIcon, "Profesion", "/dashboard/profesion")}
+        {renderSubMenu(DoubleArrowIcon, "Estado Civil", "/dashboard/estado-civil")}
+        {renderSubMenu(DoubleArrowIcon, "Estatus", "/dashboard/status-persona")}
+        {renderSubMenu(DoubleArrowIcon, "Sexo", "/dashboard/sexo")}
+        {renderSubMenu(DoubleArrowIcon, "Tipo Relacion", "/dashboard/relation-type")}
+        {renderSubMenu(DoubleArrowIcon, "Metodo de Pago", "/dashboard/payment-method")}
+        {renderSubMenu(DoubleArrowIcon, "Tipo de Tarjeta", "/dashboard/card-type")}
+        {renderSubMenu(DoubleArrowIcon, "Tipo de Accion", "/dashboard/share-type")}
+        {renderSubMenu(DoubleArrowIcon, "Ubicacion", "/dashboard/location")}>
       </Menu>
-      <List>
-        <ListItem button>
-          <ListItemIcon>
-            <DashboardIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={"Dashboard"}
-            onClick={() => handeClick("/dashboard/main")}
-          />
-        </ListItem>
-        <ListItem 
-          button 
-          onClick={handleMenu} 
+      <List dense >
+        {renderSubMenu(DashboardIcon, "Dashboard", "/dashboard/main")}
+        <ListItem
+          button
+          onClick={handleMenu}
           id="maintenance-menu">
           <ListItemIcon>
             <BuildIcon />
@@ -273,28 +288,21 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
         </ListItem>
 
         <ListItem button onClick={handleClick}>
-        <ListItemIcon >
-          <IconLibraryBooks />
-        </ListItemIcon>
-        <ListItemText primary="Reportes" />
-        {open ? <IconExpandLess /> : <IconExpandMore />}
-      </ListItem>
+          <ListItemIcon >
+            <IconLibraryBooks />
+          </ListItemIcon>
+          <ListItemText primary="Reportes" />
+          {open ? <IconExpandLess /> : <IconExpandMore />}
+        </ListItem>
 
 
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <Divider />
-        <List component="div" disablePadding>
-          <ListItem button   onClick={() => handeClick("/dashboard/report-general")}>
-            <ListItemText inset primary="Reporte General" />
-          </ListItem>
-          <ListItem button >
-            <ListItemText inset primary="Reporte de Socio" />
-          </ListItem>
-            <ListItem button >
-              <ListItemText inset primary="Reporte de Invitado" />
-            </ListItem>
-        </List>
-      </Collapse>
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <List dense>
+            {renderSecondMenu(IconLibraryBooks, "General", "/dashboard/report-general")}
+            {renderSecondMenu(IconLibraryBooks, "Acciones", "/dashboard/report-general")}
+            {renderSecondMenu(IconLibraryBooks, "Control de Accesso", "/dashboard/share-report")}
+          </List>
+        </Collapse>
 
 
         <ListItem button>

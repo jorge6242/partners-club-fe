@@ -1,4 +1,4 @@
-import React, { FunctionComponent, createElement } from "react";
+import React, { FunctionComponent, createElement, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -25,9 +25,7 @@ const useStyles = makeStyles({
     justifyContent: "left",
     padding: 10
   },
-  tableCellHeader: { 
-    paddingLeft: 0,
-    paddingRight: 0,
+  tableCellHeader: {
     '&:first-child': {
       paddingLeft: 10
     },
@@ -35,7 +33,7 @@ const useStyles = makeStyles({
       paddingRight: 10
     }
   },
-  });
+});
 
 interface DataTableProps {
   rows: any;
@@ -48,6 +46,8 @@ interface DataTableProps {
   onChangePage: any;
   onChangePerPage: any;
   fontSize?: string;
+  handleSubRowComponent?: Function;
+  renderSubRow?: any;
 }
 
 const DataTable4: FunctionComponent<DataTableProps> = ({
@@ -60,10 +60,12 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
   loading,
   onChangePage,
   onChangePerPage,
-  fontSize = '12px'
+  handleSubRowComponent,
+  renderSubRow,
+  fontSize = '12px',
 }) => {
   const classes = useStyles();
-
+  const [selectedRow, setSelectedRow] = useState(0);
   const handlePage = (event: unknown, newPage: number) => {
     const page = pagination.currentPage === 1 ? 2 : newPage;
     onChangePage(page);
@@ -74,6 +76,14 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
   ) => {
     onChangePerPage(pagination.currentPage, event.target.value);
   };
+
+  const handleSelect = (id: number) => {
+    if (id === selectedRow) {
+      setSelectedRow(0); 
+    } else {
+      setSelectedRow(id);
+    }
+  }
 
   return (
     <Paper className={classes.root}>
@@ -105,42 +115,59 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
             ) : (
                 rows.map((row: any) => {
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                      {columns.map((column: any) => {
-                        const value = row[column.id];
-                        return (
-                          <TableCell key={column.id} align={column.align} className={classes.tableCellHeader} style={{ fontSize  }} >
-                            {column.format && typeof value === "number"
-                              ? column.format(value)
-                              : createElement(column.component, { value })}
+                    <React.Fragment>
+                      <TableRow 
+                        hover 
+                        role="checkbox" 
+                        tabIndex={-1} key={row.id}
+                        onClick={() => handleSelect(row.share_movements && row.share_movements.length ? row.id : 0)}
+                      >
+                        {columns.map((column: any) => {
+                          const value = row[column.id];
+                          return (
+                            <TableCell
+                              key={column.id}
+                              align={column.align}
+                              className={classes.tableCellHeader}
+                              style={{ fontSize }}
+                              onClick={() => handleSubRowComponent ? handleSubRowComponent() : {}}
+                            >
+                              {column.format && typeof value === "number"
+                                ? column.format(value)
+                                : createElement(column.component, { value })}
+                            </TableCell>
+                          );
+                        })}
+                        {handleEdit && (
+                          <TableCell align="right" style={{ minWidth: 5 }}>
+                            <IconButton
+                              aria-label="delete"
+                              size="small"
+                              color="primary"
+                              onClick={() => handleEdit(row.id)}
+                            >
+                              <EditIcon fontSize="inherit" />
+                            </IconButton>
                           </TableCell>
-                        );
-                      })}
-                      {handleEdit && (
-                        <TableCell align="right" style={{ minWidth: 5 }}>
-                          <IconButton
-                            aria-label="delete"
-                            size="small"
-                            color="primary"
-                            onClick={() => handleEdit(row.id)}
-                          >
-                            <EditIcon fontSize="inherit" />
-                          </IconButton>
-                        </TableCell>
-                      )}
-                      {handleDelete && (
-                        <TableCell align="right" style={{ minWidth: 5 }}>
-                          <IconButton
-                            aria-label="delete"
-                            size="small"
-                            color="secondary"
-                            onClick={() => handleDelete(row.id)}
-                          >
-                            <DeleteIcon fontSize="inherit" />
-                          </IconButton>
-                        </TableCell>
-                      )}
-                    </TableRow>
+                        )}
+                        {handleDelete && (
+                          <TableCell align="right" style={{ minWidth: 5 }}>
+                            <IconButton
+                              aria-label="delete"
+                              size="small"
+                              color="secondary"
+                              onClick={() => handleDelete(row.id)}
+                            >
+                              <DeleteIcon fontSize="inherit" />
+                            </IconButton>
+                          </TableCell>
+                        )}
+
+                      </TableRow>
+                      {row.share_movements && row.share_movements.length > 0 && renderSubRow && selectedRow === row.id &&
+                        <TableRow><TableCell colSpan={10}>{renderSubRow(row.share_movements)}</TableCell></TableRow>
+                      }
+                    </React.Fragment>
                   );
                 })
               )}

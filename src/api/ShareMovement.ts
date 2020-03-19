@@ -13,6 +13,11 @@ const ShareMovement = {
       headers: headers()
     });
   },
+  getList() {
+    return AXIOS.get(`${Prefix.api}/share-movement-list`, {
+      headers: headers()
+    });
+  },
   create(data: any) {
     return AXIOS.post(
       `${Prefix.api}/share-movement`,

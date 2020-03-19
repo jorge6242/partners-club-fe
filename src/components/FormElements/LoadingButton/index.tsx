@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: "#2980b9",
       position: "absolute",
       top: -6,
-      left: -6,
+      right: -6,
       zIndex: 1
     }
   })

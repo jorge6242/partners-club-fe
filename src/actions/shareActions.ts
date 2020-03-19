@@ -2,6 +2,9 @@ import API from "../api/Share";
 import snackBarUpdate from "./snackBarActions";
 import { updateModal } from "./modalActions";
 import { ACTIONS } from '../interfaces/actionTypes/shareTypes';
+import Axios from '../config/Axios';
+import Prefix from '../config/ApiPrefix';
+import headers from '../helpers/headers';
 
 export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch: Function) => {
   dispatch({
@@ -354,3 +357,75 @@ export const searchToAssign = (term: string) => async (dispatch: Function) => {
 };
 
 export const reset = () => ({ type: ACTIONS.RESET});
+
+export const filter = (form: object, page: number = 1, perPage: number = 8) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_LOADING,
+    payload: true
+  });
+  try {
+    const { data: { data }, status } = await API.filter(form, page, perPage);
+    let response = [];
+    if (status === 200) {
+      const pagination = {
+        total: data.total,
+        perPage: data.per_page,
+        prevPageUrl: data.prev_page_url,
+        currentPage: data.current_page,
+      }
+      response = data.data;
+      dispatch({
+        type: ACTIONS.GET_ALL,
+        payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_PAGINATION,
+        payload: pagination
+      });
+      dispatch({
+        type: ACTIONS.SET_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
+export const filterReport  = (body: object) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_REPORT_LOADING,
+    payload: true
+  });
+  Axios({
+    url: `${Prefix.api}/share-filter-report`,
+    method: 'GET',
+    responseType: 'blob', // important
+    params: { ...body },
+    headers: headers(),
+  }).then((response) => {
+    console.log('response ', response);
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'sharesReport.pdf');
+    document.body.appendChild(link);
+    link.click();
+    dispatch({
+      type: ACTIONS.SET_REPORT_LOADING,
+      payload: false
+    });
+  });
+};

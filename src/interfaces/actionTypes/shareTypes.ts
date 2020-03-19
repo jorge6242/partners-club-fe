@@ -3,6 +3,7 @@ export const ACTIONS = {
   GET_SHARE_TO_ASSIGN: "share/get_share_to_assign",
   GET: "share/get",
   SET_LOADING: "share/set_loading",
+  SET_REPORT_LOADING: "share/set_report_loading",
   SET_SHARE_TO_ASSIGN_LOADING: "share/set_search_to_assign_loading",
   SET_PAGINATION: "share/set_pagination",
   SET_SELECTED_SHARE: "share/set_selected_share",
@@ -27,6 +28,11 @@ interface GetShareToAssign {
 
 interface SetLoading {
   type: typeof ACTIONS.SET_LOADING;
+  payload: boolean;
+}
+
+interface SetReportLoading {
+  type: typeof ACTIONS.SET_REPORT_LOADING;
   payload: boolean;
 }
 
@@ -64,4 +70,5 @@ export type ActionTypes =
   | SetSelectedShare
   | SetShareToAssignLoading
   | Reset
-  | GetSharesByPartner;
+  | GetSharesByPartner
+  | SetReportLoading;
