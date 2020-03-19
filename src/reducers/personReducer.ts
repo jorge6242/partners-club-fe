@@ -159,6 +159,11 @@ const personReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         familiesPartnerByCard: initialState.familiesPartnerByCard
       };
+      case ACTIONS.CLEAR_PERSONS:
+        return {
+          ...state,
+          persons: initialState.persons
+        };
     default:
       return state;
   }

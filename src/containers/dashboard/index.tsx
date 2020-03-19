@@ -299,7 +299,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List dense>
             {renderSecondMenu(IconLibraryBooks, "General", "/dashboard/report-general")}
-            {renderSecondMenu(IconLibraryBooks, "Acciones", "/dashboard/report-general")}
+            {renderSecondMenu(IconLibraryBooks, "Acciones", "/dashboard/share-report")}
             {renderSecondMenu(IconLibraryBooks, "Control de Acceso", "/dashboard/access-control-report")}
           </List>
         </Collapse>

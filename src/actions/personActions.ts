@@ -725,6 +725,8 @@ export const getGuestByPartner = (identification: string) => async (dispatch: Fu
 
 export const clear = () => ({ type: ACTIONS.CLEAR });
 
+export const clearPersons = () => ({ type: ACTIONS.CLEAR_PERSONS });
+
 export const filter  = (form: object, page: number = 1, perPage: number = 8) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,

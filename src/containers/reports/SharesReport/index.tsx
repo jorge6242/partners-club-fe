@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import Chip from "@material-ui/core/Chip";
 import CustomTextField from '../../../components/FormElements/CustomTextField'
 
-import { filter, filterReport } from "../../../actions/shareActions";
+import { filter, filterReport, reset as resetShare } from "../../../actions/shareActions";
 import ShareColumns from '../../../interfaces/ShareColumns';
 import ShareMovementColumns from '../../../interfaces/ShareMovementColumns';
 import DataTable4 from "../../../components/DataTable4";
@@ -268,12 +268,20 @@ export default function SharesReport() {
     register,
     errors,
     getValues,
-    watch
+    watch,
+    reset
   } = useForm<FormData>();
 
   useEffect(() => {
     dispatch(getList())
   }, [dispatch]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetShare());
+      reset();
+    };
+  }, [reset, dispatch]);
 
   const handleForm = async (form: FormData) => {
     dispatch(filter(form));

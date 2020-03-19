@@ -75,7 +75,8 @@ const shareReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         shareToAssignList: initialState.shareToAssignList,
         selectedShare: initialState.selectedShare,
-        sharesByPartner: initialState.sharesByPartner
+        sharesByPartner: initialState.sharesByPartner,
+        list: initialState.list
       };
     default:
       return state;
