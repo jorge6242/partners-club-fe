@@ -5,7 +5,6 @@ import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
-import BuildIcon from "@material-ui/icons/Build";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import DashboardIcon from '@material-ui/icons/Dashboard';
@@ -50,6 +49,7 @@ import { getAll as getPaymentMethods } from "../../actions/paymentMethodActions"
 import { getList as getTransactionTypes } from "../../actions/transactionTypeActions";
 import { getList as getCurrencies } from "../../actions/currencyActions";
 import { getAll as getSports } from "../../actions/sportActions";
+import { getList as getLockerLocationList } from "../../actions/lockerLocationsActions";
 
 const drawerWidth = 240;
 
@@ -115,9 +115,19 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
   const dispatch = useDispatch();
 
   const [open, setOpen] = React.useState(false)
+  const [firstOpen, setFirstOpen] = React.useState(false)
 
-  function handleClick() {
-    setOpen(!open)
+  function handleClick(value: number) {
+    switch (value) {
+      case 1:
+        setFirstOpen(!firstOpen)
+        break;
+      case 2:
+        setOpen(!open)
+        break;
+      default:
+        break;
+    }
   }
 
   useEffect(() => {
@@ -130,6 +140,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     dispatch(getTransactionTypes());
     dispatch(getCurrencies());
     dispatch(getSports());
+    dispatch(getLockerLocationList());
   }, [dispatch])
 
   useEffect(() => {
@@ -214,39 +225,40 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
       >
         {renderSubMenu(ListAltIcon, "Reporte General", "/dashboard/general-report")}
       </Menu>
-      <Menu
-        id="maintenance-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        {renderSubMenu(PeopleIcon, "Roles", "/dashboard/role")}
-        {renderSubMenu(LockIcon, "Permisos", "/dashboard/permission")}
-        {renderSubMenu(AccountBalanceIcon, "Banco", "/dashboard/banco")}
-        {renderSubMenu(DoubleArrowIcon, "Pais", "/dashboard/pais")}
-        {renderSubMenu(SportsBaseballIcon, "Deporte", "/dashboard/deporte")}
-        {renderSubMenu(DoubleArrowIcon, "Profesion", "/dashboard/profesion")}
-        {renderSubMenu(DoubleArrowIcon, "Estado Civil", "/dashboard/estado-civil")}
-        {renderSubMenu(DoubleArrowIcon, "Estatus", "/dashboard/status-persona")}
-        {renderSubMenu(DoubleArrowIcon, "Sexo", "/dashboard/sexo")}
-        {renderSubMenu(DoubleArrowIcon, "Tipo Relacion", "/dashboard/relation-type")}
-        {renderSubMenu(DoubleArrowIcon, "Metodo de Pago", "/dashboard/payment-method")}
-        {renderSubMenu(DoubleArrowIcon, "Tipo de Tarjeta", "/dashboard/card-type")}
-        {renderSubMenu(DoubleArrowIcon, "Tipo de Accion", "/dashboard/share-type")}
-        {renderSubMenu(DoubleArrowIcon, "Ubicacion", "/dashboard/location")}>
-      </Menu>
+
       <List dense >
         {renderSubMenu(DashboardIcon, "Dashboard", "/dashboard/main")}
-        <ListItem
-          button
-          onClick={handleMenu}
-          id="maintenance-menu">
-          <ListItemIcon>
-            <BuildIcon />
+
+        <ListItem button onClick={() => handleClick(1)}>
+          <ListItemIcon >
+            <IconLibraryBooks />
           </ListItemIcon>
-          <ListItemText primary={"Mantenimiento"} />
+          <ListItemText primary="Mantenimiento" />
+          {firstOpen ? <IconExpandLess /> : <IconExpandMore />}
         </ListItem>
+
+        <Collapse in={firstOpen} timeout="auto" unmountOnExit>
+          <List dense>
+            {renderSecondMenu(PeopleIcon, "Roles", "/dashboard/role")}
+            {renderSecondMenu(LockIcon, "Permisos", "/dashboard/permission")}
+            {renderSecondMenu(AccountBalanceIcon, "Banco", "/dashboard/banco")}
+            {renderSecondMenu(DoubleArrowIcon, "Pais", "/dashboard/pais")}
+            {renderSecondMenu(SportsBaseballIcon, "Deporte", "/dashboard/deporte")}
+            {renderSecondMenu(DoubleArrowIcon, "Profesion", "/dashboard/profesion")}
+            {renderSecondMenu(DoubleArrowIcon, "Estado Civil", "/dashboard/estado-civil")}
+            {renderSecondMenu(DoubleArrowIcon, "Estatus", "/dashboard/status-persona")}
+            {renderSecondMenu(DoubleArrowIcon, "Sexo", "/dashboard/sexo")}
+            {renderSecondMenu(DoubleArrowIcon, "Tipo Relacion", "/dashboard/relation-type")}
+            {renderSecondMenu(DoubleArrowIcon, "Metodo de Pago", "/dashboard/payment-method")}
+            {renderSecondMenu(DoubleArrowIcon, "Tipo de Tarjeta", "/dashboard/card-type")}
+            {renderSecondMenu(DoubleArrowIcon, "Tipo de Accion", "/dashboard/share-type")}
+            {renderSecondMenu(DoubleArrowIcon, "Ubicacion", "/dashboard/location")}
+            {renderSecondMenu(DoubleArrowIcon, "Parametros", "/dashboard/parameter")}
+            {renderSecondMenu(DoubleArrowIcon, "Locker", "/dashboard/locker")}
+          </List>
+        </Collapse>
+
+
         <ListItem button>
           <ListItemIcon>
             <AccountCircleIcon />
@@ -287,14 +299,13 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
           />
         </ListItem>
 
-        <ListItem button onClick={handleClick}>
+        <ListItem button onClick={() => handleClick(2)}>
           <ListItemIcon >
             <IconLibraryBooks />
           </ListItemIcon>
           <ListItemText primary="Reportes" />
           {open ? <IconExpandLess /> : <IconExpandMore />}
         </ListItem>
-
 
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List dense>

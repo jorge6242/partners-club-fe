@@ -46,10 +46,13 @@ import {
   assignPerson,
   removeRelation,
   getReportsByPartner,
-  updateRelation
+  updateRelation,
+  getLockersByLocation,
+  getLockersByPartner,
+  clearPersonLockersByLocation
 } from "../../actions/personActions";
 import { getAll as getProfessions } from "../../actions/professionActions";
-
+import { getByLocation, clearList } from '../../actions/lockerActions';
 import {
   getAll as getCardPerson,
   remove as removeCardPerson
@@ -70,6 +73,7 @@ import DataTable3 from "../DataTable3";
 import CustomSearch from "../FormElements/CustomSearch";
 import LoadingButton from "../FormElements/LoadingButton";
 import CardPersonForm from "../CardPersonForm";
+import Loader from "../common/Loader";
 
 const ExpansionPanelSummary = withStyles({
   root: {
@@ -220,6 +224,57 @@ const columns: PersonColumn[] = [
   }
 ];
 
+function getParsePerson(data: any, classes: any) {
+  const {
+    name,
+    last_name,
+    telephone1,
+    rif_ci,
+    address,
+    primary_email,
+    type_person
+  } = data;
+  return (
+    <Grid container spacing={1} className={classes.parsedPersonContainer}>
+      <Grid item xs={3} className={classes.parsedPersonContainerTitle}>
+        <Paper className={classes.parsedPersonContainerDetail}>
+          <strong>Tipo Persona:</strong>
+          {type_person === 1 ? "Natural" : "Empresa"}
+        </Paper>
+      </Grid>
+      <Grid item xs={3}>
+        <Paper className={classes.parsedPersonContainerDetail}>
+          <strong>Nombre:</strong> {name} {last_name}
+        </Paper>
+      </Grid>
+      <Grid item xs={3}>
+        <Paper className={classes.parsedPersonContainerDetail}>
+
+          <strong>Cedula:</strong> {rif_ci}
+        </Paper>
+      </Grid>
+      <Grid item xs={3}>
+        <Paper className={classes.parsedPersonContainerDetail}>
+
+          <strong>Direccion:</strong> {address}
+        </Paper>
+      </Grid>
+      <Grid item xs={3}>
+        <Paper className={classes.parsedPersonContainerDetail}>
+
+          <strong>Telefono:</strong> {telephone1}
+        </Paper>
+      </Grid>
+      <Grid item xs={3}>
+        <Paper className={classes.parsedPersonContainerDetail}>
+
+          <strong>Correo:</strong> {primary_email}
+        </Paper>
+      </Grid>
+    </Grid>
+  );
+}
+
 interface TabPanelProps {
   children?: React.ReactNode;
   dir?: string;
@@ -284,7 +339,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundColor: "transparent",
     border: 0,
     borderBottom: "1px solid grey",
-    fontSize: "16px"
+    fontSize: "16px",
+    '&:focus': {
+      outline: 0
+    }
   },
   textField: {
     marginLeft: theme.spacing(1),
@@ -327,6 +385,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   parsedPersonContainerDetail: {
     textAlign: "left",
     padding: "4px"
+  },
+  personLockersTitle: {
+    color: '#3f51b5',
+    fontWeight: 'bold',
   }
 }));
 
@@ -366,62 +428,28 @@ type FormData = {
   card_people3: number;
   country_list: any;
   sport_list: any;
+  locker_list: any;
+  locker_location_id: string;
 };
 
 type PersonFormProps = {
   id?: number;
 };
 
-function getParsePerson(data: any, classes: any) {
-  const {
-    name,
-    last_name,
-    telephone1,
-    rif_ci,
-    address,
-    primary_email,
-    type_person
-  } = data;
-  return (
-    <Grid container spacing={1} className={classes.parsedPersonContainer}>
-      <Grid item xs={3} className={classes.parsedPersonContainerTitle}>
-        <Paper className={classes.parsedPersonContainerDetail}>
-          <strong>Tipo Persona:</strong>
-          {type_person === 1 ? "Natural" : "Empresa"}
-        </Paper>
-      </Grid>
-      <Grid item xs={3}>
-        <Paper className={classes.parsedPersonContainerDetail}>
-          <strong>Nombre:</strong> {name} {last_name}
-        </Paper>
-      </Grid>
-      <Grid item xs={3}>
-        <Paper className={classes.parsedPersonContainerDetail}>
-          
-          <strong>Cedula:</strong> {rif_ci}
-        </Paper>
-      </Grid>
-      <Grid item xs={3}>
-        <Paper className={classes.parsedPersonContainerDetail}>
-          
-          <strong>Direccion:</strong> {address}
-        </Paper>
-      </Grid>
-      <Grid item xs={3}>
-        <Paper className={classes.parsedPersonContainerDetail}>
-          
-          <strong>Telefono:</strong> {telephone1}
-        </Paper>
-      </Grid>
-      <Grid item xs={3}>
-        <Paper className={classes.parsedPersonContainerDetail}>
-          
-          <strong>Correo:</strong> {primary_email}
-        </Paper>
-      </Grid>
-    </Grid>
-  );
+interface Item {
+  id: number;
+  description: string;
 }
+
+interface SelectedItems {
+  itemsToAdd: Array<string | number>;
+  itemsToRemove: Array<string | number>;
+}
+
+const initialSelectedItems = {
+  itemsToAdd: [],
+  itemsToRemove: [],
+};
 
 const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   /* States */
@@ -433,6 +461,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   const [selectedProff, setSelectedProff] = useState<any>(null);
   const [selectedCountries, setSelectedCountries] = useState<Array<string | number>>([]);
   const [selectedSports, setSelectedSports] = useState<Array<string | number>>([]);
+  const [selectedLockers, setSelectedLockers] = useState<SelectedItems>(initialSelectedItems);
 
   /* Form */
 
@@ -442,20 +471,24 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     errors,
     reset,
     setValue,
-    getValues
+    getValues,
+    watch
   } = useForm<FormData>();
   const { picture, name, last_name } = getValues();
 
   /* Redux */
   const dispatch = useDispatch();
-  
+
   const {
     loading,
     relationLoading,
     reportByPartnerLoading,
     personsToAssign,
     paginationPersonsToAssign,
-    familyByPerson
+    familyByPerson,
+    personLockersByLocation,
+    personLockersLoading,
+    personLockers,
   } = useSelector((state: any) => state.personReducer);
   const { list: statusPersonList } = useSelector(
     (state: any) => state.statusPersonReducer
@@ -467,6 +500,8 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   const { countries: countryList } = useSelector((state: any) => state.countryReducer);
   const { list: genderList } = useSelector((state: any) => state.genderReducer);
   const { sports: sportList } = useSelector((state: any) => state.sportReducer);
+  const { listData: lockerList, loading: lockerLoading } = useSelector((state: any) => state.lockerReducer);
+  const { listData: lockerLocationList } = useSelector((state: any) => state.lockerLocationReducer);
   const { professions: professionList } = useSelector(
     (state: any) => state.professionReducer
   );
@@ -515,9 +550,10 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
           dispatch(getSharesByPartner(id)),
           dispatch(searchPersonToAssignFamily(id)),
           dispatch(searchFamilyByPerson(id)),
-          dispatch(getCardPerson(id))
+          dispatch(getCardPerson(id)),
         ]);
         const response: any = await dispatch(get(id));
+        dispatch(getLockersByPartner(id))
         const {
           name,
           last_name,
@@ -548,6 +584,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
           professions,
           countries,
           sports,
+          lockers,
         } = response;
         setValue("name", name);
         setValue("last_name", last_name);
@@ -596,6 +633,12 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
         } else {
           setSelectedProff([]);
         }
+
+        // if (lockers.length > 0) {
+        //   const list = lockers.map((element: any) => element.id);
+        //   setValue("locker_list", JSON.stringify(list));
+        //   setSelectedLockers(lockers);
+        // }
         setTempPersonId(id);
       }
     }
@@ -606,15 +649,22 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     return () => {
       reset();
       dispatch(resetShare());
+      dispatch(clearPersonLockersByLocation());
+      dispatch(clearList());
     };
-  }, [reset,dispatch]);
+  }, [reset, dispatch]);
 
   const handleForm = async (form: object) => {
+    const data = {
+      lockers: selectedLockers,
+      id_card_picture: 'empty.png'
+    }
     if (tempPersonId > 0) {
-      dispatch(update({ id: tempPersonId, ...form, }));
+      await dispatch(update({ id: tempPersonId, ...form, ...data }));
+      dispatch(getLockersByPartner(tempPersonId));
     } else {
       const response: any = await dispatch(
-        create({ ...form, id_card_picture: "ssssss" })
+        create({ ...form, id_card_picture: 'empty.png' })
       );
       setTempPersonId(response.id);
     }
@@ -652,8 +702,36 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     setValue("country_list", JSON.stringify(event));
   };
 
-    const onSportsChange = (event: any) => {
+  const onSportsChange = (event: any) => {
     setValue("sport_list", JSON.stringify(event));
+  };
+
+  const onLockersChange = (event: any, type: string, selected: any) => {
+    let lockerList = selectedLockers;
+    if (type === 'add') {
+      selected.forEach((element: any) => {
+        const exist = lockerList.itemsToAdd.find((e: any) => e.id === element.id);
+        if (_.isEmpty(exist)) {
+          const currentIndex = lockerList.itemsToRemove.indexOf(element);
+          lockerList.itemsToRemove.splice(currentIndex, 1);
+          lockerList.itemsToAdd.push(element);
+        }
+      });
+    }
+    if (type === 'remove') {
+      selected.forEach((element: any) => {
+        const exist = lockerList.itemsToRemove.find((e: any) => e.id === element.id);
+        if (_.isEmpty(exist)) {
+          const currentIndex = lockerList.itemsToAdd.indexOf(element);
+          lockerList.itemsToAdd.splice(currentIndex, 1);
+          lockerList.itemsToRemove.push(element);
+        }
+      });
+    }
+    setSelectedLockers(lockerList);
+
+    // const list = selectedLockers.map((element: any) => element.id);
+    // setValue("locker_list", JSON.stringify(list));
   };
 
   const handleAssign = async (personRelated: number, relationType: number) => {
@@ -733,6 +811,16 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   const handleShareSelect = (event: any) => {
     dispatch(getShare(event.target.value));
   };
+
+  const handleSelectLockerLocation = async (event: React.FormEvent<HTMLSelectElement>) => {
+    const selected = selectedLockers;
+    selected.itemsToAdd.length = 0;
+    selected.itemsToRemove.length = 0;
+    setSelectedLockers(selected);
+    setValue("locker_list", "");
+    dispatch(getLockersByLocation({ id, location: event.currentTarget.value }))
+    dispatch(getByLocation(event.currentTarget.value));
+  }
 
   const renderMainData = () => {
     return (
@@ -1097,7 +1185,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                 <div className="custom-select-container">
                   <select
                     name="card_people3"
-                    onChange={() => {}}
+                    onChange={() => { }}
                     style={{ fontSize: "13px" }}
                   >
                     <option value="">Seleccione</option>
@@ -1125,18 +1213,18 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     const cardList = [];
     const dataList = [];
 
-    if(tarjeta_primaria) {
+    if (tarjeta_primaria) {
       dataList.push({ ...tarjeta_primaria, orderDetail: "Primario", order: 1 });
       cardList.push({ ...tarjeta_primaria });
     }
 
-    if(tarjeta_secundaria) {
-      dataList.push({ ...tarjeta_secundaria, orderDetail: "Secundario", order: 2  });
+    if (tarjeta_secundaria) {
+      dataList.push({ ...tarjeta_secundaria, orderDetail: "Secundario", order: 2 });
       cardList.push({ ...tarjeta_secundaria });
     }
 
-    if(tarjeta_terciaria) {
-      dataList.push({ ...tarjeta_terciaria, orderDetail: "Terciario", order: 3  });
+    if (tarjeta_terciaria) {
+      dataList.push({ ...tarjeta_terciaria, orderDetail: "Terciario", order: 3 });
       cardList.push({ ...tarjeta_terciaria });
     }
     return (
@@ -1152,21 +1240,21 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             fontSize="10px"
           />
         </Grid>
-        { cardList.length < 3 && (
-            <Grid item xs={12} className={classes.cardPersonButtonContainer}>
-              <Button
-                size="small"
-                type="button"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.cardPersonButton}
-                onClick={() => handleCardPersonCreate()}
-              >
-                Incluir Tarjeta
+        {cardList.length < 3 && (
+          <Grid item xs={12} className={classes.cardPersonButtonContainer}>
+            <Button
+              size="small"
+              type="button"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.cardPersonButton}
+              onClick={() => handleCardPersonCreate()}
+            >
+              Incluir Tarjeta
               </Button>
-            </Grid>
-          )}
+          </Grid>
+        )}
       </Grid>
     );
   };
@@ -1364,7 +1452,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                             </Typography>
                           </ExpansionPanelSummary>
                           <ExpansionPanelDetails>
-                          <Grid container spacing={3}>
+                            <Grid container spacing={3}>
                               <Grid item xs={12} justify="flex-start">
                                 {countryList.length > 0 && (
                                   <TransferList
@@ -1597,7 +1685,57 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                       Expedientes
                     </TabPanel>
                     <TabPanel value={tabValue} index={5} dir={theme.direction}>
-                      Lockers
+                      <Grid container spacing={3}>
+                        <Grid item xs={7}>
+                          <Grid container spacing={3}>
+                            <Grid item xs={12}>
+                              <select
+                                name="locker_location_id"
+                                onChange={handleSelectLockerLocation}
+                                className={classes.select}
+                              >
+                                <option value="">Seleccione Ubicacion</option>
+                                {lockerLocationList.map((item: any) => (
+                                  <option key={item.id} value={item.id}>
+                                    {item.description}
+                                  </option>
+                                ))}
+                              </select>
+                            </Grid>
+                            <Grid item xs={12} justify="flex-start">
+                              {
+                                lockerLoading ? <Loader />
+                                  :
+                                  (
+                                    <TransferList
+                                      data={lockerList}
+                                      selectedData={personLockersByLocation}
+                                      leftTitle="Lockers"
+                                      onSelectedList={onLockersChange}
+                                    />
+                                  )
+                              }
+                              <input
+                                style={{ display: "none" }}
+                                name="locker_list"
+                                ref={register}
+                              />
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                        <Grid item xs={5}>
+                          <Grid container spacing={3}>
+                            <Grid item xs={12} className={classes.personLockersTitle} >Mis Lockers</Grid>
+                            {
+                              personLockersLoading ? (<Loader />)
+                              :
+                              personLockers.map((e: any, i: number) => (
+                              <Grid item xs={12} key={i}>{e.location.description} - {e.description}</Grid>
+                              ))
+                            }
+                          </Grid>
+                          </Grid>
+                      </Grid>
                     </TabPanel>
                     <TabPanel value={tabValue} index={6} dir={theme.direction}>
                       Actividades

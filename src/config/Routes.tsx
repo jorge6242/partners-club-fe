@@ -38,6 +38,7 @@ import { getAll as getPaymentMethods } from "../actions/paymentMethodActions";
 import { getList as getTransactionTypes } from "../actions/transactionTypeActions";
 import { getList as getCurrencies } from "../actions/currencyActions";
 import { getAll as getSports } from "../actions/sportActions";
+import { getList as getLockerLocationList } from "../actions/lockerLocationsActions";
 import TransactionType from "../containers/transactionType";
 import ShareMovement from "../containers/shareMovement";
 import ShareType from "../containers/shareType";
@@ -46,6 +47,8 @@ import Location from "../containers/location";
 import GeneralReport from "../containers/reports/GeneralReport";
 import SharesReport from "../containers/reports/SharesReport";
 import AccessControlReport from "../containers/reports/AccessControlReport";
+import Parameter from "../containers/parameter";
+import Locker from "../containers/locker";
 
 export default function Routes() {
   const dispatch = useDispatch();
@@ -62,6 +65,7 @@ export default function Routes() {
       dispatch(getTransactionTypes());
       dispatch(getCurrencies());
       dispatch(getSports());
+      dispatch(getLockerLocationList());
     }
   },[dispatch, token])
 
@@ -125,6 +129,8 @@ export default function Routes() {
                       <Route path="/dashboard/report-general" exact component={GeneralReport} />
                       <Route path="/dashboard/share-report" exact component={SharesReport} />
                       <Route path="/dashboard/access-control-report" exact component={AccessControlReport} />
+                      <Route path="/dashboard/parameter" exact component={Parameter} />
+                      <Route path="/dashboard/locker" exact component={Locker} />
                     </Dashboard>
                   </Switch>
                 );

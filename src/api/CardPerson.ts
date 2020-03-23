@@ -33,7 +33,6 @@ const API = {
     );
   },
   remove(id: number,share: number, order: number) {
-    console.log('order', order);
     return AXIOS.delete(`${Prefix.api}/card-person/${id}`, {
     data: {
       share,

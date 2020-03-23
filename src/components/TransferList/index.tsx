@@ -114,20 +114,20 @@ const TransferList: FunctionComponent<TransferListProps> = ({
     setLeft(not(left, leftChecked));
     setChecked(not(checked, leftChecked));
     
-    updateList(right.concat(leftChecked));
+    updateList(right.concat(leftChecked),'add', leftChecked);
   };
 
   const handleCheckedLeft = () => {
     setLeft(left.concat(rightChecked));
     setRight(not(right, rightChecked));
     setChecked(not(checked, rightChecked));
-    updateList(not(right, rightChecked));
+    updateList(not(right, rightChecked),'remove', rightChecked);
     
   };
 
-  const updateList = (list: any) => {
+  const updateList = (list: any, type: string, selected: any) => {
     const arrayKeys = list.map((element: any) => element.id);
-    onSelectedList(arrayKeys)
+    onSelectedList(arrayKeys, type, selected);
   }
 
   const customList = (title: React.ReactNode, items: number[]) => (

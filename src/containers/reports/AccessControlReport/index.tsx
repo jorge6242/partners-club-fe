@@ -304,7 +304,7 @@ export default function AccessControlReport() {
                 field="status"
                 register={register}
                 errorsMessageField={
-                  errors.created_order && errors.created_order.message
+                  errors.status && errors.status.message
                 }
               >
                 <option value={1}> OK </option>

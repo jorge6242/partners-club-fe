@@ -20,6 +20,10 @@ type InitialState = {
   guestByPartnerLoading: boolean;
   familyByPerson: Array<string | number>;
   pagination: any;
+  personLockersByLocation: Array<string | number>;
+  personLockersByLocationLoading: boolean;
+  personLockers: Array<string | number>;
+  personLockersLoading: boolean;
 };
 
 const initialState: InitialState = {
@@ -50,8 +54,12 @@ const initialState: InitialState = {
     total: 0,
     perPage: 0,
     prevPageUrl: null,
-    currentPage: 0,
-}
+    currentPage: 0
+  },
+  personLockersByLocation: [],
+  personLockersByLocationLoading: false,
+  personLockers: [],
+  personLockersLoading: false,
 };
 
 const personReducer = (state = initialState, action: ActionTypes) => {
@@ -61,11 +69,11 @@ const personReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         persons: action.payload
       };
-      case ACTIONS.SET_PAGINATION:
-        return {
-            ...state,
-            pagination: action.payload,
-        };
+    case ACTIONS.SET_PAGINATION:
+      return {
+        ...state,
+        pagination: action.payload
+      };
     case ACTIONS.GET_GUEST_BY_PARTNER:
       return {
         ...state,
@@ -77,7 +85,11 @@ const personReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         personsToAssign: action.payload
       };
-
+    case ACTIONS.GET_PERSON_LOCKERS_BY_LOCATION:
+      return {
+        ...state,
+        personLockersByLocation: action.payload
+      };
     case ACTIONS.GET_FAMILIES_PARTNER_BY_CARD:
       return {
         ...state,
@@ -99,10 +111,25 @@ const personReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         selectedPerson: action.payload
       };
+          case ACTIONS.SET_PERSON_LOCKERS:
+      return {
+        ...state,
+        personLockers: action.payload
+      };
     case ACTIONS.SET_LOADING:
       return {
         ...state,
         loading: action.payload
+      };
+          case ACTIONS.SET_PERSON_LOCKERS_LOADING:
+      return {
+        ...state,
+        personLockersLoading: action.payload
+      };
+    case ACTIONS.SET_PERSON_LOCKERS_BY_LOCATION_LOADING:
+      return {
+        ...state,
+        personLockersByLocationLoading: action.payload
       };
     case ACTIONS.SET_SECOND_LOADING:
       return {
@@ -157,7 +184,17 @@ const personReducer = (state = initialState, action: ActionTypes) => {
     case ACTIONS.CLEAR:
       return {
         ...state,
-        familiesPartnerByCard: initialState.familiesPartnerByCard
+        familiesPartnerByCard: initialState.familiesPartnerByCard,
+      };
+      case ACTIONS.CLEAR_PERSON_LOCKERS_BY_LOCATION:
+        return {
+          ...state,
+          personLockersByLocation: initialState.personLockersByLocation
+        };
+    case ACTIONS.CLEAR_PERSONS:
+      return {
+        ...state,
+        persons: initialState.persons
       };
       case ACTIONS.CLEAR_PERSONS:
         return {

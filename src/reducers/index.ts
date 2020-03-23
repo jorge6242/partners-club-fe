@@ -30,6 +30,9 @@ import currencyReducer from './currencyReducer';
 import shareTypeReducer from './shareTypeReducer';
 import locationReducer from './locationReducer';
 import accessControlReducer from './accessControlReducer';
+import parameterReducer from './parameterReducer';
+import lockerReducer from './lockerReducer';
+import lockerLocationReducer from './lockerLocationReducer';
 
 const rootReducer = combineReducers({
   modalReducer,
@@ -59,7 +62,10 @@ const rootReducer = combineReducers({
   currencyReducer,
   shareTypeReducer,
   locationReducer,
-  accessControlReducer
+  accessControlReducer,
+  parameterReducer,
+  lockerReducer,
+  lockerLocationReducer
 });
 
 export default rootReducer;

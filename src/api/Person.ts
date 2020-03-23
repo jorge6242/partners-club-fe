@@ -120,6 +120,19 @@ const Person = {
       headers: headers()
     });
   },
+  getLockersByLocation(queryString: object) {
+    return AXIOS.get(`${Prefix.api}/person-lockers-by-location`, {
+      params: { ...queryString },
+      headers: headers()
+    });
+  },
+
+  getLockersByPartner(id: any) {
+    return AXIOS.get(`${Prefix.api}/person-lockers`, {
+      params: { id },
+      headers: headers()
+    });
+  },
 };
 
 export default Person;
