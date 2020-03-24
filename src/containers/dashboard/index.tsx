@@ -290,7 +290,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
 
         <ListItem button onClick={() => handleClick(3)}>
           <ListItemIcon >
-            <DoubleArrowIcon />
+            <LockIcon />
           </ListItemIcon>
           <ListItemText primary="Seguridad" />
           {open3 ? <IconExpandLess /> : <IconExpandMore />}
