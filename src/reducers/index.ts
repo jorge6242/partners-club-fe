@@ -33,6 +33,10 @@ import accessControlReducer from './accessControlReducer';
 import parameterReducer from './parameterReducer';
 import lockerReducer from './lockerReducer';
 import lockerLocationReducer from './lockerLocationReducer';
+import recordReducer from './recordReducer';
+import recordTypeReducer from './recordTypeReducer';
+import departmentReducer from './departmentReducer';
+import noteReducer from './noteReducer';
 
 const rootReducer = combineReducers({
   modalReducer,
@@ -65,7 +69,11 @@ const rootReducer = combineReducers({
   accessControlReducer,
   parameterReducer,
   lockerReducer,
-  lockerLocationReducer
+  lockerLocationReducer,
+  recordReducer,
+  recordTypeReducer,
+  departmentReducer,
+  noteReducer
 });
 
 export default rootReducer;

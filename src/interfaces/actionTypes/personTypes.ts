@@ -20,6 +20,7 @@ export const ACTIONS = {
   GET_GUEST_BY_PARTNER: "person/get_guest_by_partner",
   SET_PARTNERS_LOADING: "person/set_partners_loading",
   SET_TITULAR_LOADING: "person/set_titular_loading",
+  SET_FAMILY_BY_PERSON_LOADING: "person/set_family_by_person_loading",
   SET_GUEST_BY_PARTNER_LOADING: "person/set_guest_by_partner_loading",
   SET_SELECTED_FAMILIES_BY_PARTNER: "person/set_selected_families_by_partner",
   GET_PERSON_LOCKERS_BY_LOCATION: "person/get_person_lockers_by_location",
@@ -76,6 +77,11 @@ interface GetAllPersons {
 }
 
 interface SetLoading {
+  type: typeof ACTIONS.SET_LOADING;
+  payload: boolean;
+}
+
+interface SetFamilyByPerson {
   type: typeof ACTIONS.SET_LOADING;
   payload: boolean;
 }
@@ -186,4 +192,5 @@ export type ActionTypes =
   | SetPersonLockersByLocationLoading
   | ClearPersonLockersByLocation
   | SetPersonLockersLoading
-  | SetPersonLockers;
+  | SetPersonLockers
+  | SetFamilyByPerson;

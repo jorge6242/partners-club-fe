@@ -24,6 +24,7 @@ type InitialState = {
   personLockersByLocationLoading: boolean;
   personLockers: Array<string | number>;
   personLockersLoading: boolean;
+  setFamilyByPersonLoading: boolean;
 };
 
 const initialState: InitialState = {
@@ -60,6 +61,7 @@ const initialState: InitialState = {
   personLockersByLocationLoading: false,
   personLockers: [],
   personLockersLoading: false,
+  setFamilyByPersonLoading: false,
 };
 
 const personReducer = (state = initialState, action: ActionTypes) => {
@@ -136,6 +138,11 @@ const personReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         secondLoading: action.payload
       };
+          case ACTIONS.SET_FAMILY_BY_PERSON_LOADING:
+      return {
+        ...state,
+        setFamilyByPersonLoading: action.payload
+      };
     case ACTIONS.SET_ASSIGN_LOADING:
       return {
         ...state,
@@ -185,6 +192,7 @@ const personReducer = (state = initialState, action: ActionTypes) => {
       return {
         ...state,
         familiesPartnerByCard: initialState.familiesPartnerByCard,
+        familyByPerson: initialState.familyByPerson,
       };
       case ACTIONS.CLEAR_PERSON_LOCKERS_BY_LOCATION:
         return {
@@ -196,11 +204,6 @@ const personReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         persons: initialState.persons
       };
-      case ACTIONS.CLEAR_PERSONS:
-        return {
-          ...state,
-          persons: initialState.persons
-        };
     default:
       return state;
   }

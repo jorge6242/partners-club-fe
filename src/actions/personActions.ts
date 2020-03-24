@@ -530,6 +530,10 @@ export const getReportsByPartner = (id: any) => async (dispatch: Function) => {
 export const searchFamilyByPerson = (id: number, term: string = "") => async (
   dispatch: Function
 ) => {
+  dispatch({
+    type: ACTIONS.SET_FAMILY_BY_PERSON_LOADING,
+    payload: true
+  });
   try {
     const {
       data: { data },
@@ -542,9 +546,17 @@ export const searchFamilyByPerson = (id: number, term: string = "") => async (
         type: ACTIONS.GET_FAMILY_BY_PERSON,
         payload: response
       });
+      dispatch({
+        type: ACTIONS.SET_FAMILY_BY_PERSON_LOADING,
+        payload: false
+      });
     }
     return response;
   } catch (error) {
+    dispatch({
+      type: ACTIONS.SET_FAMILY_BY_PERSON_LOADING,
+      payload: false
+    });
     snackBarUpdate({
       payload: {
         message: error.message,

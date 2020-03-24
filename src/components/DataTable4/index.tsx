@@ -11,6 +11,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { TablePagination } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import DeleteIcon from "@material-ui/icons/Delete";
 
 const useStyles = makeStyles({
@@ -41,6 +42,7 @@ interface DataTableProps {
   columns: any;
   isDelete?: boolean;
   handleEdit?: Function;
+  handleView?: Function;
   handleDelete?: any;
   loading?: boolean;
   onChangePage: any;
@@ -56,6 +58,7 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
   columns,
   isDelete = true,
   handleEdit,
+  handleView,
   handleDelete,
   loading,
   onChangePage,
@@ -103,6 +106,7 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                   {column.label}
                 </TableCell>
               ))}
+              {handleView && <TableCell style={{ minWidth: 5 }}></TableCell>}
               {handleEdit && <TableCell style={{ minWidth: 5 }}></TableCell>}
               {handleDelete && <TableCell style={{ minWidth: 5 }}></TableCell>}
             </TableRow>
@@ -138,6 +142,18 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                             </TableCell>
                           );
                         })}
+                        {handleView && (
+                          <TableCell align="right" style={{ minWidth: 5 }}>
+                            <IconButton
+                              aria-label="delete"
+                              size="small"
+                              color="primary"
+                              onClick={() => handleView(row.id)}
+                            >
+                              <VisibilityIcon fontSize="inherit" />
+                            </IconButton>
+                          </TableCell>
+                        )}
                         {handleEdit && (
                           <TableCell align="right" style={{ minWidth: 5 }}>
                             <IconButton

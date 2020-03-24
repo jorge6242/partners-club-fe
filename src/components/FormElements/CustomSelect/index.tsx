@@ -11,7 +11,8 @@ type CustomSelectProps = {
   errorsMessageField: any;
   selectionMessage?: string;
   label?: string;
-  loading?: boolean
+  loading?: boolean;
+  onChange?: any
 };
 
 const CustomSelect: FunctionComponent<CustomSelectProps> = ({
@@ -22,7 +23,8 @@ const CustomSelect: FunctionComponent<CustomSelectProps> = ({
   children,
   selectionMessage = 'Seleccione',
   label,
-  loading = false
+  loading = false,
+  onChange,
 }) => loading ? (<CircularProgress color="primary" size={40} />) :
     (
       <div className="custom-select-container">
@@ -32,6 +34,7 @@ const CustomSelect: FunctionComponent<CustomSelectProps> = ({
             required: required ? "Required" : false
           })}
           name={field}
+          onChange={onChange ? onChange : () => {}}
         >
           <option value="">{selectionMessage}</option>
           {children}

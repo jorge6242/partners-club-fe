@@ -35,6 +35,7 @@ type CustomTextFieldProps = {
   maxLength?: number;
   inputType?: string;
   Icon?: React.ReactType;
+  multiline?: boolean;
 };
 
 const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
@@ -48,16 +49,19 @@ const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
   disable = false,
   maxLength = 150,
   inputType,
-  Icon
+  Icon,
+  multiline = false,
 }) => (
   <TextField
+    rows={multiline ? "4" : ""}
+    multiline={multiline}
     label={placeholder}
     disabled={disable}
     size="small"
     margin="dense"
     fullWidth
     autoFocus
-    placeholder={placeholder}
+    placeholder={multiline ? '' : placeholder}
     name={field}
     type={type}
     inputProps={{
