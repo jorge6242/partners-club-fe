@@ -174,6 +174,8 @@ export default function AccessControlForm() {
     const response: any = await dispatch(getFamiliesPartnerByCard(event.value));
     if (!_.isEmpty(response)) {
       setValue("people_id", response.id);
+      const family = response.familyMembers.find((e: any) => e.selectedFamily === true );
+      if(family) setSelectedFamilies([...selectedFamilies, family]);
     } else {
       setValue("people_id", "");
     }
@@ -349,7 +351,7 @@ export default function AccessControlForm() {
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <Grid container justify="center" direction="row" spacing={3}>
-                  {familiesPartnerByCard.family.map(
+                  {familiesPartnerByCard.familyMembers.map(
                     (element: any, i: number) => {
                       const currentRow = selectedFamilies.find(
                         (e: any) => e.id === element.id
@@ -363,13 +365,13 @@ export default function AccessControlForm() {
                           >
                             <CardHeader
                               titleTypographyProps={{ variant: "subtitle1" }}
-                              title={element.relationship.relation_type.description}
+                              title={element.relationType}
                               className={classes.cardHeader}
                             />
                             <CardActionArea>
                               <CardMedia
                                 className={classes.media}
-                                image={element.picture}
+                                image={element.profilePicture}
                               />
                               <CardContent className={classes.cardContent}>
                                 <Typography
@@ -461,8 +463,8 @@ export default function AccessControlForm() {
                         <CircularProgress color="primary" size={40} />
                       </div>
                     ) : (
-                      renderGuest()
-                    )}
+                        renderGuest()
+                      )}
                   </Grid>
                 </Grid>
               </ExpansionPanelDetails>
@@ -523,8 +525,8 @@ export default function AccessControlForm() {
                   <CircularProgress color="primary" size={40} />
                 </div>
               ) : (
-                renderPartner()
-              )}
+                  renderPartner()
+                )}
             </Grid>
             <Grid item xs={12}>
               <div className={classes.wrapper}>

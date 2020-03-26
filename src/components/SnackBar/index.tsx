@@ -3,6 +3,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch, useSelector } from 'react-redux';
+import parse from 'react-html-parser';
 
 import snackBarUpdate from '../../actions/snackBarActions'
 
@@ -38,9 +39,9 @@ export default function SnackBar() {
 
   return (
     <div className={classes.root}>
-      <Snackbar open={status} autoHideDuration={6000} onClose={handleClose}>
+      <Snackbar open={status} autoHideDuration={20000} onClose={handleClose}>
         <Alert onClose={handleClose} severity={type}>
-          {message}
+          {parse(message)}
         </Alert>
       </Snackbar>
     </div>

@@ -735,9 +735,16 @@ export const getFamiliesPartnerByCard = (card: string) => async (
     }
     return response;
   } catch (error) {
+    let message = "General Error";
+    if (error && error.response) {
+      const {
+        data: { message: msg }
+      } = error.response;
+      message = msg;
+    }
     snackBarUpdate({
       payload: {
-        message: error.message,
+        message,
         status: true,
         type: "error"
       }
