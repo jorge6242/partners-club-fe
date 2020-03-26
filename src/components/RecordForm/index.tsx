@@ -109,7 +109,7 @@ const RecordForm: FunctionComponent<RecordFormProps> = ({
   const handleForm = async (form: object) => {
     const { record_type_id } = getValues();
     const res: any = await dispatch(get(record_type_id));
-    const { days } = res;
+    const { days, blocked } = res;
     const expiration_date = moment().add(days, 'days').format('YYYY-MM-DD');
     const created = moment().format('YYYY-MM-DD');
     const data = {
@@ -117,6 +117,7 @@ const RecordForm: FunctionComponent<RecordFormProps> = ({
       created,
       days,
       expiration_date,
+      blocked,
     };
     await dispatch(create({ ...form, ...data }));
     dispatch(getRecordsByPerson({ id }));

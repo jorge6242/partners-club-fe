@@ -174,8 +174,10 @@ export default function AccessControlForm() {
     const response: any = await dispatch(getFamiliesPartnerByCard(event.value));
     if (!_.isEmpty(response)) {
       setValue("people_id", response.id);
-      const family = response.familyMembers.find((e: any) => e.selectedFamily === true );
-      if(family) setSelectedFamilies([...selectedFamilies, family]);
+      if(response.familyMembers) {
+        const family = response.familyMembers.find((e: any) => e.selectedFamily === true );
+         setSelectedFamilies([...selectedFamilies, family])
+      }
     } else {
       setValue("people_id", "");
     }
