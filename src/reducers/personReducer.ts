@@ -4,8 +4,17 @@ type InitialState = {
   persons: Array<string | number>;
   partnersToAssign: Array<string | number>;
   familiesPartnerByCard: Array<string | number>;
-  guestByPartner: object;
+  familyByPerson: Array<string | number>;
   titularToAssign: Array<string | number>;
+  personLockersByLocation: Array<string | number>;
+  personLockers: Array<string | number>;
+  partnerStatistics: object;
+  familyStatistics: object;
+  guestStatistics: object;
+  personsStatistics: object;
+  personsExceptionStatistics: object;
+  personsBirthdayStatistics: object;
+  guestByPartner: object;
   loading: boolean;
   secondLoading: boolean;
   assignLoading: boolean;
@@ -13,18 +22,21 @@ type InitialState = {
   setTitularLoading: boolean;
   relationLoading: boolean;
   reportByPartnerLoading: boolean;
-  selectedPerson: any;
-  personsToAssign: any;
-  paginationPersonsToAssign: any;
   familiesPartnerCardLoading: boolean;
   guestByPartnerLoading: boolean;
-  familyByPerson: Array<string | number>;
-  pagination: any;
-  personLockersByLocation: Array<string | number>;
   personLockersByLocationLoading: boolean;
-  personLockers: Array<string | number>;
   personLockersLoading: boolean;
   setFamilyByPersonLoading: boolean;
+  partnerStatisticsLoading: boolean;
+  familyStatisticsLoading: boolean;
+  guestStatisticsLoading: boolean;
+  personsStatisticsLoading: boolean;
+  personsExceptionStatisticsLoading: boolean;
+  personsBirthdayStatisticsLoading: boolean;
+  paginationPersonsToAssign: any;
+  pagination: any;
+  selectedPerson: any;
+  personsToAssign: any;
 };
 
 const initialState: InitialState = {
@@ -62,6 +74,18 @@ const initialState: InitialState = {
   personLockers: [],
   personLockersLoading: false,
   setFamilyByPersonLoading: false,
+  partnerStatistics: {},
+  familyStatistics: {},
+  guestStatistics: {},
+  personsStatistics: {},
+  personsExceptionStatistics: {},
+  personsBirthdayStatistics: {},
+  partnerStatisticsLoading: false,
+  familyStatisticsLoading: false,
+  guestStatisticsLoading: false,
+  personsStatisticsLoading: false,
+  personsExceptionStatisticsLoading: false,
+  personsBirthdayStatisticsLoading: false
 };
 
 const personReducer = (state = initialState, action: ActionTypes) => {
@@ -70,6 +94,36 @@ const personReducer = (state = initialState, action: ActionTypes) => {
       return {
         ...state,
         persons: action.payload
+      };
+    case ACTIONS.GET_PARTNER_STATISTICS:
+      return {
+        ...state,
+        partnerStatistics: action.payload
+      };
+    case ACTIONS.GET_PERSONS_BIRTHDAY_STATISTICS:
+      return {
+        ...state,
+        personsBirthdayStatistics: action.payload
+      };
+    case ACTIONS.GET_FAMILY_STATISTICS:
+      return {
+        ...state,
+        familyStatistics: action.payload
+      };
+    case ACTIONS.GET_GUEST_STATISTICS:
+      return {
+        ...state,
+        guestStatistics: action.payload
+      };
+    case ACTIONS.GET_PERSONS_STATISTICS:
+      return {
+        ...state,
+        personsStatistics: action.payload
+      };
+    case ACTIONS.GET_PERSONS_EXCEPTION_STATISTICS:
+      return {
+        ...state,
+        personsExceptionStatistics: action.payload
       };
     case ACTIONS.SET_PAGINATION:
       return {
@@ -113,7 +167,7 @@ const personReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         selectedPerson: action.payload
       };
-          case ACTIONS.SET_PERSON_LOCKERS:
+    case ACTIONS.SET_PERSON_LOCKERS:
       return {
         ...state,
         personLockers: action.payload
@@ -123,7 +177,7 @@ const personReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         loading: action.payload
       };
-          case ACTIONS.SET_PERSON_LOCKERS_LOADING:
+    case ACTIONS.SET_PERSON_LOCKERS_LOADING:
       return {
         ...state,
         personLockersLoading: action.payload
@@ -138,7 +192,12 @@ const personReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         secondLoading: action.payload
       };
-          case ACTIONS.SET_FAMILY_BY_PERSON_LOADING:
+    case ACTIONS.SET_PERSONS_BIRTHDAY_STATISTICS_LOADING:
+      return {
+        ...state,
+        personsBirthdayStatisticsLoading: action.payload
+      };
+    case ACTIONS.SET_FAMILY_BY_PERSON_LOADING:
       return {
         ...state,
         setFamilyByPersonLoading: action.payload
@@ -178,6 +237,31 @@ const personReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         familiesPartnerCardLoading: action.payload
       };
+    case ACTIONS.SET_PARTNER_STATISTICS_LOADING:
+      return {
+        ...state,
+        partnerStatisticsLoading: action.payload
+      };
+    case ACTIONS.SET_FAMILY_STATISTICS_LOADING:
+      return {
+        ...state,
+        familyStatisticsLoading: action.payload
+      };
+    case ACTIONS.SET_GUEST_STATISTICS_LOADING:
+      return {
+        ...state,
+        guestStatisticsLoading: action.payload
+      };
+    case ACTIONS.SET_PERSONS_STATISTICS_LOADING:
+      return {
+        ...state,
+        personsStatisticsLoading: action.payload
+      };
+    case ACTIONS.SET_PERSONS_EXCEPTION_STATISTICS_LOADING:
+      return {
+        ...state,
+        personsExceptionStatisticsLoading: action.payload
+      };
     case ACTIONS.SET_PERSON_ASSIGN_PAGINATION:
       return {
         ...state,
@@ -192,13 +276,13 @@ const personReducer = (state = initialState, action: ActionTypes) => {
       return {
         ...state,
         familiesPartnerByCard: initialState.familiesPartnerByCard,
-        familyByPerson: initialState.familyByPerson,
+        familyByPerson: initialState.familyByPerson
       };
-      case ACTIONS.CLEAR_PERSON_LOCKERS_BY_LOCATION:
-        return {
-          ...state,
-          personLockersByLocation: initialState.personLockersByLocation
-        };
+    case ACTIONS.CLEAR_PERSON_LOCKERS_BY_LOCATION:
+      return {
+        ...state,
+        personLockersByLocation: initialState.personLockersByLocation
+      };
     case ACTIONS.CLEAR_PERSONS:
       return {
         ...state,

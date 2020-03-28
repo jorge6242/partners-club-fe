@@ -65,6 +65,16 @@ const API = {
       headers: headers()
     });
   },
+  getPartnerFamilyStatistics() {
+    return AXIOS.get(`${Prefix.api}/access-control-partner-family-statistics`, {
+      headers: headers()
+    });
+  },
+  getGuestStatistics() {
+    return AXIOS.get(`${Prefix.api}/access-control-guest-statistics`, {
+      headers: headers()
+    });
+  },
 };
 
 export default API;

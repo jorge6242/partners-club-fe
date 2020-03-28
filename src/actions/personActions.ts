@@ -967,3 +967,239 @@ export const getLockersByPartner = (id: any) => async (dispatch: Function) => {
     return error;
   }
 };
+
+export const getPartnerStatistics = () => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_PARTNER_STATISTICS_LOADING,
+    payload: true
+  });
+  try {
+    const {
+      data: { data },
+      status
+    } = await Person.getPersonCountByIsPartner(1);
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_PARTNER_STATISTICS,
+        payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_PARTNER_STATISTICS_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    dispatch({
+      type: ACTIONS.SET_PARTNER_STATISTICS_LOADING,
+      payload: false
+    });
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    return error;
+  }
+};
+
+export const getFamilyStatistics = () => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_FAMILY_STATISTICS_LOADING,
+    payload: true
+  });
+  try {
+    const {
+      data: { data },
+      status
+    } = await Person.getPersonCountByIsPartner(2);
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_FAMILY_STATISTICS,
+        payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_FAMILY_STATISTICS_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    dispatch({
+      type: ACTIONS.SET_FAMILY_STATISTICS_LOADING,
+      payload: false
+    });
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    return error;
+  }
+};
+
+
+export const getGuestStatistics = () => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_GUEST_STATISTICS_LOADING,
+    payload: true
+  });
+  try {
+    const {
+      data: { data },
+      status
+    } = await Person.getPersonCountByIsPartner(3);
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_GUEST_STATISTICS,
+        payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_GUEST_STATISTICS_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    dispatch({
+      type: ACTIONS.SET_GUEST_STATISTICS_LOADING,
+      payload: false
+    });
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    return error;
+  }
+};
+
+export const getPersonsStatistics = () => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_PERSONS_STATISTICS_LOADING,
+    payload: true
+  });
+  try {
+    const {
+      data: { data },
+      status
+    } = await Person.getPersonsCount();
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_PERSONS_STATISTICS,
+        payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_PERSONS_STATISTICS_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    dispatch({
+      type: ACTIONS.SET_PERSONS_STATISTICS_LOADING,
+      payload: false
+    });
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    return error;
+  }
+};
+
+export const getPersonsExceptionStatistics = () => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_PERSONS_EXCEPTION_STATISTICS_LOADING,
+    payload: true
+  });
+  try {
+    const {
+      data: { data },
+      status
+    } = await Person.getPersonsExceptionStatistics();
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_PERSONS_EXCEPTION_STATISTICS,
+        payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_PERSONS_EXCEPTION_STATISTICS_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    dispatch({
+      type: ACTIONS.SET_PERSONS_EXCEPTION_STATISTICS_LOADING,
+      payload: false
+    });
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    return error;
+  }
+};
+
+export const getPersonsBirthdayStatistics = () => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_PERSONS_BIRTHDAY_STATISTICS_LOADING,
+    payload: true
+  });
+  try {
+    const {
+      data: { data },
+      status
+    } = await Person.getPersonsBirthdayStatistics();
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_PERSONS_BIRTHDAY_STATISTICS,
+        payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_PERSONS_BIRTHDAY_STATISTICS_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    dispatch({
+      type: ACTIONS.SET_PERSONS_BIRTHDAY_STATISTICS_LOADING,
+      payload: false
+    });
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    return error;
+  }
+};
+

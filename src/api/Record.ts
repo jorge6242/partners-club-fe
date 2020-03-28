@@ -59,6 +59,11 @@ const API = {
       headers: headers()
     });
   },
+  getRecordStatistics() {
+    return AXIOS.get(`${Prefix.api}/record-statistics`, {
+      headers: headers()
+    });
+  },
 };
 
 export default API;

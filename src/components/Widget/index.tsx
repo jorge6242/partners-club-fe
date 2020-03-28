@@ -28,12 +28,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type FormComponentProps = {
   title?: string;
+  subTitle?: string;
   amount?: string;
   Icon: any;
 };
 
 const Widgtet: FunctionComponent<FormComponentProps> = ({
   title,
+  subTitle,
   amount,
   Icon
 }) => {
@@ -48,7 +50,10 @@ const Widgtet: FunctionComponent<FormComponentProps> = ({
         </div>
         <div className="widget-container__detail">
           <div className="widget-container__detail-title">{title}</div>
-          <div className="widget-container__detail-sub-title">{amount}</div>
+          {subTitle && (
+            <div className="widget-container__detail-title">{subTitle}</div>
+          )}
+          <div className="widget-container__detail-amount">{amount}</div>
         </div>
       </div>
     </Card>

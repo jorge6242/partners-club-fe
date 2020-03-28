@@ -393,3 +393,98 @@ export const filterReport = (body: object) => async (dispatch: Function) => {
     });
   });
 };
+
+export const getPartnerFamilyStatistics = () => async (
+  dispatch: Function
+) => {
+  dispatch({
+    type: ACTIONS.SET_PARTNER_FAMILY_STATISTICS_LOADING,
+    payload: true
+  });
+  try {
+    const {
+      data: { data },
+      status
+    } = await API.getPartnerFamilyStatistics();
+    let response = [];
+    if (status === 200) {
+      response = data;
+      let chart = { labels : [], dataMonth: []};
+      if(data.length > 0) {
+        const labels = data.map((e: any) => e.month);
+        const dataMonth = data.map((e: any) => e.data);
+        chart = { labels, dataMonth };
+      }
+      dispatch({
+        type: ACTIONS.GET_PARTNER_FAMILY_STATISTICS,
+        payload: chart
+      });
+      dispatch({
+        type: ACTIONS.SET_PARTNER_FAMILY_STATISTICS_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_PARTNER_FAMILY_STATISTICS_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
+export const getGuestStatistics = () => async (
+  dispatch: Function
+) => {
+  dispatch({
+    type: ACTIONS.SET_GUEST_STATISTICS_LOADING,
+    payload: true
+  });
+  try {
+    const {
+      data: { data },
+      status
+    } = await API.getGuestStatistics();
+    let response = [];
+    if (status === 200) {
+      response = data;
+      let chart = { labels : [], dataMonth: []};
+      if(data.length > 0) {
+        const labels = data.map((e: any) => e.month);
+        const dataMonth = data.map((e: any) => e.data);
+        chart = { labels, dataMonth };
+      }
+      dispatch({
+        type: ACTIONS.GET_GUEST_STATISTICS,
+        payload: chart
+      });
+      dispatch({
+        type: ACTIONS.SET_GUEST_STATISTICS_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_GUEST_STATISTICS_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+

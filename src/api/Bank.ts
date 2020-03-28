@@ -13,6 +13,9 @@ const Bank = {
       headers: headers()
     });
   },
+  getList() {
+    return AXIOS.get(`${Prefix.api}/bank-list`, { headers: headers() });
+  },
   create(data: any) {
     return AXIOS.post(
       `${Prefix.api}/bank`,

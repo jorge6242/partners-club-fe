@@ -1,14 +1,33 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
+import CardMembershipIcon from "@material-ui/icons/CardMembership";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import FaceIcon from "@material-ui/icons/Face";
-import EqualizerIcon from "@material-ui/icons/Equalizer";
+import PersonIcon from "@material-ui/icons/Person";
+import FunctionsIcon from "@material-ui/icons/Functions";
+import BlockIcon from "@material-ui/icons/Block";
+import PersonAddDisabledIcon from "@material-ui/icons/PersonAddDisabled";
+import CreditCardIcon from "@material-ui/icons/CreditCard";
+import CakeIcon from "@material-ui/icons/Cake";
+import { useDispatch, useSelector } from "react-redux";
 
-import "./index.sass";
 import Widgtet from "../../components/Widget";
 import Chart from "../../components/chart";
+import { Paper } from "@material-ui/core";
+import {
+  getPartnerStatistics,
+  getFamilyStatistics,
+  getGuestStatistics,
+  getPersonsStatistics,
+  getPersonsExceptionStatistics,
+  getPersonsBirthdayStatistics
+} from "../../actions/personActions";
+import Loader from "../../components/common/Loader";
+import { getRecordStatistics } from "../../actions/recordActions";
+import { getCardStatistics } from "../../actions/cardPersonActions";
+import { getPartnerFamilyStatistics, getGuestStatistics as getGuestStatisticsGraph } from "../../actions/accessControlActions";
 
 const useStyles = makeStyles({
   bullet: {
@@ -23,34 +42,199 @@ const useStyles = makeStyles({
     marginBottom: 12
   },
   widgetContainer: {
-      marginBottom: '100px',
+    marginBottom: "100px"
   }
 });
 
 export default function Home() {
- const classes = useStyles();
+  const classes = useStyles();
+  const {
+    personReducer: {
+      partnerStatistics,
+      partnerStatisticsLoading,
+      familyStatistics,
+      familyStatisticsLoading,
+      guestStatistics,
+      guestStatisticsLoading,
+      personsStatistics,
+      personsStatisticsLoading,
+      personsExceptionStatistics,
+      personsExceptionStatisticsLoading,
+      personsBirthdayStatistics,
+      personsBirthdayStatisticsLoading
+    },
+    recordReducer: { recordStatistics, recordStatisticsLoading },
+    cardPersonReducer: { cardStatistics, cardStatisticsLoading },
+    accessControlReducer: {
+      partnerFamilyStatistics,
+      partnerFamilyStatisticsLoading,
+      guestStatisticsGraph,
+      guestStatisticsGraphLoading
+    }
+  } = useSelector((state: any) => state);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getPartnerStatistics());
+    dispatch(getFamilyStatistics());
+    dispatch(getGuestStatistics());
+    dispatch(getPersonsStatistics());
+    dispatch(getRecordStatistics());
+    dispatch(getPersonsExceptionStatistics());
+    dispatch(getCardStatistics());
+    dispatch(getPersonsBirthdayStatistics());
+    dispatch(getPartnerFamilyStatistics());
+    dispatch(getGuestStatisticsGraph());
+  }, [dispatch]);
   return (
     <div className="home-container">
       <Grid container spacing={3} className={classes.widgetContainer}>
         <Grid item xs={3}>
-          <Widgtet title="Socios" amount="87" Icon={FaceIcon} />
+          {partnerStatisticsLoading ? (
+            <Loader />
+          ) : (
+            <Paper>
+              <Widgtet
+                Icon={FaceIcon}
+                title="Socios"
+                amount={partnerStatistics.count}
+              />
+              <Widgtet
+                Icon={CardMembershipIcon}
+                title="Accesos"
+                subTitle="Mes anterior/Actual en curso"
+                amount={partnerStatistics.months}
+              />
+            </Paper>
+          )}
+        </Grid>
+
+        <Grid item xs={3}>
+          {familyStatisticsLoading ? (
+            <Loader />
+          ) : (
+            <Paper>
+              <Widgtet
+                Icon={PeopleAltIcon}
+                title="Familiares"
+                amount={familyStatistics.count}
+              />
+              <Widgtet
+                Icon={CardMembershipIcon}
+                title="Accesos"
+                subTitle="Mes anterior/Actual en curso"
+                amount={familyStatistics.months}
+              />
+            </Paper>
+          )}
+        </Grid>
+
+        <Grid item xs={3}>
+          {guestStatisticsLoading ? (
+            <Loader />
+          ) : (
+            <Paper>
+              <Widgtet
+                Icon={PersonIcon}
+                title="Invitados"
+                amount={guestStatistics.count}
+              />
+              <Widgtet
+                Icon={CardMembershipIcon}
+                title="Accesos"
+                subTitle="Mes anterior/Actual en curso"
+                amount={guestStatistics.months}
+              />
+            </Paper>
+          )}
         </Grid>
         <Grid item xs={3}>
-          <Widgtet title="Usuarios" amount="43" Icon={PeopleAltIcon} />
+          {personsStatisticsLoading ? (
+            <Loader />
+          ) : (
+            <Paper>
+              <Widgtet
+                Icon={FunctionsIcon}
+                title="Totales"
+                amount={personsStatistics.count}
+              />
+              <Widgtet
+                Icon={FunctionsIcon}
+                title="Accesos"
+                subTitle="Mes anterior/Actual en curso"
+                amount={personsStatistics.months}
+              />
+            </Paper>
+          )}
+        </Grid>
+
+        <Grid item xs={3}>
+          {recordStatisticsLoading ? (
+            <Loader />
+          ) : (
+            <Widgtet
+              Icon={BlockIcon}
+              title="Exp Bloqueo Si/No"
+              amount={recordStatistics.blockeds}
+            />
+          )}
         </Grid>
         <Grid item xs={3}>
-          <Widgtet title="Ingresos" amount="1500" Icon={AccountBalanceIcon} />
+          {personsExceptionStatisticsLoading ? (
+            <Loader />
+          ) : (
+            <Widgtet
+              Icon={PersonAddDisabledIcon}
+              title="Lista Excepcion"
+              amount={personsExceptionStatistics.count}
+            />
+          )}
         </Grid>
         <Grid item xs={3}>
-          <Widgtet title="Produccion" amount="5000" Icon={EqualizerIcon} />
+          {cardStatisticsLoading ? (
+            <Loader />
+          ) : (
+            <Widgtet
+              Icon={CreditCardIcon}
+              title="TDC por vender 30d/60d"
+              amount={cardStatistics.cards}
+            />
+          )}
         </Grid>
-      </Grid>
-      <Grid container spacing={3}>
+        <Grid item xs={3}>
+          {personsBirthdayStatisticsLoading ? (
+            <Loader />
+          ) : (
+            <Widgtet
+              Icon={CakeIcon}
+              title="Cumpleaños del mes"
+              amount={personsBirthdayStatistics.count}
+            />
+          )}
+        </Grid>
         <Grid item xs={6}>
-          <Chart title={"Ingresos"} type={"bar"}/>
+          {partnerFamilyStatisticsLoading ? (
+            <Loader />
+          ) : (
+            <Chart
+              title={"Ingresos Socios/Familiares por mes"}
+              type={"bar"}
+              labels={partnerFamilyStatistics.labels}
+              dataLabels={partnerFamilyStatistics.dataMonth}
+            />
+          )}
         </Grid>
         <Grid item xs={6}>
-          <Chart title={"Egresos"} type={"doughnut"}/>
+          {guestStatisticsGraphLoading ? (
+            <Loader />
+          ) : (
+            <Chart
+              title={"Ingresos Invitados por mes"}
+              type={"doughnut"}
+              labels={guestStatisticsGraph.labels}
+              dataLabels={guestStatisticsGraph.dataMonth}
+            />
+          )}
         </Grid>
       </Grid>
     </div>

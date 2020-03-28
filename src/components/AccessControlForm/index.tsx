@@ -176,7 +176,9 @@ export default function AccessControlForm() {
       setValue("people_id", response.id);
       if(response.familyMembers) {
         const family = response.familyMembers.find((e: any) => e.selectedFamily === true );
-         setSelectedFamilies([...selectedFamilies, family])
+        if(family) {
+          setSelectedFamilies([...selectedFamilies, family])
+        }
       }
     } else {
       setValue("people_id", "");

@@ -133,6 +133,27 @@ const Person = {
       headers: headers()
     });
   },
+  getPersonsCount() {
+    return AXIOS.get(`${Prefix.api}/person-count-all`, {
+      headers: headers()
+    });
+  },
+  getPersonCountByIsPartner(isPartner: number) {
+    return AXIOS.get(`${Prefix.api}/person-count-by-ispartner`, {
+      params: { isPartner },
+      headers: headers()
+    });
+  },
+  getPersonsExceptionStatistics() {
+    return AXIOS.get(`${Prefix.api}/person-statistics-exception`, {
+      headers: headers()
+    });
+  },
+  getPersonsBirthdayStatistics() {
+    return AXIOS.get(`${Prefix.api}/person-statistics-birthday`, {
+      headers: headers()
+    });
+  },
 };
 
 export default Person;

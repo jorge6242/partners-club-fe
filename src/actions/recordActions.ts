@@ -349,3 +349,44 @@ export const getRecordsByPerson = (
     return error;
   }
 };
+
+
+export const getRecordStatistics = () => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_RECORD_STATISTICS_LOADING,
+    payload: true
+  });
+  try {
+    const {
+      data: { data },
+      status
+    } = await API.getRecordStatistics();
+    let response = [];
+    if (status === 200) {
+      response = data;
+      console.log('data ', data);
+      dispatch({
+        type: ACTIONS.GET_RECORD_STATISTICS,
+        payload: response
+      });
+    }
+    dispatch({
+      type: ACTIONS.SET_RECORD_STATISTICS_LOADING,
+      payload: false
+    });
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_RECORD_STATISTICS_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};

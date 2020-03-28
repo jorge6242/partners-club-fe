@@ -215,3 +215,39 @@ export const remove = (id: number, personId: any, share: number, order: number) 
     return error;
   }
 };
+
+export const getCardStatistics = () => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_CARD_STATISTICS_LOADING,
+    payload: true
+  });
+  try {
+    const { data: { data }, status } = await API.getCardStatistics();
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_CARD_STATISTICS,
+        payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_CARD_STATISTICS_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_CARD_STATISTICS_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};

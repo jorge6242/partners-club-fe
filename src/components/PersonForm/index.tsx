@@ -748,7 +748,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
         } else {
           setSelectedProff([]);
         }
-
         // if (lockers.length > 0) {
         //   const list = lockers.map((element: any) => element.id);
         //   setValue("locker_list", JSON.stringify(list));

@@ -16,7 +16,7 @@ import {
   get,
 } from "../../actions/cardPersonActions";
 import { getAll as getCardTypes } from "../../actions/cardTypeActions";
-import { getAll as getBanks } from "../../actions/bankActions";
+import { getList as getBanks } from "../../actions/bankActions";
 
 const options = [
   { id: 1, hidden: false, description: "Primaria" },
@@ -91,7 +91,7 @@ const CardPersonForm: FunctionComponent<CardPersonFormProps> = ({
   const { loading } = useSelector(
     (state: any) => state.cardPersonReducer
   );
-  const { banks } = useSelector((state: any) => state.bankReducer);
+  const { listData: banks } = useSelector((state: any) => state.bankReducer);
   const { list: cardTypeList } = useSelector(
     (state: any) => state.cardTypeReducer
   );
@@ -100,13 +100,12 @@ const CardPersonForm: FunctionComponent<CardPersonFormProps> = ({
     dispatch(getCardTypes());
     dispatch(getBanks());
     async function fetch() {
-     const newArray = cardOptions.map((element: any) => {
-          if(share.tarjeta_primaria && element.id === 1) element.hidden = true;
-          if(share.tarjeta_secundaria && element.id === 2) element.hidden = true;
-          if(share.tarjeta_terciaria && element.id === 3) element.hidden = true;
-          return element
+      cardOptions.map((element: any) => {
+        if (share.tarjeta_primaria && element.id === 1) element.hidden = true;
+        if (share.tarjeta_secundaria && element.id === 2) element.hidden = true;
+        if (share.tarjeta_terciaria && element.id === 3) element.hidden = true;
+        return element
       });
-      setCardOptions(newArray);
       if (id) {
         const response: any = await dispatch(get(id));
         // const { titular, ci, card_number, sec_code, expiration_date, card_type_id, bank_id } = response;
@@ -117,22 +116,21 @@ const CardPersonForm: FunctionComponent<CardPersonFormProps> = ({
         setValue("expiration_date", response.expiration_date);
         setValue("card_type_id", response.card_type_id);
         setValue("bank_id", response.bank_id);
-        const newArray = cardOptions.map((element: any) => {
-          if(share.tarjeta_primaria && share.tarjeta_primaria.id === id && element.id === 1) {
+        cardOptions.map((element: any) => {
+          if (share.tarjeta_primaria && share.tarjeta_primaria.id === id && element.id === 1) {
             element.hidden = false;
             setValue("order", element.id);
           }
-          if(share.tarjeta_secundaria && share.tarjeta_secundaria.id === id && element.id === 2) {
+          if (share.tarjeta_secundaria && share.tarjeta_secundaria.id === id && element.id === 2) {
             element.hidden = false;
             setValue("order", element.id);
           }
-          if(share.tarjeta_terciaria && share.tarjeta_terciaria.id === id && element.id === 3) {
+          if (share.tarjeta_terciaria && share.tarjeta_terciaria.id === id && element.id === 3) {
             element.hidden = false;
             setValue("order", element.id);
           }
           return element
-      });
-      setCardOptions(newArray);
+        });;
       }
     }
     fetch();
@@ -148,7 +146,7 @@ const CardPersonForm: FunctionComponent<CardPersonFormProps> = ({
     if (id) {
       dispatch(update({ id, ...form, people_id: personId, share: share.id }));
     } else {
-        dispatch(create({ ...form, people_id: personId, share: share.id }));
+      dispatch(create({ ...form, people_id: personId, share: share.id }));
     }
   };
 
@@ -265,7 +263,7 @@ const CardPersonForm: FunctionComponent<CardPersonFormProps> = ({
                 selectionMessage="Seleccione"
               >
                 {cardOptions.map((item: any, i: number) => (
-                  <option value={item.id} hidden={item.hidden}>{item.description}</option>
+                  <option key={item.id} value={item.id} hidden={item.hidden}>{item.description}</option>
                 ))}
                 ))}
               </CustomSelect>

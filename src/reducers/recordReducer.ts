@@ -3,7 +3,9 @@ import {  ACTIONS, ActionTypes } from '../interfaces/actionTypes/recordTypes';
 type InitState = {
     list: Array<string | number>;
     recordsByPerson: Array<string | number>;
+    recordStatistics: Array<string | number>;
     loading: boolean;
+    recordStatisticsLoading: boolean;
     pagination: any;
     listData: any;
 }
@@ -19,6 +21,8 @@ const initialState: InitState = {
     },
     listData: [],
     recordsByPerson: [],
+    recordStatistics: [],
+    recordStatisticsLoading: false,
 };
 
 const recordReducer = (state = initialState, action: ActionTypes) => {
@@ -28,6 +32,11 @@ const recordReducer = (state = initialState, action: ActionTypes) => {
                 ...state,
                 list: action.payload,
             };
+            case ACTIONS.GET_RECORD_STATISTICS:
+                return {
+                    ...state,
+                    recordStatistics: action.payload,
+                };
             case ACTIONS.GET_RECORDS_BY_PERSON:
                 return {
                     ...state,
@@ -47,7 +56,12 @@ const recordReducer = (state = initialState, action: ActionTypes) => {
             return {
                 ...state,
                 loading: action.payload,
-            };    
+            }; 
+            case ACTIONS.SET_RECORD_STATISTICS_LOADING:
+                return {
+                    ...state,
+                    recordStatisticsLoading: action.payload,
+                };    
         default:
             return state;
     }

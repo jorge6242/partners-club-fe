@@ -40,6 +40,11 @@ const API = {
     }, 
     headers: headers() });
   },
+  getCardStatistics() {
+    return AXIOS.get(`${Prefix.api}/card-person-statistics`, {
+      headers: headers()
+    });
+  },
 };
 
 export default API;
