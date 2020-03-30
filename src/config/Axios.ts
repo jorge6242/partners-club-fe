@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const AXIOS = axios.create({
-  baseURL: 'http://localhost:8080/controlsocios/qa/api/',
+  baseURL: 'http://localhost:8080',
   headers: {
     'Content-Type': 'application/json',
   },
