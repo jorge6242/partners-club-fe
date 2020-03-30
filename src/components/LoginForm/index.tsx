@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 type FormData = {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -74,15 +74,15 @@ const LoginForm: FunctionComponent<LoginFormProps> = ({ handleForm, loading }) =
             fullWidth
             id="email"
             label="Usuario"
-            name="username"
-            autoComplete="username"
+            name="email"
+            autoComplete="email"
             autoFocus
             inputRef={register({
               required: "Required",
             })}
-            required={errors.username ? true : false}
-            error={errors.username ? true : false}
-            helperText={errors.username && errors.username.message}
+            required={errors.email ? true : false}
+            error={errors.email ? true : false}
+            helperText={errors.email && errors.email.message}
           />
           <TextField
             variant="outlined"
