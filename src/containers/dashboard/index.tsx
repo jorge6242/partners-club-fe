@@ -368,8 +368,6 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             {renderSecondMenu(DoubleArrowIcon, "Parametros", "/dashboard/parameter")}
             {renderSecondMenu(DoubleArrowIcon, "Locker", "/dashboard/locker")}
             {renderSecondMenu(DoubleArrowIcon, "Tipos de transacion", "/dashboard/transaction-type")}
-            {renderSecondMenu(DoubleArrowIcon, "Widget", "/dashboard/widget")}
-            {renderSecondMenu(DoubleArrowIcon, "Menu", "/dashboard/menu")}
           </List>
         </Collapse>
 
@@ -401,6 +399,8 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
           <List dense>
             {renderSecondMenu(PeopleIcon, "Roles", "/dashboard/role")}
             {renderSecondMenu(LockIcon, "Permisos", "/dashboard/permission")}
+            {renderSecondMenu(DoubleArrowIcon, "Widget", "/dashboard/widget")}
+            {renderSecondMenu(DoubleArrowIcon, "Menu", "/dashboard/menu")}
           </List>
         </Collapse>
 
