@@ -37,6 +37,9 @@ import recordReducer from './recordReducer';
 import recordTypeReducer from './recordTypeReducer';
 import departmentReducer from './departmentReducer';
 import noteReducer from './noteReducer';
+import menuReducer from './menuReducer';
+import widgetReducer from './widgetReducer';
+import menuItemReducer from './menuItemReducer';
 
 const rootReducer = combineReducers({
   modalReducer,
@@ -73,7 +76,10 @@ const rootReducer = combineReducers({
   recordReducer,
   recordTypeReducer,
   departmentReducer,
-  noteReducer
+  noteReducer,
+  menuReducer,
+  widgetReducer,
+  menuItemReducer
 });
 
 export default rootReducer;

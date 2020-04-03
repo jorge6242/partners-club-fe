@@ -575,7 +575,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
 
   /* Redux */
   const dispatch = useDispatch();
-
   const {
     loading,
     relationLoading,

@@ -49,6 +49,8 @@ import SharesReport from "../containers/reports/SharesReport";
 import AccessControlReport from "../containers/reports/AccessControlReport";
 import Parameter from "../containers/parameter";
 import Locker from "../containers/locker";
+import Widget from "../containers/widget";
+import Menu from "../containers/menu";
 
 export default function Routes() {
   const dispatch = useDispatch();
@@ -131,6 +133,8 @@ export default function Routes() {
                       <Route path="/dashboard/access-control-report" exact component={AccessControlReport} />
                       <Route path="/dashboard/parameter" exact component={Parameter} />
                       <Route path="/dashboard/locker" exact component={Locker} />
+                      <Route path="/dashboard/widget" exact component={Widget} />
+                      <Route path="/dashboard/menu" exact component={Menu} />
                     </Dashboard>
                   </Switch>
                 );

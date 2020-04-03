@@ -30,13 +30,15 @@ import {
   createStyles
 } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import IconExpandLess from '@material-ui/icons/ExpandLess'
 import IconExpandMore from '@material-ui/icons/ExpandMore'
 import IconLibraryBooks from '@material-ui/icons/LibraryBooks'
 import Collapse from '@material-ui/core/Collapse'
+import SettingsIcon from '@material-ui/icons/Settings';
+import _ from 'lodash';
 
 import { logout } from "../../actions/loginActions";
 import AccessControlForm from "../../components/AccessControlForm";
@@ -51,6 +53,7 @@ import { getList as getTransactionTypes } from "../../actions/transactionTypeAct
 import { getList as getCurrencies } from "../../actions/currencyActions";
 import { getAll as getSports } from "../../actions/sportActions";
 import { getList as getLockerLocationList } from "../../actions/lockerLocationsActions";
+import { getList as getMenuList } from "../../actions/menuActions";
 
 const drawerWidth = 240;
 
@@ -92,6 +95,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     menuContainer: {
       fontSize: '10px',
+    },
+    profileButton: {
+      background: 'white'
     }
   })
 );
@@ -109,11 +115,17 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const { container, children } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [subMenuItem, setSubMenuItem] = React.useState(null);
+  const [subMenuItem2, setSubMenuItem2] = React.useState(null);
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();
   const location = useLocation();
   const dispatch = useDispatch();
+
+  const { user, loading } = useSelector((state: any) => state.loginReducer);
+
+  const { listData: menuList } = useSelector((state: any) => state.menuReducer);
 
   const [open1, setOpen1] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
@@ -143,7 +155,106 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     }
   }
 
+  const handleMenu1 = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose1 = () => {
+    setAnchorEl(null);
+  };
+
+
+  function setSubMenu(currentItem: any) {
+    if (subMenuItem == currentItem) {
+      setSubMenuItem(null);
+    } else {
+      setSubMenuItem(currentItem);
+    }
+  }
+
+  function setSecondSubMenu(currentItem: any) {
+    if (subMenuItem2 == currentItem) {
+      setSubMenuItem2(null);
+    } else {
+      setSubMenuItem2(currentItem);
+    }
+  }
+
+  const renderThirdMenu = (Icon: React.ReactType, title: string, route: string) => (
+    <ListItem button onClick={() => handeClick(route)}>
+      <ListItemIcon>
+        <SettingsIcon />
+      </ListItemIcon>
+      <ListItemText primary={title} />
+    </ListItem>
+  )
+
+  const secondMenu = (Icon: React.ReactType, title: string, route: string, menu: any, item: any) => {
+    const findChildrens: any = menu.filter((e: any) => e.parent == item.id);
+    return (
+      <React.Fragment key={item.id}>
+        <ListItem button onClick={() => findChildrens.length > 0 ? setSecondSubMenu(item.id) : {}}>
+          <ListItemIcon >
+            <SettingsIcon />
+          </ListItemIcon>
+          <ListItemText primary={item.name} />
+          {findChildrens.length > 0 && (
+            item.id === subMenuItem2 ? <IconExpandLess /> : <IconExpandMore />
+          )
+          }
+        </ListItem>
+        {findChildrens.length > 0 && (
+          <Collapse in={item.id === subMenuItem2 ? true : false} timeout="auto" unmountOnExit>
+            <List dense>
+              {findChildrens.map((e: any) => renderThirdMenu(DoubleArrowIcon, e.name, ""))}
+            </List>
+          </Collapse>
+        )
+
+        }
+      </React.Fragment>
+    )
+  }
+
+
+  function build(menu: any) {
+    return menu.map((item: any, i: number) => {
+      if (item.parent === "0") {
+        const findChildrens: any = menu.filter((e: any) => e.parent == item.id);
+        return (
+          <React.Fragment>
+            <ListItem button onClick={() => findChildrens.length > 0 ? setSubMenu(item.id) : handeClick(item.route ? item.route : '')}>
+              <ListItemIcon >
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary={item.name} />
+              {findChildrens.length > 0 && (
+                item.id === subMenuItem ? <IconExpandLess /> : <IconExpandMore />
+              )
+              }
+            </ListItem>
+            {findChildrens.length > 0 && (
+              <Collapse in={item.id === subMenuItem ? true : false} timeout="auto" unmountOnExit>
+                <List dense>
+                  {findChildrens.map((e: any) => secondMenu(DoubleArrowIcon, e.name, "", menu, e))}
+                </List>
+              </Collapse>
+            )
+
+            }
+          </React.Fragment>
+        )
+      }
+    })
+  }
+
+  function buildMenu(menu: any) {
+    return build(menu);
+  }
+
+
   useEffect(() => {
+    dispatch(getMenuList());
     dispatch(getStatusPersonAll());
     dispatch(getMaritalStatusAll());
     dispatch(getGenderAll());
@@ -172,10 +283,6 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
   };
 
   const handleLogout = () => dispatch(logout());
-
-  const handleMenu = (event: any) => {
-    setAnchorEl(event.currentTarget);
-  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -229,17 +336,9 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     <div>
       <div className={classes.toolbar} />
       <Divider />
-      <Menu
-        id="report-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        {renderFirstMenu(ListAltIcon, "Reporte General", "/dashboard/general-report")}
-      </Menu>
-
       <List dense >
+        {!_.isEmpty(menuList) && buildMenu(menuList.items)}
+        <Divider />
         {renderFirstMenu(DashboardIcon, "Inicio", "/dashboard/main")}
         {renderFirstMenu(AccountCircleIcon, "Socios", "/dashboard/socio")}
         {renderFirstMenu(DoubleArrowIcon, "Acciones", "/dashboard/share")}
@@ -269,6 +368,8 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             {renderSecondMenu(DoubleArrowIcon, "Parametros", "/dashboard/parameter")}
             {renderSecondMenu(DoubleArrowIcon, "Locker", "/dashboard/locker")}
             {renderSecondMenu(DoubleArrowIcon, "Tipos de transacion", "/dashboard/transaction-type")}
+            {renderSecondMenu(DoubleArrowIcon, "Widget", "/dashboard/widget")}
+            {renderSecondMenu(DoubleArrowIcon, "Menu", "/dashboard/menu")}
           </List>
         </Collapse>
 
@@ -335,8 +436,8 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
 
             <Collapse in={open5} timeout="auto" unmountOnExit>
               <List dense>
-              {renderSecondMenu(IconLibraryBooks, "Control de Acceso", "/dashboard/access-control-report")}
-              {renderSecondMenu(IconLibraryBooks, "Invitados", "/dashboard/guest")}
+                {renderSecondMenu(IconLibraryBooks, "Control de Acceso", "/dashboard/access-control-report")}
+                {renderSecondMenu(IconLibraryBooks, "Invitados", "/dashboard/guest")}
               </List>
             </Collapse>
           </List>
@@ -344,6 +445,9 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
       </List>
     </div>
   );
+
+  const nameRole: any = !_.isEmpty(user) ? _.first(user.roles) : '';
+  console.log('nameRole ', nameRole);
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -363,9 +467,28 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
               Suite Gestion Clubes
             </Typography>
             <Typography variant="h6" noWrap>
-              <Button variant="contained" onClick={() => handleLogout()}>
-                Logout
-              </Button>
+              <div>
+                <Button
+                  startIcon={<AccountCircleIcon />}
+                  aria-controls="simple-menu"
+                  aria-haspopup="true"
+                  onClick={handleMenu1}
+                  className={classes.profileButton}
+                >
+                  Usuario: {!loading && user.username}
+                </Button>
+                <Menu
+                  id="simple-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose1}
+                >
+                  <MenuItem>Usuario: {!loading && user.username}</MenuItem>
+                  <MenuItem>Role: {!loading && !_.isEmpty(nameRole) && nameRole.name}</MenuItem>
+                  <MenuItem onClick={() => handleLogout()}>Logout</MenuItem>
+                </Menu>
+              </div>
             </Typography>
           </div>
         </Toolbar>

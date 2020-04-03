@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeigth: 'bold',
     },
     list: {
-      height: 150,
+      height: 200,
       width: 200,
       backgroundColor: theme.palette.background.paper,
       overflow: "auto"
