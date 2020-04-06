@@ -52,6 +52,7 @@ import Locker from "../containers/locker";
 import Widget from "../containers/widget";
 import Menu from "../containers/menu";
 import MainLoader from "../components/MainLoading";
+import MenuItem from "../containers/MenuItem";
 
 export default function Routes() {
   const dispatch = useDispatch();
@@ -136,6 +137,7 @@ export default function Routes() {
                       <Route path="/dashboard/locker" exact component={Locker} />
                       <Route path="/dashboard/widget" exact component={Widget} />
                       <Route path="/dashboard/menu" exact component={Menu} />
+                      <Route path="/dashboard/menu-item" exact component={MenuItem} />
                     </Dashboard>
                   </Switch>
                 );

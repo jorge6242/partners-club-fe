@@ -401,6 +401,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             {renderSecondMenu(LockIcon, "Permisos", "/dashboard/permission")}
             {renderSecondMenu(DoubleArrowIcon, "Widget", "/dashboard/widget")}
             {renderSecondMenu(DoubleArrowIcon, "Menu", "/dashboard/menu")}
+            {renderSecondMenu(DoubleArrowIcon, "Menu Item", "/dashboard/menu-item")}
           </List>
         </Collapse>
 
