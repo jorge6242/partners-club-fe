@@ -456,8 +456,9 @@ export const getGuestStatistics = () => async (
     let response = [];
     if (status === 200) {
       response = data;
+      console.log('data ', data);
       let chart = { labels : [], dataMonth: []};
-      if(data.length > 0) {
+      if(data && data.length > 0) {
         const labels = data.map((e: any) => e.month);
         const dataMonth = data.map((e: any) => e.data);
         chart = { labels, dataMonth };

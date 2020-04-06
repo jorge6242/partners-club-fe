@@ -40,6 +40,7 @@ import noteReducer from './noteReducer';
 import menuReducer from './menuReducer';
 import widgetReducer from './widgetReducer';
 import menuItemReducer from './menuItemReducer';
+import mainLoaderReducer from './mainLoaderReducer';
 
 const rootReducer = combineReducers({
   modalReducer,
@@ -79,7 +80,8 @@ const rootReducer = combineReducers({
   noteReducer,
   menuReducer,
   widgetReducer,
-  menuItemReducer
+  menuItemReducer,
+  mainLoaderReducer
 });
 
 export default rootReducer;

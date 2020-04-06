@@ -4,6 +4,8 @@ import SecureStorage from '../config/SecureStorage'
 import snackBarUpdate from '../actions/snackBarActions';
 import { ACTIONS } from '../interfaces/actionTypes/loginTypes';
 import _ from 'lodash';
+
+import { mainStatusLoading } from '../actions/loadingMainActions';
 // import history from '../config/History';
 
 export const login = (body: object) => async (dispatch: Function) => {
@@ -48,6 +50,7 @@ export const login = (body: object) => async (dispatch: Function) => {
 export const logout = () => ({ type: ACTIONS.LOGOUT })
 
 export const checkLogin = () => async (dispatch: Function) => {
+    dispatch(mainStatusLoading(true))
     try {
         const {
             data: { data },
@@ -58,9 +61,11 @@ export const checkLogin = () => async (dispatch: Function) => {
             checkLoginResponse = data;
             const role = _.first(data.roles);
             dispatch({ type: ACTIONS.SET_USER, payload: { ...data, role } })
+            dispatch(mainStatusLoading(false))
         }
         return checkLoginResponse;
     } catch (error) {
+        dispatch(mainStatusLoading(false))
         return error;
     }
 };

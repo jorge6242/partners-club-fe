@@ -51,6 +51,7 @@ import Parameter from "../containers/parameter";
 import Locker from "../containers/locker";
 import Widget from "../containers/widget";
 import Menu from "../containers/menu";
+import MainLoader from "../components/MainLoading";
 
 export default function Routes() {
   const dispatch = useDispatch();
@@ -146,6 +147,7 @@ export default function Routes() {
         <Modal />
         <SecondModal />
         <SnackBar />
+        <MainLoader />
       </MainLayout>
     </HashRouter>
   );
