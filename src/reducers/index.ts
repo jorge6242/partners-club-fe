@@ -41,6 +41,9 @@ import menuReducer from './menuReducer';
 import widgetReducer from './widgetReducer';
 import menuItemReducer from './menuItemReducer';
 import mainLoaderReducer from './mainLoaderReducer';
+import noteTypeReducer from './noteTypeReducer';
+import menuItemIconReducer from './menuItemIconReducer';
+import customModalReducer from './customModalReducer';
 
 const rootReducer = combineReducers({
   modalReducer,
@@ -81,7 +84,10 @@ const rootReducer = combineReducers({
   menuReducer,
   widgetReducer,
   menuItemReducer,
-  mainLoaderReducer
+  mainLoaderReducer,
+  noteTypeReducer,
+  menuItemIconReducer,
+  customModalReducer
 });
 
 export default rootReducer;

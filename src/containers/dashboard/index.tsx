@@ -54,6 +54,7 @@ import { getList as getCurrencies } from "../../actions/currencyActions";
 import { getAll as getSports } from "../../actions/sportActions";
 import { getList as getLockerLocationList } from "../../actions/lockerLocationsActions";
 import { getList as getMenuList } from "../../actions/menuActions";
+import icons from "../../helpers/collectionIcons";
 
 const drawerWidth = 240;
 
@@ -189,8 +190,15 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     </ListItem>
   )
 
-  const secondMenu = (Icon: React.ReactType, title: string, route: string, menu: any, item: any) => {
+  const secondMenu = (CustomIcon: React.ReactType, title: string, route: string, menu: any, item: any) => {
     const findChildrens: any = menu.filter((e: any) => e.parent == item.id);
+    let Icon = SettingsIcon;
+    if(item.icons) {
+      let currenMenutIcon = icons.find((e: any) => e.slug === item.icons.slug);
+      if(currenMenutIcon) {
+        Icon = currenMenutIcon.name;
+      }
+    }
     return (
       <React.Fragment key={item.id}>
         <ListItem button onClick={() => findChildrens.length > 0 ? setSecondSubMenu(item.id) : handeClick(item.route ? item.route : '')}>
@@ -221,11 +229,18 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     return menu.map((item: any, i: number) => {
       if (item.parent === "0") {
         const findChildrens: any = menu.filter((e: any) => e.parent == item.id);
+        let Icon = SettingsIcon;
+        if(item.icons) {
+          let currenMenutIcon = icons.find((e: any) => e.slug === item.icons.slug);
+          if(currenMenutIcon) {
+            Icon = currenMenutIcon.name;
+          }
+        }
         return (
           <React.Fragment>
             <ListItem button onClick={() => findChildrens.length > 0 ? setSubMenu(item.id) : handeClick(item.route ? item.route : '')}>
               <ListItemIcon >
-                <SettingsIcon />
+                <Icon />
               </ListItemIcon>
               <ListItemText primary={item.name} />
               {findChildrens.length > 0 && (
@@ -341,6 +356,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
         <Divider />
         {renderFirstMenu(DashboardIcon, "Inicio", "/dashboard/main")}
         {renderFirstMenu(AccountCircleIcon, "Socios", "/dashboard/socio")}
+        {renderSecondMenu(DoubleArrowIcon, "Invitados", "/dashboard/guest")}
         {renderFirstMenu(DoubleArrowIcon, "Acciones", "/dashboard/share")}
         {renderFirstMenu(DoubleArrowIcon, "Movimientos de Acciones", "/dashboard/share-movement")}
 
@@ -397,6 +413,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
 
         <Collapse in={open3} timeout="auto" unmountOnExit>
           <List dense>
+            {renderSecondMenu(PeopleIcon, "Usuarios", "/dashboard/user")}
             {renderSecondMenu(PeopleIcon, "Roles", "/dashboard/role")}
             {renderSecondMenu(LockIcon, "Permisos", "/dashboard/permission")}
             {renderSecondMenu(DoubleArrowIcon, "Widget", "/dashboard/widget")}
@@ -416,15 +433,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
 
         <Collapse in={open4} timeout="auto" unmountOnExit>
           <List dense>
-            <ListItem button>
-              <ListItemIcon>
-                <CenterFocusWeakIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={"Control de Acceso"}
-                onClick={() => handleAccessControl()}
-              />
-            </ListItem>
+            {renderSecondMenu(CenterFocusWeakIcon, "Control de Acceso", "/dashboard/access-control")}
             {renderSecondMenu(DoubleArrowIcon, "Ubicaciones", "/dashboard/location")}
             {renderSecondMenu(DoubleArrowIcon, "Invitados", "/dashboard/guest")}
             <ListItem button onClick={() => handleClick(5)}>

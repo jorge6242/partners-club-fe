@@ -1,6 +1,6 @@
 import API from "../api/MenuItem";
 import snackBarUpdate from "../actions/snackBarActions";
-import { updateModal } from "../actions/modalActions";
+import { updateModal } from "../actions/customModalActions";
 import { ACTIONS } from '../interfaces/actionTypes/menuItemTypes';
 
 export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch: Function) => {

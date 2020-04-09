@@ -48,9 +48,11 @@ const useStyles = makeStyles(theme => ({
     fontSize: "16px"
   },
   typeRecordDetail : {
-    color: 'red',
     fontStyle: 'italic',
     fontWeight: 'bold',
+  },
+  typeRecorBlocked: {
+    color: 'red',
   }
 }));
 
@@ -183,8 +185,8 @@ const RecordForm: FunctionComponent<RecordFormProps> = ({
                 <Grid item xs={6}>
                   {
                     selectedRecordType && (
-                      <div className={classes.typeRecordDetail}>
-                        <div>Bloqueo: {selectedRecordType.blocked === 1 ? 'SI' : 'NO'}</div>
+                      <div className={`${classes.typeRecordDetail} ${selectedRecordType.blocked == 1 ? classes.typeRecorBlocked : '' }`}>
+                        <div>Bloqueo: {selectedRecordType.blocked == 1 ? 'SI' : 'NO'}</div>
                         <div>Dias: {selectedRecordType.days}</div>
                         <div>Vencimiento: {moment().add(selectedRecordType.days, 'days').format('YYYY-MM-DD')}</div>
                       </div>

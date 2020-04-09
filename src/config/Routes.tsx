@@ -53,6 +53,9 @@ import Widget from "../containers/widget";
 import Menu from "../containers/menu";
 import MainLoader from "../components/MainLoading";
 import MenuItem from "../containers/MenuItem";
+import CustomModal from "../components/CustomModal";
+import AccessControl from "../containers/accessControl";
+import Guest from "../containers/guest";
 
 export default function Routes() {
   const dispatch = useDispatch();
@@ -138,6 +141,8 @@ export default function Routes() {
                       <Route path="/dashboard/widget" exact component={Widget} />
                       <Route path="/dashboard/menu" exact component={Menu} />
                       <Route path="/dashboard/menu-item" exact component={MenuItem} />
+                      <Route path="/dashboard/access-control" exact component={AccessControl} />
+                      <Route path="/dashboard/guest" exact component={Guest} />
                     </Dashboard>
                   </Switch>
                 );
@@ -148,6 +153,7 @@ export default function Routes() {
         </Switch>
         <Modal />
         <SecondModal />
+        <CustomModal />
         <SnackBar />
         <MainLoader />
       </MainLayout>

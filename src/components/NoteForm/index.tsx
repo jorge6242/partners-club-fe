@@ -13,6 +13,7 @@ import _ from 'lodash';
 import CustomTextField from "../FormElements/CustomTextField";
 import { create, get } from "../../actions/noteActions";
 import { getList as getDepartmentList } from "../../actions/departmentActions";
+import { getList as getNoteTypeList } from "../../actions/noteTypeActions";
 import CustomSelect from "../FormElements/CustomSelect";
 
 const useStyles = makeStyles(theme => ({
@@ -58,6 +59,9 @@ type FormData = {
     description: string;
     status: string;
     department_id: number;
+    note_type_id: number;
+    subject: number;
+    is_sent: number;
 };
 
 type NoteFormProps = {
@@ -76,6 +80,8 @@ const NoteForm: FunctionComponent<NoteFormProps> = ({
 
     const { listData: departmentList } = useSelector((state: any) => state.departmentReducer);
 
+    const { listData: noteTypeList } = useSelector((state: any) => state.noteTypeReducer);
+
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -93,6 +99,7 @@ const NoteForm: FunctionComponent<NoteFormProps> = ({
 
     useEffect(() => {
         dispatch(getDepartmentList());
+        dispatch(getNoteTypeList());
     }, [dispatch]);
 
     useEffect(() => {
@@ -106,6 +113,7 @@ const NoteForm: FunctionComponent<NoteFormProps> = ({
     const handleForm = (form: object) => {
         const data = {
             people_id: id,
+            status: 1,
             created: moment().format('YYYY-MM-DD'),
             ...form,
         };
@@ -115,10 +123,10 @@ const NoteForm: FunctionComponent<NoteFormProps> = ({
     const renderDetail = () => {
         return !_.isEmpty(selectedNote) && (
             <Grid container spacing={3}>
-                 <Grid item xs={12}>
+                <Grid item xs={12}>
                     <strong>Fecha:</strong> {selectedNote.created}
                 </Grid>
-                 <Grid item xs={12}>
+                <Grid item xs={12}>
                     <strong>Status:</strong> {selectedNote.status === 1 ? 'Activo' : 'Inactivo'}
                 </Grid>
                 <Grid item xs={12}>
@@ -139,34 +147,19 @@ const NoteForm: FunctionComponent<NoteFormProps> = ({
                 noValidate
             >
                 <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <CustomSelect
-                            label="Status"
-                            selectionMessage="Seleccione"
-                            field="status"
-                            required
-                            register={register}
-                            errorsMessageField={
-                                errors.status && errors.status.message
-                            }
-                        >
-                            <option value={1}> Activo </option>
-                            <option value={0}> Inactivo </option>
-                        </CustomSelect>
-                    </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={6}>
                         <CustomTextField
-                            placeholder="Description"
-                            field="description"
+                            placeholder="Asunto"
+                            field="subject"
                             required
                             register={register}
-                            errorsField={errors.description}
+                            errorsField={errors.subject}
                             errorsMessageField={
-                                errors.description && errors.description.message
+                                errors.subject && errors.subject.message
                             }
-                            multiline
-                        /></Grid>
-                    <Grid item xs={12}>
+                        />
+                    </Grid>
+                    <Grid item xs={6}>
                         <CustomSelect
                             label="Departamento"
                             selectionMessage="Seleccione"
@@ -183,6 +176,37 @@ const NoteForm: FunctionComponent<NoteFormProps> = ({
                                 </option>
                             ))}
                         </CustomSelect>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <CustomSelect
+                            label="Tipo de Nota"
+                            selectionMessage="Seleccione"
+                            field="note_type_id"
+                            required
+                            register={register}
+                            errorsMessageField={
+                                errors.note_type_id && errors.note_type_id.message
+                            }
+                        >
+                            {noteTypeList.map((item: any) => (
+                                <option key={item.id} value={item.id}>
+                                    {item.description}
+                                </option>
+                            ))}
+                        </CustomSelect>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <CustomTextField
+                            placeholder="Description"
+                            field="description"
+                            required
+                            register={register}
+                            errorsField={errors.description}
+                            errorsMessageField={
+                                errors.description && errors.description.message
+                            }
+                            multiline
+                        />
                     </Grid>
                     <Grid item xs={12}>
                         <div className={classes.wrapper}>

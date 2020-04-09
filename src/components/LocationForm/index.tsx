@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import CustomTextField from "../FormElements/CustomTextField";
 import { update, create, get } from "../../actions/locationActions";
+import CustomSelect from "../FormElements/CustomSelect";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -112,14 +113,18 @@ const LocationForm: FunctionComponent<LocationFormProps> = ({
             }
           />
 
-          <CustomTextField
-            placeholder="Estatus"
+          <CustomSelect
+            label="Tipo"
+            selectionMessage="Seleccione Tipo"
             field="status"
-            required
             register={register}
-            errorsField={errors.status}
-            errorsMessageField={errors.status && errors.status.message}
-          />
+            errorsMessageField={
+              errors.status && errors.status.message
+            }
+          >
+            <option value={1}> Activo </option>
+            <option value={2}> Inactivo </option>
+          </CustomSelect>
 
           <div className={classes.wrapper}>
             <Button

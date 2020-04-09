@@ -66,6 +66,7 @@ import {
   reset as resetShare
 } from "../../actions/shareActions";
 import { updateModal } from "../../actions/secondModalActions";
+import { update as updateNote } from "../../actions/noteActions";
 import TransferList from "../TransferList";
 import DataTableAssignPersons from "../DataTableAssignPersons";
 import PersonColumn from "../../interfaces/PersonColumn";
@@ -273,7 +274,7 @@ const recordColumns: RecordColumns[] = [
     label: "Bloqueado",
     minWidth: 10,
     align: "left",
-    component: (value: any) => <span>{value.value === 1 ? "SI" : "NO"}</span>
+    component: (value: any) => <span>{value.value == 1 ? "SI" : "NO"}</span>
   }
 ];
 
@@ -292,6 +293,20 @@ const noteColumns: NoteColumns[] = [
     component: (value: any) => <span>{value.value}</span>
   },
   {
+    id: "type",
+    label: "Tipo",
+    minWidth: 10,
+    align: "left",
+    component: (value: any) => <span>{value.value.description}</span>
+  },
+  {
+    id: "subject",
+    label: "Asunto",
+    minWidth: 10,
+    align: "left",
+    component: (value: any) => <span>{value.value}</span>
+  },
+  {
     id: "description",
     label: "Descripcion",
     minWidth: 10,
@@ -303,7 +318,7 @@ const noteColumns: NoteColumns[] = [
     label: "Status",
     minWidth: 10,
     align: "left",
-    component: (value: any) => <span>{value.value === 1 ? 'Activo' : 'Inactivo'}</span>
+    component: (value: any) => <span>{value.value == "1" ? 'Activo' : 'Inactivo'}</span>
   },
   {
     id: "department",
@@ -449,7 +464,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontWeight: theme.typography.fontWeightRegular
   },
   swipeableViewsContainer: {
-    height: "350px"
   },
   reportButtonContainer: {
     textAlign: "right"
@@ -889,6 +903,16 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
       status
     };
     dispatch(updateRelation(data));
+  };
+
+  const handleSwitchNote = async (selectedId: number, relationStatus: string) => {
+    const status = relationStatus === "1" ? 0 : 1;
+    const data = {
+      id: selectedId,
+      personId: id,
+      status
+    };
+    await dispatch(updateNote(data));
   };
 
   const handleReportByPartner = () => {
@@ -1513,6 +1537,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             loading={notesByPersonLoading}
             onChangePage={handleRecordChangePage}
             onChangePerPage={handleRecordPerPage}
+            handleSwitch={handleSwitchNote}
           />
         </Grid>
       </Grid>

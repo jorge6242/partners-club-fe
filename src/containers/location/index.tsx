@@ -10,6 +10,7 @@ import LocationForm from "../../components/LocationForm";
 import DataTable4 from '../../components/DataTable4'
 import Columns from '../../interfaces/locationColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
+import { Chip } from "@material-ui/core";
 
 const columns: Columns[] = [
   { 
@@ -27,10 +28,21 @@ const columns: Columns[] = [
   },
   {
     id: "status",
-    label: "Tarifa",
+    label: "Status",
     minWidth: 30,
     align: "right",
-    component: (value: any) => <span>{value.value}</span>
+    component: (value: any) => (
+      <Chip
+        label={value.value === "1" ? "Activo" : "Inactivo"}
+        style={{
+          backgroundColor: value.value === "1" ? "#2ecc71" : "#e74c3c",
+          color: "white",
+          fontWeight: "bold",
+          fontSize: "10px"
+        }}
+        size="small"
+      />
+    )
   },
 ];
 

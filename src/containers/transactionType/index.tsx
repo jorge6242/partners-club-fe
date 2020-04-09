@@ -7,23 +7,58 @@ import './index.sass';
 import { getAll, remove, search } from "../../actions/transactionTypeActions";
 import { updateModal } from "../../actions/modalActions";
 import TransactionTypeForm from "../../components/TransactionTypeForm";
-import DataTable1 from '../../components/DataTable1'
+import DataTable4 from '../../components/DataTable4'
 import TransactionTypeColumn from '../../interfaces/TransactionTypeColumn';
 import CustomSearch from '../../components/FormElements/CustomSearch';
 
 const columns: TransactionTypeColumn[] = [
-  { id: "id", label: "Id", minWidth: 10 },
+  { 
+    id: "id", 
+    label: "Id", 
+    minWidth: 10 ,
+    component: (value: any) => <span>{value.value}</span>
+  },
   {
     id: "description",
     label: "Description",
     minWidth: 30,
-    align: "right"
+    align: "right",
+    component: (value: any) => <span>{value.value}</span>
+  },
+    {
+    id: "apply_main",
+    label: "Aplica Principal",
+    minWidth: 30,
+    align: "right",
+    component: (value: any) => <span>{value.value == 1 ? 'SI' : 'NO'}</span>
+  },
+  {
+    id: "apply_extension",
+    label: "Aplica Extension",
+    minWidth: 30,
+    align: "right",
+    component: (value: any) => <span>{value.value == 1 ? 'SI' : 'NO'}</span>
+  },
+  {
+    id: "apply_change_user",
+    label: "Aplica Cambio Usuario",
+    minWidth: 30,
+    align: "right",
+    component: (value: any) => <span>{value.value == 1 ? 'SI' : 'NO'}</span>
   },
   {
     id: "rate",
     label: "Tarifa",
     minWidth: 30,
-    align: "right"
+    align: "right",
+    component: (value: any) => <span>{value.value}</span>
+  },
+    {
+    id: "currency",
+    label: "Moneda",
+    minWidth: 30,
+    align: "right",
+    component: (value: any) => <span>{value.value.description}</span>
   },
 ];
 
@@ -94,12 +129,11 @@ export default function TransactionType() {
         <CustomSearch handleSearch={handleSearch} />
       </div>
       <div>
-        <DataTable1
+      <DataTable4
           rows={list}
           pagination={pagination}
           columns={columns}
           handleEdit={handleEdit}
-          isDelete
           handleDelete={handleDelete}
           loading={loading}
           onChangePage={handleChangePage}

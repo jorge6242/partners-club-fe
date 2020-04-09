@@ -19,18 +19,18 @@ const columns: Columns[] = [
     component: (value: any) => <span>{value.value}</span>
   },
   {
-    id: "description",
-    label: "Description",
-    minWidth: 30,
-    align: "right",
-    component: (value: any) => <span>{value.value}</span>
-  },
-    {
     id: "location",
     label: "Ubicacion",
     minWidth: 30,
     align: "right",
     component: (value: any) => <span>{value.value.description}</span>
+  },
+  {
+    id: "description",
+    label: "Description",
+    minWidth: 30,
+    align: "right",
+    component: (value: any) => <span>{value.value}</span>
   },
 ];
 

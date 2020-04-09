@@ -28,6 +28,7 @@ export default interface PersonColumn {
     | "status_person"
     | "relationship"
     | "shares"
+    | "isPartner"
     | "card_number";
   label: string;
   minWidth?: number;

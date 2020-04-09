@@ -210,7 +210,7 @@ export const get = (id: number) => async (dispatch: Function) => {
   }
 };
 
-export const update = (body: object) => async (dispatch: Function) => {
+export const update = (body: any) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,
     payload: true
@@ -225,20 +225,12 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Department Updated!",
+          message: "Nota Actualizada",
           type: "success",
           status: true
         }
       })(dispatch);
-      dispatch(
-        updateModal({
-          payload: {
-            status: false,
-            element: null
-          }
-        })
-      );
-      dispatch(getAll());
+      dispatch(getNotesByPerson({id: body.personId}));
       dispatch({
         type: ACTIONS.SET_LOADING,
         payload: false

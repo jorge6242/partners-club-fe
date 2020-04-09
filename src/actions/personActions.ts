@@ -1,6 +1,6 @@
 import Person from "../api/Person";
 import snackBarUpdate from "../actions/snackBarActions";
-import { updateModal } from "../actions/modalActions";
+import { updateModal } from "../actions/customModalActions";
 import { updateModal as updateSecondModal } from "../actions/secondModalActions";
 import { ACTIONS } from "../interfaces/actionTypes/personTypes";
 import Axios from "../config/Axios";
@@ -59,6 +59,57 @@ export const getAll = (page: number = 1, perPage: number = 8) => async (
   }
 };
 
+export const getAllGuest = (page: number = 1, perPage: number = 8) => async (
+  dispatch: Function
+) => {
+  dispatch({
+    type: ACTIONS.SET_LOADING,
+    payload: true
+  });
+  try {
+    const {
+      data: { data },
+      status
+    } = await Person.getAllGuest(page, perPage);
+    let response = [];
+    if (status === 200) {
+      const pagination = {
+        total: data.total,
+        perPage: data.per_page,
+        prevPageUrl: data.prev_page_url,
+        currentPage: data.current_page
+      };
+      response = data.data;
+      dispatch({
+        type: ACTIONS.GET_ALL,
+        payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_PAGINATION,
+        payload: pagination
+      });
+      dispatch({
+        type: ACTIONS.SET_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
 export const search = (term: string) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,
@@ -71,10 +122,59 @@ export const search = (term: string) => async (dispatch: Function) => {
     } = await Person.search(term);
     let response = [];
     if (status === 200) {
-      response = data;
+      response = data.data;
       dispatch({
         type: ACTIONS.GET_ALL,
         payload: response
+      });
+    }
+    dispatch({
+      type: ACTIONS.SET_LOADING,
+      payload: false
+    });
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
+export const searchByGuest = (term: string) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_LOADING,
+    payload: true
+  });
+  try {
+    const {
+      data: { data },
+      status
+    } = await Person.searchByGuest(term);
+    let response = [];
+    if (status === 200) {
+      const pagination = {
+        total: data.total,
+        perPage: data.per_page,
+        prevPageUrl: data.prev_page_url,
+        currentPage: data.current_page
+      };
+      response = data.data;
+      dispatch({
+        type: ACTIONS.GET_ALL,
+        payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_PAGINATION,
+        payload: pagination
       });
     }
     dispatch({
@@ -150,7 +250,7 @@ export const searchPersonToAssignFamily = (
   }
 };
 
-export const create = (body: object) => async (dispatch: Function) => {
+export const create = (body: object, isGuest: boolean = false) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,
     payload: true
@@ -175,7 +275,19 @@ export const create = (body: object) => async (dispatch: Function) => {
           status: true
         }
       })(dispatch);
-      dispatch(getAll());
+      if(isGuest) {
+        dispatch(getAllGuest());
+        dispatch(
+          updateModal({
+            payload: {
+              status: false,
+              element: null
+            }
+          })
+        );
+      } else {
+        dispatch(getAll());
+      }
       dispatch({
         type: ACTIONS.SET_LOADING,
         payload: false
@@ -206,6 +318,68 @@ export const create = (body: object) => async (dispatch: Function) => {
 };
 
 export const createGuest = (body: any, refresh: Function) => async (
+  dispatch: Function
+) => {
+  dispatch({
+    type: ACTIONS.SET_LOADING,
+    payload: true
+  });
+  try {
+    const response = await Person.create(body);
+    const {
+      status,
+      data: { data }
+    } = response;
+    let createresponse: any = [];
+    if (status === 200 || status === 201) {
+      createresponse = { ...data };
+      snackBarUpdate({
+        payload: {
+          message: "Invitado Registrado",
+          type: "success",
+          status: true
+        }
+      })(dispatch);
+      await dispatch(getAll());
+      refresh(body.rif_ci);
+      dispatch(
+        updateSecondModal({
+          payload: {
+            status: false,
+            element: null
+          }
+        })
+      );
+      dispatch({
+        type: ACTIONS.SET_LOADING,
+        payload: false
+      });
+    }
+    return createresponse;
+  } catch (error) {
+    let message = "General Error";
+    if (error && error.response) {
+      const {
+        data: { message: msg }
+      } = error.response;
+      message = msg;
+    }
+    snackBarUpdate({
+      payload: {
+        message,
+        type: "error",
+        status: true
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
+export const updateGuest = (body: any, refresh: Function) => async (
   dispatch: Function
 ) => {
   dispatch({
@@ -315,7 +489,7 @@ export const get = (id: number) => async (dispatch: Function) => {
   }
 };
 
-export const update = (body: object) => async (dispatch: Function) => {
+export const update = (body: object, isGuest: boolean = false) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,
     payload: true
@@ -335,7 +509,19 @@ export const update = (body: object) => async (dispatch: Function) => {
           status: true
         }
       })(dispatch);
-      dispatch(getAll());
+      if(isGuest) {
+        dispatch(getAllGuest());
+        dispatch(
+          updateModal({
+            payload: {
+              status: false,
+              element: null
+            }
+          })
+        );
+      } else {
+        dispatch(getAll());
+      }  
       dispatch({
         type: ACTIONS.SET_LOADING,
         payload: false

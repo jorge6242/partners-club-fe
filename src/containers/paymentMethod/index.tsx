@@ -19,6 +19,12 @@ const columns: MasterTableColumns[] = [
     minWidth: 170,
     align: "right"
   },
+      {
+    id: "slug",
+    label: "Slug",
+    minWidth: 170,
+    align: "right"
+  },
 ];
 
 export default function PaymentMethod() {

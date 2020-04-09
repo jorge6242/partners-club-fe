@@ -1,5 +1,5 @@
 import React, { FunctionComponent, createElement, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -13,6 +13,23 @@ import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import DeleteIcon from "@material-ui/icons/Delete";
+import Switch from "@material-ui/core/Switch";
+import { green } from "@material-ui/core/colors";
+
+const GreenSwitch = withStyles({
+  switchBase: {
+    color: '#e74c3c',
+    "&$checked": {
+      color: '#27ae60'
+    },
+    "&$checked + $track": {
+      backgroundColor: green[500]
+    }
+  },
+  checked: {},
+  track: {}
+})(Switch);
+
 
 const useStyles = makeStyles({
   root: {
@@ -50,6 +67,7 @@ interface DataTableProps {
   fontSize?: string;
   handleSubRowComponent?: Function;
   renderSubRow?: any;
+  handleSwitch?: any;
 }
 
 const DataTable4: FunctionComponent<DataTableProps> = ({
@@ -66,6 +84,7 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
   handleSubRowComponent,
   renderSubRow,
   fontSize = '12px',
+  handleSwitch,
 }) => {
   const classes = useStyles();
   const [selectedRow, setSelectedRow] = useState(0);
@@ -82,10 +101,26 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
 
   const handleSelect = (id: number) => {
     if (id === selectedRow) {
-      setSelectedRow(0); 
+      setSelectedRow(0);
     } else {
       setSelectedRow(id);
     }
+  }
+
+  const renderDelete = (row: any) => {
+    if (row.eliminable && row.eliminable == 0) {
+      return <div />
+    }
+    return (
+      <IconButton
+        aria-label="delete"
+        size="small"
+        color="secondary"
+        onClick={() => handleDelete(row.id)}
+      >
+        <DeleteIcon fontSize="inherit" />
+      </IconButton>
+    )
   }
 
   return (
@@ -120,9 +155,9 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                 rows.map((row: any) => {
                   return (
                     <React.Fragment>
-                      <TableRow 
-                        hover 
-                        role="checkbox" 
+                      <TableRow
+                        hover
+                        role="checkbox"
                         tabIndex={-1} key={row.id}
                         onClick={() => handleSelect(row.share_movements && row.share_movements.length ? row.id : 0)}
                       >
@@ -142,8 +177,16 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                             </TableCell>
                           );
                         })}
+                        {handleSwitch && (
+                          <TableCell style={{ minWidth: 5, fontSize }}>
+                            <GreenSwitch
+                              checked={row.status == "1" ? true : false}
+                              onChange={() => handleSwitch(row.id, row.status)}
+                            />
+                          </TableCell>
+                        )}
+                        <TableCell align="right" style={{ minWidth: 5 }}>
                         {handleView && (
-                          <TableCell align="right" style={{ minWidth: 5 }}>
                             <IconButton
                               aria-label="delete"
                               size="small"
@@ -152,10 +195,8 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                             >
                               <VisibilityIcon fontSize="inherit" />
                             </IconButton>
-                          </TableCell>
                         )}
-                        {handleEdit && (
-                          <TableCell align="right" style={{ minWidth: 5 }}>
+                          {handleEdit && (
                             <IconButton
                               aria-label="delete"
                               size="small"
@@ -164,23 +205,12 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                             >
                               <EditIcon fontSize="inherit" />
                             </IconButton>
-                          </TableCell>
-                        )}
-                        {handleDelete && (
-                          <TableCell align="right" style={{ minWidth: 5 }}>
-                            <IconButton
-                              aria-label="delete"
-                              size="small"
-                              color="secondary"
-                              onClick={() => handleDelete(row.id)}
-                            >
-                              <DeleteIcon fontSize="inherit" />
-                            </IconButton>
-                          </TableCell>
-                        )}
-
+                          )}
+                          {handleDelete && renderDelete(row)}
+                        </TableCell>
                       </TableRow>
-                      {row.share_movements && row.share_movements.length > 0 && renderSubRow && selectedRow === row.id &&
+                      {
+                        row.share_movements && row.share_movements.length > 0 && renderSubRow && selectedRow === row.id &&
                         <TableRow><TableCell colSpan={10}>{renderSubRow(row.share_movements)}</TableCell></TableRow>
                       }
                     </React.Fragment>
@@ -200,7 +230,7 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
         onChangePage={handlePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
-    </Paper>
+    </Paper >
   );
 };
 

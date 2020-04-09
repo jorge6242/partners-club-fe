@@ -13,6 +13,16 @@ const Person = {
       headers: headers()
     });
   },
+  getAllGuest(data: number, perPage: number) {
+    const page = data ? data : 1;
+    return AXIOS.get(`${Prefix.api}/person-guest`, {
+      params: {
+        page,
+        perPage
+      },
+      headers: headers()
+    });
+  },
   create(data: any) {
     return AXIOS.post(
       `${Prefix.api}/person`,
@@ -39,6 +49,12 @@ const Person = {
   },
   search(term: string) {
     return AXIOS.get(`${Prefix.api}/person-search?term=${term}`, {
+      headers: headers()
+    });
+  },
+  searchByGuest(term: string) {
+    return AXIOS.get(`${Prefix.api}/person-search-guest`, {
+      params: { term },
       headers: headers()
     });
   },
