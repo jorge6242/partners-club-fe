@@ -1,5 +1,7 @@
 export const ACTIONS = {
   GET_ALL: "person/get_all",
+  GET_COMPANY_PERSONS: "person/get_company_persons",
+  GET_PERSONS_BY_TYPE: "person/get_persons_by_type",
   GET: "person/get",
   GET_PERSON_TO_ASSIGN: "person/get_persons_to_assign",
   SET_PERSON: "set_person/get",
@@ -12,6 +14,8 @@ export const ACTIONS = {
   GET_PERSONS_EXCEPTION_STATISTICS: "person/get_persons_exception_statistics",
   GET_PERSONS_BIRTHDAY_STATISTICS: "person/get_persons_birthday_statistics",
   SET_LOADING: "person/set_loading",
+  SET_COMPANY_PERSONS_LOADING: "person/set_company_persons_loading",
+  SET_PERSONS_BY_TYPE_LOADING: "person/set_persons_by_type_loading",
   SET_SECOND_LOADING: "person/set_second_loading",
   SET_RELATION_LOADING: "person/set_relation_loading",
   SET_ASSIGN_LOADING: "person/set_assign_loading",
@@ -44,6 +48,11 @@ export const ACTIONS = {
 
 interface GetPerson {
   type: typeof ACTIONS.GET;
+  payload: Array<string | number>;
+}
+
+interface GetPersonsByType {
+  type: typeof ACTIONS.GET_PERSONS_BY_TYPE;
   payload: Array<string | number>;
 }
 
@@ -120,6 +129,11 @@ interface GetAllPersons {
 
 interface SetLoading {
   type: typeof ACTIONS.SET_LOADING;
+  payload: boolean;
+}
+
+interface SetPersonsByTypeLoading {
+  type: typeof ACTIONS.SET_PERSONS_BY_TYPE_LOADING;
   payload: boolean;
 }
 
@@ -277,4 +291,6 @@ export type ActionTypes =
   | GetPersonsExceptionStatistics
   | SetPersonsExceptionStatisticsLoading
   | GetPersonsBirthdayStatistics
-  | SetPersonsBirthdayStatisticsLoading;
+  | SetPersonsBirthdayStatisticsLoading
+  | GetPersonsByType
+  | SetPersonsByTypeLoading;

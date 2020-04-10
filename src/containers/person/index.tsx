@@ -84,7 +84,7 @@ export default function Bank() {
         payload: {
           status: true,
           element: <PersonForm id={id} />,
-          customSize: 'lg'
+          customSize: 'xl'
         }
       })
     );
@@ -96,7 +96,7 @@ export default function Bank() {
         payload: {
           status: true,
           element: <PersonForm />,
-          customSize: 'lg'
+          customSize: 'xl'
         }
       })
     );

@@ -3,6 +3,8 @@ import { ACTIONS, ActionTypes } from "../interfaces/actionTypes/personTypes";
 type InitialState = {
   persons: Array<string | number>;
   partnersToAssign: Array<string | number>;
+  companyPersons: Array<string | number>;
+  setCompanyPersonsLoading: boolean;
   familiesPartnerByCard: Array<string | number>;
   familyByPerson: Array<string | number>;
   titularToAssign: Array<string | number>;
@@ -37,6 +39,8 @@ type InitialState = {
   pagination: any;
   selectedPerson: any;
   personsToAssign: any;
+  personsByType: Array<string | number>;
+  setPersonsByTypeLoading: boolean;
 };
 
 const initialState: InitialState = {
@@ -52,7 +56,7 @@ const initialState: InitialState = {
     total: 0,
     perPage: 0,
     prevPageUrl: null,
-    currentPage: 0
+    currentPage: 0,
   },
   familyByPerson: [],
   partnersToAssign: [],
@@ -67,7 +71,7 @@ const initialState: InitialState = {
     total: 0,
     perPage: 0,
     prevPageUrl: null,
-    currentPage: 0
+    currentPage: 0,
   },
   personLockersByLocation: [],
   personLockersByLocationLoading: false,
@@ -85,7 +89,11 @@ const initialState: InitialState = {
   guestStatisticsLoading: false,
   personsStatisticsLoading: false,
   personsExceptionStatisticsLoading: false,
-  personsBirthdayStatisticsLoading: false
+  personsBirthdayStatisticsLoading: false,
+  companyPersons: [],
+  setCompanyPersonsLoading: false,
+  personsByType: [],
+  setPersonsByTypeLoading: false,
 };
 
 const personReducer = (state = initialState, action: ActionTypes) => {
@@ -93,200 +101,220 @@ const personReducer = (state = initialState, action: ActionTypes) => {
     case ACTIONS.GET_ALL:
       return {
         ...state,
-        persons: action.payload
+        persons: action.payload,
+      };
+    case ACTIONS.GET_PERSONS_BY_TYPE:
+      return {
+        ...state,
+        personsByType: action.payload,
+      };
+    case ACTIONS.GET_COMPANY_PERSONS:
+      return {
+        ...state,
+        companyPersons: action.payload,
       };
     case ACTIONS.GET_PARTNER_STATISTICS:
       return {
         ...state,
-        partnerStatistics: action.payload
+        partnerStatistics: action.payload,
       };
     case ACTIONS.GET_PERSONS_BIRTHDAY_STATISTICS:
       return {
         ...state,
-        personsBirthdayStatistics: action.payload
+        personsBirthdayStatistics: action.payload,
       };
     case ACTIONS.GET_FAMILY_STATISTICS:
       return {
         ...state,
-        familyStatistics: action.payload
+        familyStatistics: action.payload,
       };
     case ACTIONS.GET_GUEST_STATISTICS:
       return {
         ...state,
-        guestStatistics: action.payload
+        guestStatistics: action.payload,
       };
     case ACTIONS.GET_PERSONS_STATISTICS:
       return {
         ...state,
-        personsStatistics: action.payload
+        personsStatistics: action.payload,
       };
     case ACTIONS.GET_PERSONS_EXCEPTION_STATISTICS:
       return {
         ...state,
-        personsExceptionStatistics: action.payload
+        personsExceptionStatistics: action.payload,
       };
     case ACTIONS.SET_PAGINATION:
       return {
         ...state,
-        pagination: action.payload
+        pagination: action.payload,
       };
     case ACTIONS.GET_GUEST_BY_PARTNER:
       return {
         ...state,
-        guestByPartner: action.payload
+        guestByPartner: action.payload,
       };
 
     case ACTIONS.GET_PERSON_TO_ASSIGN:
       return {
         ...state,
-        personsToAssign: action.payload
+        personsToAssign: action.payload,
       };
     case ACTIONS.GET_PERSON_LOCKERS_BY_LOCATION:
       return {
         ...state,
-        personLockersByLocation: action.payload
+        personLockersByLocation: action.payload,
       };
     case ACTIONS.GET_FAMILIES_PARTNER_BY_CARD:
       return {
         ...state,
-        familiesPartnerByCard: action.payload
+        familiesPartnerByCard: action.payload,
       };
 
     case ACTIONS.GET_PARTNERS_TO_ASSIGN:
       return {
         ...state,
-        partnersToAssign: action.payload
+        partnersToAssign: action.payload,
       };
     case ACTIONS.GET_TITULAR_TO_ASSIGN:
       return {
         ...state,
-        titularToAssign: action.payload
+        titularToAssign: action.payload,
       };
     case ACTIONS.SET_PERSON:
       return {
         ...state,
-        selectedPerson: action.payload
+        selectedPerson: action.payload,
       };
     case ACTIONS.SET_PERSON_LOCKERS:
       return {
         ...state,
-        personLockers: action.payload
+        personLockers: action.payload,
       };
     case ACTIONS.SET_LOADING:
       return {
         ...state,
-        loading: action.payload
+        loading: action.payload,
+      };
+    case ACTIONS.SET_PERSONS_BY_TYPE_LOADING:
+      return {
+        ...state,
+        setPersonsByTypeLoading: action.payload,
+      };
+    case ACTIONS.SET_COMPANY_PERSONS_LOADING:
+      return {
+        ...state,
+        setCompanyPersonsLoading: action.payload,
       };
     case ACTIONS.SET_PERSON_LOCKERS_LOADING:
       return {
         ...state,
-        personLockersLoading: action.payload
+        personLockersLoading: action.payload,
       };
     case ACTIONS.SET_PERSON_LOCKERS_BY_LOCATION_LOADING:
       return {
         ...state,
-        personLockersByLocationLoading: action.payload
+        personLockersByLocationLoading: action.payload,
       };
     case ACTIONS.SET_SECOND_LOADING:
       return {
         ...state,
-        secondLoading: action.payload
+        secondLoading: action.payload,
       };
     case ACTIONS.SET_PERSONS_BIRTHDAY_STATISTICS_LOADING:
       return {
         ...state,
-        personsBirthdayStatisticsLoading: action.payload
+        personsBirthdayStatisticsLoading: action.payload,
       };
     case ACTIONS.SET_FAMILY_BY_PERSON_LOADING:
       return {
         ...state,
-        setFamilyByPersonLoading: action.payload
+        setFamilyByPersonLoading: action.payload,
       };
     case ACTIONS.SET_ASSIGN_LOADING:
       return {
         ...state,
-        assignLoading: action.payload
+        assignLoading: action.payload,
       };
     case ACTIONS.SET_REPORT_BY_PARTNER_LOADING:
       return {
         ...state,
-        reportByPartnerLoading: action.payload
+        reportByPartnerLoading: action.payload,
       };
     case ACTIONS.SET_RELATION_LOADING:
       return {
         ...state,
-        relationLoading: action.payload
+        relationLoading: action.payload,
       };
     case ACTIONS.SET_PARTNERS_LOADING:
       return {
         ...state,
-        setPartnersLoading: action.payload
+        setPartnersLoading: action.payload,
       };
     case ACTIONS.SET_TITULAR_LOADING:
       return {
         ...state,
-        setTitularLoading: action.payload
+        setTitularLoading: action.payload,
       };
     case ACTIONS.SET_GUEST_BY_PARTNER_LOADING:
       return {
         ...state,
-        guestByPartnerLoading: action.payload
+        guestByPartnerLoading: action.payload,
       };
     case ACTIONS.SET_FAMILIES_PARTNER_CARD_LOADING:
       return {
         ...state,
-        familiesPartnerCardLoading: action.payload
+        familiesPartnerCardLoading: action.payload,
       };
     case ACTIONS.SET_PARTNER_STATISTICS_LOADING:
       return {
         ...state,
-        partnerStatisticsLoading: action.payload
+        partnerStatisticsLoading: action.payload,
       };
     case ACTIONS.SET_FAMILY_STATISTICS_LOADING:
       return {
         ...state,
-        familyStatisticsLoading: action.payload
+        familyStatisticsLoading: action.payload,
       };
     case ACTIONS.SET_GUEST_STATISTICS_LOADING:
       return {
         ...state,
-        guestStatisticsLoading: action.payload
+        guestStatisticsLoading: action.payload,
       };
     case ACTIONS.SET_PERSONS_STATISTICS_LOADING:
       return {
         ...state,
-        personsStatisticsLoading: action.payload
+        personsStatisticsLoading: action.payload,
       };
     case ACTIONS.SET_PERSONS_EXCEPTION_STATISTICS_LOADING:
       return {
         ...state,
-        personsExceptionStatisticsLoading: action.payload
+        personsExceptionStatisticsLoading: action.payload,
       };
     case ACTIONS.SET_PERSON_ASSIGN_PAGINATION:
       return {
         ...state,
-        paginationPersonsToAssign: action.payload
+        paginationPersonsToAssign: action.payload,
       };
     case ACTIONS.GET_FAMILY_BY_PERSON:
       return {
         ...state,
-        familyByPerson: action.payload
+        familyByPerson: action.payload,
       };
     case ACTIONS.CLEAR:
       return {
         ...state,
         familiesPartnerByCard: initialState.familiesPartnerByCard,
-        familyByPerson: initialState.familyByPerson
+        familyByPerson: initialState.familyByPerson,
       };
     case ACTIONS.CLEAR_PERSON_LOCKERS_BY_LOCATION:
       return {
         ...state,
-        personLockersByLocation: initialState.personLockersByLocation
+        personLockersByLocation: initialState.personLockersByLocation,
       };
     case ACTIONS.CLEAR_PERSONS:
       return {
         ...state,
-        persons: initialState.persons
+        persons: initialState.persons,
       };
     default:
       return state;

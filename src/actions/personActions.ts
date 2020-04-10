@@ -149,6 +149,84 @@ export const search = (term: string) => async (dispatch: Function) => {
   }
 };
 
+export const searchCompanyPersons = (term: string) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_COMPANY_PERSONS_LOADING,
+    payload: true
+  });
+  try {
+    const {
+      data: { data },
+      status
+    } = await Person.searchCompanyPersons(term);
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_COMPANY_PERSONS,
+        payload: response
+      });
+    }
+    dispatch({
+      type: ACTIONS.SET_COMPANY_PERSONS_LOADING,
+      payload: false
+    });
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_COMPANY_PERSONS_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
+export const searchPersonsByType = (queryString: object) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_PERSONS_BY_TYPE_LOADING,
+    payload: true
+  });
+  try {
+    const {
+      data: { data },
+      status
+    } = await Person.searchPersonsByType(queryString);
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_PERSONS_BY_TYPE,
+        payload: response
+      });
+    }
+    dispatch({
+      type: ACTIONS.SET_PERSONS_BY_TYPE_LOADING,
+      payload: false
+    });
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_PERSONS_BY_TYPE_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
 export const searchByGuest = (term: string) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,

@@ -52,6 +52,18 @@ const Person = {
       headers: headers()
     });
   },
+  searchCompanyPersons(term: string) {
+    return AXIOS.get(`${Prefix.api}/person-search-company`, {
+      params: { term },
+      headers: headers()
+    });
+  },
+  searchPersonsByType(queryString: object) {
+    return AXIOS.get(`${Prefix.api}/person-search-type`, {
+      params: { ...queryString },
+      headers: headers()
+    });
+  },
   searchByGuest(term: string) {
     return AXIOS.get(`${Prefix.api}/person-search-guest`, {
       params: { term },
