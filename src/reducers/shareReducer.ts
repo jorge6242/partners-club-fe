@@ -9,6 +9,7 @@ type BanksInitialState = {
   reportLoading: boolean;
   pagination: any;
   selectedShare: any;
+  dataList: Array<string | number>;
 };
 
 const initialState: BanksInitialState = {
@@ -24,7 +25,8 @@ const initialState: BanksInitialState = {
     currentPage: 0
   },
   selectedShare: {},
-  sharesByPartner: []
+  sharesByPartner: [],
+  dataList: []
 };
 
 const shareReducer = (state = initialState, action: ActionTypes) => {
@@ -34,6 +36,11 @@ const shareReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         list: action.payload
       };
+      case ACTIONS.GET_LIST:
+        return {
+          ...state,
+          dataList: action.payload
+        };
     case ACTIONS.GET_SHARES_BY_PARTNER:
       return {
         ...state,

@@ -146,7 +146,7 @@ export const create = (body: object) => async (dispatch: Function) => {
       createresponse = response;
       snackBarUpdate({
         payload: {
-          message: "Currency Created!",
+          message: "Moneda ha sido Creado!",
           type: "success",
           status: true
         }
@@ -222,7 +222,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Currency Updated!",
+          message: "Moneda ha sido Actualizado!",
           type: "success",
           status: true
         }
@@ -274,7 +274,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Currency Removed!",
+          message: "Moneda Eliminado!",
           type: "success",
           status: true
         }

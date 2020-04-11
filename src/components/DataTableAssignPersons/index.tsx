@@ -73,7 +73,11 @@ const DataTableAssignPersons: FunctionComponent<DataTableProps> = ({
                                 <TableCell
                                     key={column.id}
                                     align={column.align}
-                                    style={{ minWidth: column.minWidth, fontSize: '10px' }}
+                                    style={{ 
+                                        minWidth: column.minWidth, 
+                                        fontSize: '12px',
+                                        fontWeight: 'bold'
+                                    }}
                                 >
                                     {column.label}
                                 </TableCell>

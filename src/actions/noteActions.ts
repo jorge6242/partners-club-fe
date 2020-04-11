@@ -149,7 +149,7 @@ export const create = (body: any) => async (dispatch: Function) => {
       createresponse = response;
       snackBarUpdate({
         payload: {
-          message: "Department Created!",
+          message: "Nota ha sido Creado!",
           type: "success",
           status: true
         }
@@ -269,7 +269,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Department Removed!",
+          message: "DepartmNotaado!",
           type: "success",
           status: true
         }

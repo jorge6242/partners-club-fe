@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
     borderBottom: "1px solid grey",
     fontSize: "16px"
   },
-  typeRecordDetail : {
+  typeRecordDetail: {
     fontStyle: 'italic',
     fontWeight: 'bold',
   },
@@ -99,13 +99,12 @@ const RecordForm: FunctionComponent<RecordFormProps> = ({
 
   const onTypeChange = async () => {
     const recordType = watch('record_type_id');
-    console.log('recordType ', recordType);
-      if (recordType > 0) {
-        const res: any = await dispatch(get(recordType));
-        setSelectedRecordType(res);
-      } else {
-        setSelectedRecordType(null);
-      }
+    if (recordType > 0) {
+      const res: any = await dispatch(get(recordType));
+      setSelectedRecordType(res);
+    } else {
+      setSelectedRecordType(null);
+    }
   }
 
   const handleForm = async (form: object) => {
@@ -185,10 +184,17 @@ const RecordForm: FunctionComponent<RecordFormProps> = ({
                 <Grid item xs={6}>
                   {
                     selectedRecordType && (
-                      <div className={`${classes.typeRecordDetail} ${selectedRecordType.blocked == 1 ? classes.typeRecorBlocked : '' }`}>
+                      <div className={`${classes.typeRecordDetail} ${selectedRecordType.blocked == 1 ? classes.typeRecorBlocked : ''}`}>
                         <div>Bloqueo: {selectedRecordType.blocked == 1 ? 'SI' : 'NO'}</div>
-                        <div>Dias: {selectedRecordType.days}</div>
-                        <div>Vencimiento: {moment().add(selectedRecordType.days, 'days').format('YYYY-MM-DD')}</div>
+                        {
+                          selectedRecordType.blocked == 1 && (
+                            <React.Fragment>
+                              <div>Dias: {selectedRecordType.days}</div>
+                              <div>Vencimiento: {moment().add(selectedRecordType.days, 'days').format('YYYY-MM-DD')}</div>
+                            </React.Fragment>
+                          )
+                        }
+
                       </div>
                     )
                   }
@@ -214,8 +220,8 @@ const RecordForm: FunctionComponent<RecordFormProps> = ({
                 color="primary"
                 component="span"
                 size="small"
-                // onClick={() => handleImage()}
-                >
+              // onClick={() => handleImage()}
+              >
                 Archivo 1
               </Button>
               <input

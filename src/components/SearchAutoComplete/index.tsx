@@ -116,9 +116,7 @@ const SearchAutoComplete: FunctionComponent<CustomSearchdProps> = ({
                 </ListItem>
               ))
               :
-              (<ListItem >
-              <ListItemText primary={'Sin datos'} />
-            </ListItem>)
+              (<div />)
             }
           </List>
         </Grid>

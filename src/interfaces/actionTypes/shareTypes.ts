@@ -1,5 +1,6 @@
 export const ACTIONS = {
   GET_ALL: "share/get_all",
+  GET_LIST: "share/get_list",
   GET_SHARE_TO_ASSIGN: "share/get_share_to_assign",
   GET: "share/get",
   SET_LOADING: "share/set_loading",
@@ -12,6 +13,11 @@ export const ACTIONS = {
 };
 
 interface Get {
+  type: typeof ACTIONS.GET;
+  payload: Array<string | number>;
+}
+
+interface GetList {
   type: typeof ACTIONS.GET;
   payload: Array<string | number>;
 }
@@ -71,4 +77,5 @@ export type ActionTypes =
   | SetShareToAssignLoading
   | Reset
   | GetSharesByPartner
-  | SetReportLoading;
+  | SetReportLoading
+  | GetList;

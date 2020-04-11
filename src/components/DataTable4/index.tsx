@@ -142,8 +142,7 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                 </TableCell>
               ))}
               {handleView && <TableCell style={{ minWidth: 5 }}></TableCell>}
-              {handleEdit && <TableCell style={{ minWidth: 5 }}></TableCell>}
-              {handleDelete && <TableCell style={{ minWidth: 5 }}></TableCell>}
+              <TableCell style={{ minWidth: 5 }}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -185,7 +184,7 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                             />
                           </TableCell>
                         )}
-                        <TableCell align="right" style={{ minWidth: 5 }}>
+                        <TableCell align="right">
                         {handleView && (
                             <IconButton
                               aria-label="delete"

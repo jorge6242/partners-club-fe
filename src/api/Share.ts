@@ -37,11 +37,19 @@ const API = {
   remove(id: number) {
     return AXIOS.delete(`${Prefix.api}/share/${id}`, { headers: headers() });
   },
-  search(term: string, perPage: number) {
+  search(term: string, isSingle: boolean) {
     return AXIOS.get(`${Prefix.api}/share-search`, {
       params: {
         term,
-        perPage
+        isSingle
+      },
+      headers: headers()
+    });
+  },
+  singleSearch(term: string) {
+    return AXIOS.get(`${Prefix.api}/share-single-search`, {
+      params: {
+        term,
       },
       headers: headers()
     });

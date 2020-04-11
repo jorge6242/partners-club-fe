@@ -13,10 +13,12 @@ import CustomTextField from "../FormElements/CustomTextField";
 import {
   create,
   searchToAssign,
-  reset as resetShare
+  reset as resetShare,
+  updateSharetoAssign
 } from "../../actions/shareActions";
 import { getList } from "../../actions/shareTypeActions";
 import SearchAutoComplete from "../SearchAutoComplete";
+import CustomSelect from "../FormElements/CustomSelect";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -98,7 +100,6 @@ const ShareForm: FunctionComponent<ShareFormProps> = ({ id }) => {
   useEffect(() => {
     return () => {
       reset();
-      dispatch(resetShare());
     };
   }, [reset, dispatch]);
 
@@ -107,7 +108,11 @@ const ShareForm: FunctionComponent<ShareFormProps> = ({ id }) => {
   };
 
   const handleSearchShares = _.debounce((term: any) => {
-    dispatch(searchToAssign(term));
+    if(term !== "") {
+      dispatch(searchToAssign(term));
+    } else {
+      dispatch(updateSharetoAssign());
+    }
   }, 1000);
 
   const handleSelectShare = (option: any) => {
@@ -162,21 +167,23 @@ const ShareForm: FunctionComponent<ShareFormProps> = ({ id }) => {
                 })}
               />
             </Grid>
-            <Grid item xs={12}>
-              {shareType ? (
-                <div>
-                  <strong>Tipo de Accion</strong>: {shareType.description}
-                </div>
-              ) : (
-                <CircularProgress color="primary" size={20} />
-              )}
-              <input
-                style={{ display: "none" }}
-                name="share_type_id"
-                ref={register({
-                  required: true
-                })}
-              />
+            <Grid item xs={6}>
+              <CustomSelect
+                label="Tipo"
+                selectionMessage="Seleccione Estatus"
+                field="share_type_id"
+                required
+                register={register}
+                errorsMessageField={
+                  errors.share_type_id && errors.share_type_id.message
+                }
+              >
+                {shareTypeList.map((item: any) => (
+                  <option key={item.id} value={item.id}>
+                    {item.description}
+                  </option>
+                ))}
+              </CustomSelect>
             </Grid>
           </Grid>
 
@@ -189,7 +196,7 @@ const ShareForm: FunctionComponent<ShareFormProps> = ({ id }) => {
               disabled={loading}
               className={classes.submit}
             >
-              {id ? "Update" : "Create"}
+              {id ? "Actualizar" : "Crear"}
             </Button>
             {loading && (
               <CircularProgress size={24} className={classes.buttonProgress} />

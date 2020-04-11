@@ -373,7 +373,7 @@ export const create = (body: object, isGuest: boolean = false) => async (dispatc
     }
     return createresponse;
   } catch (error) {
-    let message = "General Error";
+    let message = "Error en el Servidor";
     if (error && error.response) {
       const {
         data: { message: msg }
@@ -435,7 +435,7 @@ export const createGuest = (body: any, refresh: Function) => async (
     }
     return createresponse;
   } catch (error) {
-    let message = "General Error";
+    let message = "Error en el Servidor";
     if (error && error.response) {
       const {
         data: { message: msg }
@@ -497,7 +497,7 @@ export const updateGuest = (body: any, refresh: Function) => async (
     }
     return createresponse;
   } catch (error) {
-    let message = "General Error";
+    let message = "Error en el Servidor";
     if (error && error.response) {
       const {
         data: { message: msg }
@@ -783,7 +783,7 @@ export const getReportsByPartner = (id: any) => async (dispatch: Function) => {
       });
       snackBarUpdate({
         payload: {
-          message: "General Error",
+          message: "Error en el Servidor",
           type: "error",
           status: true
         }
@@ -861,7 +861,7 @@ export const assignPerson = (body: any) => async (dispatch: Function) => {
     }
     return createresponse;
   } catch (error) {
-    let message = "General Error";
+    let message = "Error en el Servidor";
     if (error && error.response) {
       const {
         data: { message: msg }
@@ -882,6 +882,11 @@ export const assignPerson = (body: any) => async (dispatch: Function) => {
     return error;
   }
 };
+
+export const clearPartnersToAssign = () => ({
+  type: ACTIONS.GET_PARTNERS_TO_ASSIGN,
+  payload: []
+});
 
 export const searchPartnersToAssign = (term: string) => async (
   dispatch: Function
@@ -923,6 +928,11 @@ export const searchPartnersToAssign = (term: string) => async (
     return error;
   }
 };
+
+export const clearTitularToAssign = () => ({
+  type: ACTIONS.GET_TITULAR_TO_ASSIGN,
+  payload: []
+});
 
 export const searchTitularToAssign = (term: string) => async (
   dispatch: Function
@@ -999,7 +1009,7 @@ export const getFamiliesPartnerByCard = (card: string) => async (
     }
     return response;
   } catch (error) {
-    let message = "General Error";
+    let message = "Error en el Servidor";
     if (error && error.response) {
       const {
         data: { message: msg }

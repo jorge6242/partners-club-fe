@@ -224,7 +224,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Locker Actualizado!",
+          message: "Locker ha sido Creado!",
           type: "success",
           status: true
         }

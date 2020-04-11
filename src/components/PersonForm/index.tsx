@@ -67,7 +67,7 @@ import {
   get as getShare,
   reset as resetShare
 } from "../../actions/shareActions";
-import { updateModal } from "../../actions/secondModalActions";
+import { updateModal } from "../../actions/modalActions";
 import { update as updateNote } from "../../actions/noteActions";
 import TransferList from "../TransferList";
 import DataTableAssignPersons from "../DataTableAssignPersons";
@@ -180,21 +180,21 @@ const FamilysColumns: FamilyPersonColumns[] = [
   {
     id: "id",
     label: "ID",
-    minWidth: 30,
+    minWidth: 10,
     align: "right",
     component: (value: any) => <span>{value.value}</span>
   },
   {
     id: "rif_ci",
     label: "Rif/CI",
-    minWidth: 30,
+    minWidth: 20,
     align: "right",
     component: (value: any) => <span>{value.value}</span>
   },
   {
     id: "relationType",
     label: "Parentesco",
-    minWidth: 30,
+    minWidth: 20,
     align: "right",
     component: (value: any) => (
       <span>
@@ -205,21 +205,21 @@ const FamilysColumns: FamilyPersonColumns[] = [
   {
     id: "name",
     label: "Nombre",
-    minWidth: 30,
+    minWidth: 20,
     align: "right",
     component: (value: any) => <span>{value.value}</span>
   },
   {
     id: "last_name",
     label: "Apellido",
-    minWidth: 30,
+    minWidth: 20,
     align: "right",
     component: (value: any) => <span>{value.value}</span>
   },
   {
     id: "status",
     label: "",
-    minWidth: 30,
+    minWidth: 20,
     align: "right",
     component: (value: any) => (
       <Chip
@@ -237,17 +237,32 @@ const FamilysColumns: FamilyPersonColumns[] = [
 ];
 
 const columns: PersonColumn[] = [
-  { id: "id", label: "Id", minWidth: 170 },
+  { id: "id", 
+  label: "Id", 
+  minWidth: 10 
+},
+  {
+    id: "rif_ci",
+    label: "Cedula",
+    minWidth: 20,
+    align: "right"
+  },
+  {
+    id: "passport",
+    label: "Pasaporte",
+    minWidth: 20,
+    align: "right"
+  },
   {
     id: "name",
     label: "Nombre",
-    minWidth: 170,
+    minWidth: 20,
     align: "right"
   },
   {
     id: "last_name",
     label: "Apellido",
-    minWidth: 170,
+    minWidth: 20,
     align: "right"
   }
 ];
@@ -360,12 +375,12 @@ function getParsePerson(data: any, classes: any) {
       </Grid>
       <Grid item xs={3}>
         <Paper className={classes.parsedPersonContainerDetail}>
-          <strong>Nombre:</strong> {name} {last_name}
+          <strong>RIF/CI:</strong> {rif_ci}
         </Paper>
       </Grid>
       <Grid item xs={3}>
         <Paper className={classes.parsedPersonContainerDetail}>
-          <strong>Cedula:</strong> {rif_ci}
+          <strong>Nombre:</strong> {name} {last_name}
         </Paper>
       </Grid>
       <Grid item xs={3}>
@@ -700,11 +715,11 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
         const response: any = await dispatch(get(id));
         dispatch(getProfessions());
         dispatch(searchFamilyByPerson(id));
-        dispatch(searchPersonToAssignFamily(id));
         dispatch(getCardPerson(id));
         dispatch(getLockersByPartner(id));
         dispatch(getRecordsByPerson({ id }));
         dispatch(getNotesByPerson({ id }));
+        // dispatch(searchPersonToAssignFamily(id));
         const {
           name,
           last_name,
@@ -814,6 +829,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
       lockers: selectedLockers,
       id_card_picture: "empty.png"
     };
+    console.log('form ',form);
     if (tempPersonId > 0) {
       await dispatch(update({ id: tempPersonId, ...form, ...data }));
       dispatch(getLockersByPartner(tempPersonId));
@@ -1062,7 +1078,9 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     const { type_facturador } = getValues();
     setSelectedFacturador(null);
     setSelectedFiador(null);
-    dispatch(searchPersonsByType({term, typePerson: type_facturador}));
+    if(term !== '') {
+      dispatch(searchPersonsByType({ term, typePerson: type_facturador }));
+    }
   }, 1000);
 
   const handleSelectFacturador = (option: any) => {
@@ -1082,7 +1100,9 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     const { type_fiador } = getValues();
     setSelectedFiador(null);
     setSelectedFacturador(null);
-    dispatch(searchPersonsByType({term, typePerson: type_fiador}));
+    if(term !== '') {
+    dispatch(searchPersonsByType({ term, typePerson: type_fiador }));
+    }
   }, 1000);
 
   const handleSelectFiador = (option: any) => {
@@ -1271,6 +1291,16 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   const renderAddressData = () => {
     return (
       <Grid container spacing={2}>
+        <Grid item xs={4}>
+          <CustomTextField
+            placeholder="Direccion"
+            field="address"
+            register={register}
+            errorsField={errors.address}
+            errorsMessageField={errors.address && errors.address.message}
+            multiline
+          />
+        </Grid>
         <Grid item xs={3}>
           <CustomSelect
             label="Pais"
@@ -1317,16 +1347,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             }
           />
         </Grid>
-        <Grid item xs={4}>
-          <CustomTextField
-            placeholder="Direccion"
-            field="address"
-            register={register}
-            errorsField={errors.address}
-            errorsMessageField={errors.address && errors.address.message}
-            multiline
-          />
-        </Grid>
       </Grid>
     );
   };
@@ -1358,7 +1378,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             inputType="email"
           />
         </Grid>
-
         <Grid item xs={3}>
           <CustomTextField
             placeholder="Telefono 1"
@@ -1666,9 +1685,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
           <input
             style={{ display: "none" }}
             name="company_person_id"
-            ref={register({
-              required: true
-            })}
+            ref={register}
           />
         </Grid>
         {
@@ -1685,7 +1702,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
 
   const renderFacturador = () => {
     let selected = selectedShare.facturador;
-    if(selectedFacturador) {
+    if (selectedFacturador) {
       selected = selectedFacturador;
     }
     return (
@@ -1693,69 +1710,74 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
         <Grid item xs={12} >
           <Grid container spacing={3}>
             <Grid item xs={2}>
-            <CustomSelect
-            label="Tipo"
-            selectionMessage="Seleccione"
-            field="type_facturador"
-            register={register}
-            errorsMessageField={
-              errors.type_facturador && errors.type_facturador.message
-            }
-            optionValueSelected={1}
-          >
-            <option value={1}> Natural </option>
-            <option value={2}> Empresa </option>
-            <option value={3}> Ambos </option>
-          </CustomSelect>
+              <CustomSelect
+                label="Tipo"
+                selectionMessage="Seleccione"
+                field="type_facturador"
+                register={register}
+                errorsMessageField={
+                  errors.type_facturador && errors.type_facturador.message
+                }
+                optionValueSelected={1}
+              >
+                <option value={1}> Natural </option>
+                <option value={2}> Empresa </option>
+                <option value={3}> Ambos </option>
+              </CustomSelect>
             </Grid>
             <Grid item xs={8}>
-            <SearchAutoComplete
-            label="Buscar Facturador"
-            options={personsByType}
-            loading={setPersonsByTypeLoaing}
-            handleSearch={handleSearchFacturador}
-            handleSelect={handleSelectFacturador}
-            errorsField={errors.id_factura_persona}
-            getOptionLabel={getOptionLabelCompanyPerson}
-            errorsMessageField={
-              errors.id_factura_persona && errors.id_factura_persona.message
-            }
-          />
+              <SearchAutoComplete
+                label="Buscar Facturador"
+                options={personsByType}
+                loading={setPersonsByTypeLoaing}
+                handleSearch={handleSearchFacturador}
+                handleSelect={handleSelectFacturador}
+                errorsField={errors.id_factura_persona}
+                getOptionLabel={getOptionLabelCompanyPerson}
+                errorsMessageField={
+                  errors.id_factura_persona && errors.id_factura_persona.message
+                }
+              />
             </Grid>
             <Grid xs={2}>
-            {
-              selectedFacturador && (
-                <Button
-                type="button"
-                fullWidth
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                size="small"
-                onClick={() => updatePersonShare({ id: selectedShare.id, id_factura_persona: selectedFacturador.id })}
-              >
-                Actualizar
+              {
+                selectedFacturador && (
+                  <Button
+                    type="button"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    disabled={loading}
+                    size="small"
+                    onClick={() => updatePersonShare({ id: selectedShare.id, id_factura_persona: selectedFacturador.id })}
+                  >
+                    Actualizar
               </Button>
-              )
-            }
+                )
+              }
             </Grid>
           </Grid>
           <input
             style={{ display: "none" }}
             name="id_factura_persona"
-            ref={register({
-              required: true
-            })}
+            ref={register}
           />
         </Grid>
-        <Grid xs={12}>{getParsePerson( selected, classes )}</Grid>
+        {
+          selected && (
+            <React.Fragment>
+              <Grid item xs={12}>Facturador Actual:</Grid>
+              <Grid item xs={12}>{getParsePerson(selected, classes)}</Grid>
+            </React.Fragment>
+          )
+        }
       </Grid>
-    ) 
+    )
   }
 
   const renderFiador = () => {
     let selected = selectedShare.fiador;
-    if(selectedFiador) {
+    if (selectedFiador) {
       selected = selectedFiador;
     }
     return (
@@ -1763,64 +1785,69 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
         <Grid item xs={12} >
           <Grid container spacing={3}>
             <Grid item xs={2}>
-            <CustomSelect
-            label="Tipo"
-            selectionMessage="Seleccione"
-            field="type_fiador"
-            register={register}
-            errorsMessageField={
-              errors.type_fiador && errors.type_fiador.message
-            }
-            optionValueSelected={1}
-          >
-            <option value={1}> Natural </option>
-            <option value={2}> Empresa </option>
-            <option value={3}> Ambos </option>
-          </CustomSelect>
+              <CustomSelect
+                label="Tipo"
+                selectionMessage="Seleccione"
+                field="type_fiador"
+                register={register}
+                errorsMessageField={
+                  errors.type_fiador && errors.type_fiador.message
+                }
+                optionValueSelected={1}
+              >
+                <option value={1}> Natural </option>
+                <option value={2}> Empresa </option>
+                <option value={3}> Ambos </option>
+              </CustomSelect>
             </Grid>
             <Grid item xs={8}>
-            <SearchAutoComplete
-            label="Buscar Fiador"
-            options={personsByType}
-            loading={setPersonsByTypeLoaing}
-            handleSearch={handleSearchFiador}
-            handleSelect={handleSelectFiador}
-            errorsField={errors.id_fiador_persona}
-            getOptionLabel={getOptionLabelCompanyPerson}
-            errorsMessageField={
-              errors.id_fiador_persona && errors.id_fiador_persona.message
-            }
-          />
+              <SearchAutoComplete
+                label="Buscar Fiador"
+                options={personsByType}
+                loading={setPersonsByTypeLoaing}
+                handleSearch={handleSearchFiador}
+                handleSelect={handleSelectFiador}
+                errorsField={errors.id_fiador_persona}
+                getOptionLabel={getOptionLabelCompanyPerson}
+                errorsMessageField={
+                  errors.id_fiador_persona && errors.id_fiador_persona.message
+                }
+              />
             </Grid>
             <Grid xs={2}>
-            {
-              selectedFiador && (
-                <Button
-                type="button"
-                fullWidth
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                size="small"
-                onClick={() => updatePersonShare({ id: selectedShare.id, id_fiador_persona: selectedFiador.id })}
-              >
-                Actualizar
+              {
+                selectedFiador && (
+                  <Button
+                    type="button"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    disabled={loading}
+                    size="small"
+                    onClick={() => updatePersonShare({ id: selectedShare.id, id_fiador_persona: selectedFiador.id })}
+                  >
+                    Actualizar
               </Button>
-              )
-            }
+                )
+              }
             </Grid>
           </Grid>
           <input
             style={{ display: "none" }}
             name="id_fiador_persona"
-            ref={register({
-              required: true
-            })}
+            ref={register}
           />
         </Grid>
-        <Grid xs={12}>{getParsePerson( selected, classes )}</Grid>
+        {
+          selected && (
+            <React.Fragment>
+              <Grid item xs={12}>Fiador Actual:</Grid>
+              <Grid item xs={12}>{getParsePerson(selected, classes)}</Grid>
+            </React.Fragment>
+          )
+        }
       </Grid>
-    ) 
+    )
   }
 
   const getNacionalityLabel = (row: any) => row.citizenship;
@@ -1900,7 +1927,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                       <Tab label="Notas" disabled={disableTabs} />
                       <Tab label="Expedientes" disabled={disableTabs} />
                       <Tab label="Lockers" disabled={disableTabs} />
-                      <Tab label="Trabajo" disabled={disableTabs} />
                     </Tabs>
                   </AppBar>
                   <SwipeableViews
@@ -1983,7 +2009,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                           </ExpansionPanelSummary>
                           <ExpansionPanelDetails>
                             <Grid container spacing={3}>
-                              <Grid item xs={12} justify="flex-start">
+                              <Grid item xs={12}>
                                 {professionList.length > 0 && selectedProff && (
                                   <TransferList
                                     data={professionList}
@@ -2013,12 +2039,12 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                             id="panel1a-header"
                           >
                             <Typography className={classes.heading}>
-                              Nacionalidades y Deportes
+                              Nacionalidades
                             </Typography>
                           </ExpansionPanelSummary>
                           <ExpansionPanelDetails>
                             <Grid container spacing={3}>
-                              <Grid item xs={12} justify="flex-start">
+                            <Grid item xs={12}>
                                 {countryList.length > 0 && (
                                   <TransferList
                                     data={countryList}
@@ -2034,7 +2060,26 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                                   ref={register}
                                 />
                               </Grid>
-                              <Grid item xs={12} justify="flex-start">
+                            </Grid>
+                          </ExpansionPanelDetails>
+                        </ExpansionPanel>
+                        <ExpansionPanel
+                          disabled={disableTabs}
+                          expanded={expanded === "panel6"}
+                          onChange={handleExpandedPanel("panel6")}
+                        >
+                          <ExpansionPanelSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel6a-content"
+                            id="panel6a-header"
+                          >
+                            <Typography className={classes.heading}>
+                              Deportes
+                            </Typography>
+                          </ExpansionPanelSummary>
+                          <ExpansionPanelDetails>
+                            <Grid container spacing={3}>
+                              <Grid item xs={12}>
                                 {sportList.length > 0 && (
                                   <TransferList
                                     data={sportList}
@@ -2050,6 +2095,24 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                                 />
                               </Grid>
                             </Grid>
+                          </ExpansionPanelDetails>
+                        </ExpansionPanel>
+                        <ExpansionPanel
+                          disabled={disableTabs}
+                          expanded={expanded === "panel7"}
+                          onChange={handleExpandedPanel("panel7")}
+                        >
+                          <ExpansionPanelSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel7a-content"
+                            id="panel7a-header"
+                          >
+                            <Typography className={classes.heading}>
+                              Trabajo
+                            </Typography>
+                          </ExpansionPanelSummary>
+                          <ExpansionPanelDetails>
+                            {renderWork()}
                           </ExpansionPanelDetails>
                         </ExpansionPanel>
                       </div>
@@ -2115,7 +2178,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                                   handleDelete={handleDeleteRelation}
                                   handleSwitch={handleSwitchRelation}
                                   loading={relationLoading}
-                                  fontSize="10px"
+                                  fontSize="12px"
                                 />
                               </Grid>
                               <Grid
@@ -2265,7 +2328,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                                 ))}
                               </select>
                             </Grid>
-                            <Grid item xs={12} justify="flex-start">
+                            <Grid item xs={12}>
                               {lockerLoading ? (
                                 <Loader />
                               ) : (
@@ -2306,9 +2369,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                         </Grid>
                       </Grid>
                     </TabPanel>
-                    <TabPanel value={tabValue} index={6} dir={theme.direction}>
-                      {renderWork()}
-                    </TabPanel>
                   </SwipeableViews>
                 </div>
               </Grid>
@@ -2325,7 +2385,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                 disabled={loading}
                 className={classes.submit}
               >
-                {tempPersonId > 0 ? "Update" : "Create"}
+                {tempPersonId > 0 ? "Actualizar" : "Crear"}
               </Button>
               {loading && (
                 <CircularProgress

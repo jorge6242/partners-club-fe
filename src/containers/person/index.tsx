@@ -15,20 +15,27 @@ import { Chip } from "@material-ui/core";
 const columns: PersonColumn[] = [
   {
     id: "id",
-    label: "Id", minWidth: 20,
+    label: "Id", minWidth: 10,
+    component: (value: any) => <span>{value.value}</span>,
+  },
+  {
+    id: "shares",
+    label: "Acciones",
+    minWidth: 20,
+    align: "right",
     component: (value: any) => <span>{value.value}</span>,
   },
   {
     id: "rif_ci",
     label: "RIF/CI",
-    minWidth: 170,
+    minWidth: 30,
     align: "right",
     component: (value: any) => <span>{value.value}</span>,
   },
   {
     id: "isPartner",
     label: "parentesto",
-    minWidth: 170,
+    minWidth: 30,
     align: "right",
     component: (value: any) => {
       return (
@@ -48,27 +55,27 @@ const columns: PersonColumn[] = [
 {
   id: "name",
     label: "Nombre",
-      minWidth: 170,
+      minWidth: 30,
         align: "right",
           component: (value: any) => <span>{value.value}</span> ,
   },
 {
   id: "last_name",
     label: "Apellido",
-      minWidth: 170,
+      minWidth: 30,
         align: "right",
           component: (value: any) => <span>{value.value}</span> ,
   },
 {
   id: "primary_email",
     label: "Correo Primario",
-      minWidth: 170,
+      minWidth: 30,
         align: "right",
           component: (value: any) => <span>{value.value}</span> ,
   },
 ];
 
-export default function Bank() {
+export default function Person() {
   const dispatch = useDispatch();
   const { persons, loading, pagination } = useSelector((state: any) => state.personReducer);
   useEffect(() => {

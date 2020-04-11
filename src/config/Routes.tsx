@@ -3,14 +3,12 @@ import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import Dashboard from "../containers/dashboard";
-import Product from "../containers/product";
 import Modal from "../components/Modal";
 import SecondModal from "../components/SecondModal";
 import MainLayout from "../Hoc/MainLayout";
 import SnackBar from "../components/SnackBar";
 import Login from "../containers/login";
 import SecureStorage from "./SecureStorage";
-import Category from "../containers/category";
 import { checkLogin, setupInterceptors } from "../actions/loginActions";
 import Bank from "../containers/bank";
 import Country from "../containers/Country";
@@ -106,8 +104,6 @@ export default function Routes() {
                         path="/dashboard/permission"
                         component={Permission}
                       />
-                      <Route path="/dashboard/product" component={Product} />
-                      <Route path="/dashboard/category" component={Category} />
                       <Route path="/dashboard/banco" component={Bank} />
                       <Route path="/dashboard/pais" component={Country} />
                       <Route path="/dashboard/deporte" component={Sport} />

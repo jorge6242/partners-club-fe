@@ -148,7 +148,7 @@ export const create = (body: object) => async (dispatch: Function) => {
       createresponse = response;
       snackBarUpdate({
         payload: {
-          message: "Menu Item Icon Created!",
+          message: "Icono de Menu Item ha sido Creado!",
           type: "success",
           status: true
         }
@@ -224,7 +224,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Menu Item Icon Updated!",
+          message: "Icono de Menu Item ha sido Actualizado!",
           type: "success",
           status: true
         }
@@ -276,7 +276,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Menu Item Icon Removed!",
+          message: "Icono de Menu Item Eliminado!",
           type: "success",
           status: true
         }

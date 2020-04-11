@@ -146,7 +146,7 @@ export const create = (body: object) => async (dispatch: Function) => {
       createresponse = response;
       snackBarUpdate({
         payload: {
-          message: "Transaction Created!",
+          message: "Tipo Transacion ha sido Creado!",
           type: "success",
           status: true
         }
@@ -222,7 +222,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Transaction Updated!",
+          message: "Tipo Transacion ha sido Actualizado!",
           type: "success",
           status: true
         }
@@ -274,7 +274,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Transaction Removed!",
+          message: "Tipo Transacion Eliminado!",
           type: "success",
           status: true
         }

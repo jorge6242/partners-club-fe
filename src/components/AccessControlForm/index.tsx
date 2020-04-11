@@ -107,8 +107,6 @@ const useStyles = makeStyles(theme => ({
     fontWeight: theme.typography.fontWeightRegular
   },
   partnerContainer: {
-    height: 230,
-    overflow: 'auto',
   }
 }));
 

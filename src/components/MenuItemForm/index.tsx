@@ -109,13 +109,14 @@ const MenuItemForm: FunctionComponent<ComponentProps> = ({
         async function fetch() {
             if (id) {
                 const response: any = await dispatch(get(id));
-                const { name, slug, description, route, menu_id, menu_item_icon_id , parent, roles } = response;
+                const { name, slug, description, route, menu_id, menu_item_icon_id, order , parent, roles } = response;
                 setValue("name", name);
                 setValue("slug", slug);
                 setValue("description", description);
                 setValue("route", route);
                 setValue("parent", parent);
                 setValue("menu_id", menu_id);
+                setValue("order", order);
                 setValue("menu_item_icon_id", menu_item_icon_id);
                 if (roles && roles.length > 0) {
                     setSelectedData(roles);
@@ -330,7 +331,7 @@ const MenuItemForm: FunctionComponent<ComponentProps> = ({
                             disabled={loading}
                             className={classes.submit}
                         >
-                            {id ? "Update" : "Create"}
+                            {id ? "Actualizar" : "Crear"}
                         </Button>
                         {loading && (
                             <CircularProgress size={24} className={classes.buttonProgress} />

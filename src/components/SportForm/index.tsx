@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from 'react-redux'
 
 import CustomTextField from "../FormElements/CustomTextField";
-import { update, create, get } from "../../actions/bankActions";
+import { update, create, get } from "../../actions/sportActions";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -120,7 +120,7 @@ const BankForm: FunctionComponent<BankFormProps> = ({ id }) => {
               disabled={loading}
               className={classes.submit}
             >
-              {id ? "Update" : "Create"}
+              {id ? "Actualizar" : "Crear"}
             </Button>
             {loading && (
               <CircularProgress size={24} className={classes.buttonProgress} />

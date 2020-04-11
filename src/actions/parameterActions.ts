@@ -224,7 +224,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Parametro Actualizado!",
+          message: "Parametro ha sido Creado!",
           type: "success",
           status: true
         }

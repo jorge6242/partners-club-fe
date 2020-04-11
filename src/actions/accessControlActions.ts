@@ -182,7 +182,7 @@ export const create = (body: object) => async (dispatch: Function) => {
     }
     return createresponse;
   } catch (error) {
-    let message = "General Error";
+    let message = "Error en el Servidor";
     if (error && error.response) {
       const {
         data: { message: msg }
@@ -242,7 +242,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Access control Updated!",
+          message: "Access control ha sido Actualizado!",
           type: "success",
           status: true
         }
@@ -263,7 +263,7 @@ export const update = (body: object) => async (dispatch: Function) => {
     }
     return response;
   } catch (error) {
-    let message = "General Error";
+    let message = "Error en el Servidor";
     if (error && error.response) {
       const {
         data: { message: msg }
@@ -296,7 +296,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Access control Removed!",
+          message: "Access control Eliminado!",
           type: "success",
           status: true
         }

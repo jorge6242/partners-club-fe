@@ -53,7 +53,7 @@ export const create = (body: any) => async (dispatch: Function) => {
       createresponse = response;
       snackBarUpdate({
         payload: {
-          message: "Card Type Created!",
+          message: "Tarjeta ha sido Creado!",
           type: "success",
           status: true
         }
@@ -142,7 +142,7 @@ export const update = (body: any) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Card Type Updated!",
+          message: "Tarjeta ha sido Actualizado!",
           type: "success",
           status: true
         }
@@ -195,7 +195,7 @@ export const remove = (id: number, personId: any, share: number, order: number) 
       };
       snackBarUpdate({
         payload: {
-          message: "Card Type Removed!",
+          message: "Tarjeta Eliminado!",
           type: "success",
           status: true
         }

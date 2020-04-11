@@ -16,7 +16,9 @@ import { searchToAssign, reset as resetShare } from "../../actions/shareActions"
 
 import {
   searchPartnersToAssign,
-  searchTitularToAssign
+  searchTitularToAssign,
+  clearPartnersToAssign,
+  clearTitularToAssign
 } from "../../actions/personActions";
 import SearchAutoComplete from "../SearchAutoComplete";
 import CustomSelect from "../FormElements/CustomSelect";
@@ -87,7 +89,7 @@ const ShareMovementForm: FunctionComponent<ShareMovementFormProps> = ({
     getValues,
     watch
   } = useForm<FormData>();
-  const [ selectedTypeTransaction, setSelectedTypeTransaction ] = useState<any>(null);
+  const [selectedTypeTransaction, setSelectedTypeTransaction] = useState<any>(null);
   const { shareToAssignList, shareToAssignLoading } = useSelector(
     (state: any) => state.shareReducer
   );
@@ -122,27 +124,37 @@ const ShareMovementForm: FunctionComponent<ShareMovementFormProps> = ({
       const selectedTransaction = transactionTypeList.find((e: any) => e.id.toString() === transaction);
       if (selectedTransaction) {
         setSelectedTypeTransaction(selectedTransaction);
-        setValue('rate',selectedTransaction.rate);
-        setValue('currency_rate_id',selectedTransaction.currency_id);
+        setValue('rate', selectedTransaction.rate);
+        setValue('currency_rate_id', selectedTransaction.currency_id);
       }
-    } 
+    }
   }, [watch, setValue, transactionTypeList])
 
   const handleForm = (form: object) => {
     const created = moment().format('YYYY-MM-DD');
-    dispatch(create({...form, number_procesed: 1 , created }));
+    dispatch(create({ ...form, number_procesed: 1, created }));
   };
 
   const handleSearchShares = _.debounce((term: any) => {
-    dispatch(searchToAssign(term));
+    if (term !== "") {
+      dispatch(searchToAssign(term));
+    }
   }, 1000);
 
   const handleSearchPartners = _.debounce((term: any) => {
-    dispatch(searchPartnersToAssign(term));
+    if (term !== "") {
+      dispatch(searchPartnersToAssign(term));
+    } else {
+      dispatch(clearPartnersToAssign());
+    }
   }, 1000);
 
   const handleSearchOwner = _.debounce((term: any) => {
-    dispatch(searchTitularToAssign(term));
+    if (term !== "") {
+      dispatch(searchTitularToAssign(term));
+    } else {
+      dispatch(clearTitularToAssign());
+    }
   }, 1000);
 
   const handleSelectShare = (option: any) => {
@@ -285,45 +297,45 @@ const ShareMovementForm: FunctionComponent<ShareMovementFormProps> = ({
                 />
               </Grid>
               <Grid item xs={6}>
-              <Grid container spacing={1}>
-              <Grid item xs={5} style={{ paddingTop: '8px' }}>
-              <CustomSelect
-                  label="Moneda"
-                  selectionMessage="Seleccione"
-                  field="currency_sale_price_id"
-                  required
-                  register={register}
-                  errorsMessageField={
-                    errors.currency_sale_price_id &&
-                    errors.currency_sale_price_id.message
-                  }
-                >
-                  {currencyList.map((item: any) => (
-                    <option key={item.id} value={item.id}>
-                      {item.description}
-                    </option>
-                  ))}
-                </CustomSelect>
+                <Grid container spacing={1}>
+                  <Grid item xs={5} style={{ paddingTop: '8px' }}>
+                    <CustomSelect
+                      label="Moneda"
+                      selectionMessage="Seleccione"
+                      field="currency_sale_price_id"
+                      required
+                      register={register}
+                      errorsMessageField={
+                        errors.currency_sale_price_id &&
+                        errors.currency_sale_price_id.message
+                      }
+                    >
+                      {currencyList.map((item: any) => (
+                        <option key={item.id} value={item.id}>
+                          {item.description}
+                        </option>
+                      ))}
+                    </CustomSelect>
+                  </Grid>
+                  <Grid item xs={7}>
+                    <CustomTextField
+                      placeholder="Precio Venta"
+                      field="number_sale_price"
+                      required
+                      register={register}
+                      errorsField={errors.number_sale_price}
+                      errorsMessageField={
+                        errors.number_sale_price && errors.number_sale_price.message
+                      }
+                    />
+                  </Grid>
+                </Grid>
               </Grid>
-              <Grid item xs={7}>
-              <CustomTextField
-                  placeholder="Precio Venta"
-                  field="number_sale_price"
-                  required
-                  register={register}
-                  errorsField={errors.number_sale_price}
-                  errorsMessageField={
-                    errors.number_sale_price && errors.number_sale_price.message
-                  }
-                />
-              </Grid>
-              </Grid>
-              </Grid>
-              { selectedTypeTransaction && (
-                 <Grid item xs={6}>
-                 Tarifa: { selectedTypeTransaction.rate } <br />
-                 Moneda: { selectedTypeTransaction.currency.description }
-               </Grid>
+              {selectedTypeTransaction && (
+                <Grid item xs={6}>
+                  Tarifa: {selectedTypeTransaction.rate} <br />
+                  Moneda: {selectedTypeTransaction.currency.description}
+                </Grid>
               )
               }
               <Grid item xs={12}>
@@ -336,7 +348,7 @@ const ShareMovementForm: FunctionComponent<ShareMovementFormProps> = ({
                     disabled={loading}
                     className={classes.submit}
                   >
-                    {id ? "Update" : "Create"}
+                    {id ? "Actualizar" : "Crear"}
                   </Button>
                   {loading && (
                     <CircularProgress
@@ -352,7 +364,7 @@ const ShareMovementForm: FunctionComponent<ShareMovementFormProps> = ({
                     required: true
                   })}
                 />
-                                <input
+                <input
                   style={{ display: "none" }}
                   name="rate"
                   ref={register({

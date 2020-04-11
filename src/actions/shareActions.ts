@@ -52,13 +52,13 @@ export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch
   }
 };
 
-export const search = (term: string, perPage: number = 8) => async (dispatch: Function) => {
+export const search = (term: string, isSingle: boolean = false) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,
     payload: true
   });
   try {
-    const { data: { data }, status } = await API.search(term, perPage);
+    const { data: { data }, status } = await API.search(term, isSingle);
     let response = [];
     if (status === 200) {
       response = data;
@@ -76,6 +76,42 @@ export const search = (term: string, perPage: number = 8) => async (dispatch: Fu
       dispatch({
         type: ACTIONS.SET_PAGINATION,
         payload: pagination
+      });
+    }
+    dispatch({
+      type: ACTIONS.SET_LOADING,
+      payload: false
+    });
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
+export const singleSearch = (term: string) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_LOADING,
+    payload: true
+  });
+  try {
+    const { data: { data }, status } = await API.singleSearch(term);
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_LIST,
+        payload: response
       });
     }
     dispatch({
@@ -120,7 +156,7 @@ export const create = (body: object) => async (dispatch: Function) => {
       );
       snackBarUpdate({
         payload: {
-          message: "Share Created!",
+          message: "Accion ha sido Creado!",
           type: "success",
           status: true
         }
@@ -217,7 +253,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Share Updated!",
+          message: "Accion ha sido Actualizado!",
           type: "success",
           status: true
         }
@@ -269,7 +305,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Share Removed!",
+          message: "Share EAccionado!",
           type: "success",
           status: true
         }
@@ -319,13 +355,18 @@ export const getSharesByPartner = (id: number) => async (dispatch: Function) => 
   }
 };
 
+export const updateSharetoAssign = () => ({
+  type: ACTIONS.GET_SHARE_TO_ASSIGN,
+  payload: []
+});
+
 export const searchToAssign = (term: string) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_SHARE_TO_ASSIGN_LOADING,
     payload: true
   });
   try {
-    const { data: { data }, status } = await API.searchToAssign(term);
+    const { data: { data }, status } = await API.singleSearch(term)
     let response = [];
     if (status === 200) {
       response = data;
