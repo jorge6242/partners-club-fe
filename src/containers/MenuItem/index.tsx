@@ -23,7 +23,7 @@ const columns: Columns[] = [
     label: "Menu",
     minWidth: 30,
     align: "right",
-    component: (value: any) => <span>{value.value.description}</span>
+    component: (value: any) => <span>{value.value ? value.value.description : ''}</span>
   },
   {
     id: "main",
