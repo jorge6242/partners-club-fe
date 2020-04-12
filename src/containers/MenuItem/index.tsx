@@ -27,22 +27,22 @@ const columns: Columns[] = [
     align: "right",
     component: (value: any) => <span>{value.value ? value.value.description : ''}</span>
   },
-  {
-    id: "icons",
-    label: "Icono",
-    minWidth: 10,
-    align: "right",
-    component: (value: any) => {
-      let Icon = SettingsIcon;
-      if (value.value) {
-        let currenMenutIcon = icons.find((e: any) => e.slug === value.value.slug);
-        if (currenMenutIcon) {
-          Icon = currenMenutIcon.name;
-        }
-      }
-      return <span>{value.value ? <Icon /> : <div />}</span>
-    }
-  },
+  // {
+  //   id: "icons",
+  //   label: "Icono",
+  //   minWidth: 10,
+  //   align: "right",
+  //   component: (value: any) => {
+  //     let Icon = SettingsIcon;
+  //     if (value.value) {
+  //       let currenMenutIcon = icons.find((e: any) => e.slug === value.value.slug);
+  //       if (currenMenutIcon) {
+  //         Icon = currenMenutIcon.name;
+  //       }
+  //     }
+  //     return <span>{value.value ? <Icon /> : <div />}</span>
+  //   }
+  // },
   {
     id: "main",
     label: "Padre",
