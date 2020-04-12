@@ -337,7 +337,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
       <Divider />
       <List dense >
         {!_.isEmpty(menuList) && buildMenu(menuList.items)}
-        <Divider />
+        {/* <Divider />
         {renderFirstMenu(DashboardIcon, "Inicio", "/dashboard/main")}
         {renderFirstMenu(AccountCircleIcon, "Socios", "/dashboard/socio")}
         {renderSecondMenu(DoubleArrowIcon, "Invitados", "/dashboard/guest")}
@@ -435,7 +435,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
               </List>
             </Collapse>
           </List>
-        </Collapse>
+        </Collapse> */}
       </List>
     </div>
   );
