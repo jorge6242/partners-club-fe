@@ -223,9 +223,9 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
       </TableContainer>
       <TablePagination
         labelRowsPerPage="Filas"
-        rowsPerPageOptions={[5, 10, 20, 30, 40]}
+        labelDisplayedRows={({ from, to, count }) => `${pagination.from}-${pagination.to}`}
         component="div"
-        count={pagination.total}
+        count={rows.to}
         rowsPerPage={pagination.perPage}
         page={pagination.prevPageUrl === null ? 0 : pagination.currentPage}
         onChangePage={handlePage}

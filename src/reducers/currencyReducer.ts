@@ -15,6 +15,8 @@ const initialState: BanksInitialState = {
         perPage: 0,
         prevPageUrl: null,
         currentPage: 0,
+        from: 0,
+        to: 0
     },
     listData: [],
 };

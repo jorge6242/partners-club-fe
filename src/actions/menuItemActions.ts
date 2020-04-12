@@ -3,7 +3,7 @@ import snackBarUpdate from "../actions/snackBarActions";
 import { updateModal } from "../actions/modalActions";
 import { ACTIONS } from '../interfaces/actionTypes/menuItemTypes';
 
-export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch: Function) => {
+export const getAll = (page: number = 1, perPage: number = 100) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,
     payload: true
@@ -17,6 +17,8 @@ export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch
         perPage: data.per_page,
         prevPageUrl: data.prev_page_url,
         currentPage: data.current_page,
+        from: data.from,
+        to: data.to
       }
       response = data.data;
       dispatch({
@@ -103,6 +105,8 @@ export const search = (term: string, perPage: number = 8) => async (dispatch: Fu
         perPage: data.per_page,
         prevPageUrl: data.prev_page_url,
         currentPage: data.current_page,
+        from: data.from,
+        to: data.to
       }
       response = data.data;
       dispatch({

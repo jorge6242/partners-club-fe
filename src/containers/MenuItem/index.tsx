@@ -10,6 +10,8 @@ import MenuItemForm from "../../components/MenuItemForm";
 import DataTable4 from '../../components/DataTable4'
 import Columns from '../../interfaces/MenuItemColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
+import icons from "../../helpers/collectionIcons";
+import SettingsIcon from '@material-ui/icons/Settings';
 
 const columns: Columns[] = [
   { 
@@ -21,42 +23,58 @@ const columns: Columns[] = [
   {
     id: "father",
     label: "Menu",
-    minWidth: 30,
+    minWidth: 20,
     align: "right",
     component: (value: any) => <span>{value.value ? value.value.description : ''}</span>
   },
   {
+    id: "icons",
+    label: "Icono",
+    minWidth: 10,
+    align: "right",
+    component: (value: any) => {
+      let Icon = SettingsIcon;
+      if (value.value) {
+        let currenMenutIcon = icons.find((e: any) => e.slug === value.value.slug);
+        if (currenMenutIcon) {
+          Icon = currenMenutIcon.name;
+        }
+      }
+      return <span>{value.value ? <Icon /> : <div />}</span>
+    }
+  },
+  {
     id: "main",
     label: "Padre",
-    minWidth: 30,
+    minWidth: 20,
     align: "right",
     component: (value: any) => <span>{value.value ? value.value.description : '-'}</span>
   },
   {
     id: "description",
     label: "Description",
-    minWidth: 30,
+    minWidth: 20,
     align: "right",
     component: (value: any) => <span>{value.value}</span>
   },
   {
     id: "slug",
     label: "Clave",
-    minWidth: 30,
+    minWidth: 20,
     align: "right",
     component: (value: any) => <span>{value.value}</span>
   },
   {
     id: "route",
     label: "Ruta",
-    minWidth: 30,
+    minWidth: 20,
     align: "right",
     component: (value: any) => <span>{value.value}</span>
   },
   {
     id: "order",
     label: "Orden",
-    minWidth: 30,
+    minWidth: 10,
     align: "right",
     component: (value: any) => <span>{value.value}</span>
   },
