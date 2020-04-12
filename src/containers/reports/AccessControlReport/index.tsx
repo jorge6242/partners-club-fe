@@ -5,8 +5,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useForm } from 'react-hook-form';
 import SearchIcon from "@material-ui/icons/Search";
 import Button from '@material-ui/core/Button';
-import CustomTextField from '../../../components/FormElements/CustomTextField'
+import moment from 'moment';
 
+import CustomTextField from '../../../components/FormElements/CustomTextField'
 import { filter, filterReport } from "../../../actions/accessControlActions";
 import AccessControlColumns from '../../../interfaces/AccessControlColumns';
 import DataTable4 from "../../../components/DataTable4";
@@ -28,7 +29,14 @@ const columns: AccessControlColumns[] = [
     label: "Fecha",
     minWidth: 10,
     align: "left",
-    component: (value: any) => <span>{value.value}</span>
+    component: (value: any) => <span>{moment(value.value).format("DD-MM-YYYY")}</span>
+  },
+  {
+    id: "created",
+    label: "Hora",
+    minWidth: 10,
+    align: "left",
+    component: (value: any) => <span>{moment(value.value).format("h:mm:ss")}</span>
   },
   {
     id: "location",
@@ -182,7 +190,7 @@ export default function AccessControlReport() {
           <Grid container spacing={3} direction="row"
             justify="space-between"
             alignItems="center">
-            <Grid item xs={6} className={classes.title}> Reporte de Control de Accesso</Grid>
+            <Grid item xs={6} className={classes.title}> Reporte de Control de Acceso</Grid>
             <Grid item xs={6} className={classes.printButtonContainer} >
               <LoadingButton
                 Icon={PrintIcon}

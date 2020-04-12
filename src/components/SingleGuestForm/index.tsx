@@ -108,7 +108,7 @@ const SingleGuestForm: FunctionComponent<ComponentProps> = ({ id }) => {
         }
     }
     fetch();
-}, [id, dispatch, setValue, setImage]);
+}, [id, dispatch, setValue, setImage, image]);
 
   useEffect(() => {
     return () => {

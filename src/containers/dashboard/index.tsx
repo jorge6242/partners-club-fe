@@ -10,7 +10,6 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SportsBaseballIcon from '@material-ui/icons/SportsBaseball';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
-import ListAltIcon from '@material-ui/icons/ListAlt';
 import LockIcon from '@material-ui/icons/Lock';
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import PeopleIcon from '@material-ui/icons/People';
@@ -203,7 +202,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
       <React.Fragment key={item.id}>
         <ListItem button onClick={() => findChildrens.length > 0 ? setSecondSubMenu(item.id) : handeClick(item.route ? item.route : '')}>
           <ListItemIcon >
-            <SettingsIcon />
+            <Icon />
           </ListItemIcon>
           <ListItemText primary={item.name} />
           {findChildrens.length > 0 && (
@@ -299,32 +298,17 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
 
   const handleLogout = () => dispatch(logout());
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleAccessControl = () => {
-    dispatch(
-      updateModal({
-        payload: {
-          status: true,
-          element: <AccessControlForm />,
-          customSize: 'medium'
-        }
-      })
-    );
-  }
-  const renderMenu = (Icon: React.ReactType, title: string, route: string) => (
-    <ListItem button>
-      <ListItemIcon>
-        <Icon />
-      </ListItemIcon>
-      <ListItemText
-        primary={title}
-        onClick={() => handeClick(route)}
-      />
-    </ListItem>
-  )
+  // const renderMenu = (Icon: React.ReactType, title: string, route: string) => (
+  //   <ListItem button>
+  //     <ListItemIcon>
+  //       <Icon />
+  //     </ListItemIcon>
+  //     <ListItemText
+  //       primary={title}
+  //       onClick={() => handeClick(route)}
+  //     />
+  //   </ListItem>
+  // )
 
   const renderFirstMenu = (Icon: React.ReactType, title: string, route: string) => (
     <MenuItem>

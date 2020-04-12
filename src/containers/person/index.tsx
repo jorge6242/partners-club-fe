@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import './index.sass';
 import { getAll, remove, search } from "../../actions/personActions";
-import { updateModal } from "../../actions/customModalActions";
+import { updateModal } from "../../actions/modalActions";
 import PersonForm from "../../components/PersonForm";
 import DataTable4 from '../../components/DataTable4';
 import PersonColumn from '../../interfaces/PersonColumn';
@@ -91,7 +91,7 @@ export default function Person() {
         payload: {
           status: true,
           element: <PersonForm id={id} />,
-          customSize: 'xl'
+          customSize: 'large'
         }
       })
     );
@@ -103,7 +103,7 @@ export default function Person() {
         payload: {
           status: true,
           element: <PersonForm />,
-          customSize: 'xl'
+          customSize: 'large'
         }
       })
     );

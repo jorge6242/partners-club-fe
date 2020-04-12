@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 
 import { getAll, remove, search } from "../../actions/menuItemActions";
-import { updateModal } from "../../actions/customModalActions";
+import { updateModal } from "../../actions/modalActions";
 import MenuItemForm from "../../components/MenuItemForm";
 import DataTable4 from '../../components/DataTable4'
 import Columns from '../../interfaces/MenuItemColumns';
@@ -91,7 +91,8 @@ export default function MenuItem() {
       updateModal({
         payload: {
           status: true,
-          element: <MenuItemForm id={id} />
+          element: <MenuItemForm id={id} />,
+          customSize: 'medium'
         }
       })
     );
@@ -102,7 +103,8 @@ export default function MenuItem() {
       updateModal({
         payload: {
           status: true,
-          element: <MenuItemForm />
+          element: <MenuItemForm />,
+          customSize: 'medium'
         }
       })
     );

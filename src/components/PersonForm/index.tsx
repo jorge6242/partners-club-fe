@@ -54,7 +54,10 @@ import {
   clearPersonLockersByLocation,
   clear,
   searchCompanyPersons,
-  searchPersonsByType
+  searchPersonsByType,
+  clearPersonToAssignFamily,
+  clearSearchPersonsByType,
+  clearSearchCompanyPersons
 } from "../../actions/personActions";
 import { getAll as getProfessions } from "../../actions/professionActions";
 import { getByLocation, clearList } from "../../actions/lockerActions";
@@ -67,7 +70,7 @@ import {
   get as getShare,
   reset as resetShare
 } from "../../actions/shareActions";
-import { updateModal } from "../../actions/modalActions";
+import { updateModal } from "../../actions/secondModalActions";
 import { update as updateNote } from "../../actions/noteActions";
 import TransferList from "../TransferList";
 import DataTableAssignPersons from "../DataTableAssignPersons";
@@ -237,10 +240,11 @@ const FamilysColumns: FamilyPersonColumns[] = [
 ];
 
 const columns: PersonColumn[] = [
-  { id: "id", 
-  label: "Id", 
-  minWidth: 10 
-},
+  {
+    id: "id",
+    label: "Id",
+    minWidth: 10
+  },
   {
     id: "rif_ci",
     label: "Cedula",
@@ -829,7 +833,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
       lockers: selectedLockers,
       id_card_picture: "empty.png"
     };
-    console.log('form ',form);
+    console.log('form ', form);
     if (tempPersonId > 0) {
       await dispatch(update({ id: tempPersonId, ...form, ...data }));
       dispatch(getLockersByPartner(tempPersonId));
@@ -931,7 +935,11 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   };
 
   const handleSearch = (event: any) => {
-    dispatch(searchPersonToAssignFamily(id, event.value));
+    if(event.value !== "") {
+      dispatch(searchPersonToAssignFamily(id, event.value));
+    } else {
+      dispatch(clearPersonToAssignFamily());
+    }
   };
 
   const handleDeleteRelation = (relationId: number) => {
@@ -1058,8 +1066,11 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   };
 
   const handleSearchCompanys = _.debounce((term: any) => {
-    setSelectedCompany(null);
-    dispatch(searchCompanyPersons(term));
+    if(term !== "") {
+      dispatch(searchCompanyPersons(term));
+    } else {
+      dispatch(clearSearchCompanyPersons())
+    }
   }, 1000);
 
   const handleSelectCompanyPerson = (option: any) => {
@@ -1069,6 +1080,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
       setSelectedCompany(null);
     } else {
       setSelectedCompany(selected);
+      dispatch(clearSearchCompanyPersons())
     }
 
     setValue("company_person_id", option.id);
@@ -1078,8 +1090,10 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     const { type_facturador } = getValues();
     setSelectedFacturador(null);
     setSelectedFiador(null);
-    if(term !== '') {
+    if (term !== '') {
       dispatch(searchPersonsByType({ term, typePerson: type_facturador }));
+    } else {
+      dispatch(clearSearchPersonsByType());
     }
   }, 1000);
 
@@ -1090,6 +1104,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
       setSelectedFacturador(null);
       setSelectedFiador(null);
     } else {
+      dispatch(clearSearchPersonsByType());
       setSelectedFacturador(selected);
     }
 
@@ -1100,8 +1115,10 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     const { type_fiador } = getValues();
     setSelectedFiador(null);
     setSelectedFacturador(null);
-    if(term !== '') {
-    dispatch(searchPersonsByType({ term, typePerson: type_fiador }));
+    if (term !== '') {
+      dispatch(searchPersonsByType({ term, typePerson: type_fiador }));
+    } else {
+      dispatch(clearSearchPersonsByType());
     }
   }, 1000);
 
@@ -1112,6 +1129,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
       setSelectedFiador(null);
       setSelectedFacturador(null);
     } else {
+      dispatch(clearSearchPersonsByType());
       setSelectedFiador(selected);
     }
 
@@ -1291,15 +1309,20 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   const renderAddressData = () => {
     return (
       <Grid container spacing={2}>
-        <Grid item xs={4}>
-          <CustomTextField
-            placeholder="Direccion"
-            field="address"
-            register={register}
-            errorsField={errors.address}
-            errorsMessageField={errors.address && errors.address.message}
-            multiline
-          />
+
+        <Grid item xs={12}>
+          <Grid container spacing={3}>
+            <Grid xs={6}>
+              <CustomTextField
+                placeholder="Direccion"
+                field="address"
+                register={register}
+                errorsField={errors.address}
+                errorsMessageField={errors.address && errors.address.message}
+                multiline
+              />
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item xs={3}>
           <CustomSelect
@@ -1354,83 +1377,100 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   const renderContactsData = () => {
     return (
       <Grid container spacing={2}>
-        <Grid item xs={3}>
-          <CustomTextField
-            placeholder="Correo Primario"
-            field="primary_email"
-            register={register}
-            errorsField={errors.primary_email}
-            errorsMessageField={
-              errors.primary_email && errors.primary_email.message
-            }
-            inputType="email"
-          />
+        <Grid item xs={6}>
+          <Grid container spacing={3}>
+            <Grid item xs={6}>
+              <CustomTextField
+                placeholder="Correo Primario"
+                field="primary_email"
+                register={register}
+                errorsField={errors.primary_email}
+                errorsMessageField={
+                  errors.primary_email && errors.primary_email.message
+                }
+                inputType="email"
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <CustomTextField
+                placeholder="Correo Secundario"
+                field="secondary_email"
+                register={register}
+                errorsField={errors.secondary_email}
+                errorsMessageField={
+                  errors.secondary_email && errors.secondary_email.message
+                }
+                inputType="email"
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <CustomTextField
+                placeholder="Telefono 1"
+                field="telephone1"
+                register={register}
+                errorsField={errors.telephone1}
+                errorsMessageField={errors.telephone1 && errors.telephone1.message}
+                inputType="number"
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <CustomTextField
+                placeholder="Telefono 2"
+                field="telephone2"
+                register={register}
+                errorsField={errors.telephone2}
+                errorsMessageField={errors.telephone2 && errors.telephone2.message}
+                inputType="number"
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <CustomTextField
+                placeholder="Celular 1"
+                field="phone_mobile1"
+                register={register}
+                errorsField={errors.phone_mobile1}
+                errorsMessageField={
+                  errors.phone_mobile1 && errors.phone_mobile1.message
+                }
+                inputType="number"
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <CustomTextField
+                placeholder="Celular 2"
+                field="phone_mobile2"
+                register={register}
+                errorsField={errors.phone_mobile2}
+                errorsMessageField={
+                  errors.phone_mobile2 && errors.phone_mobile2.message
+                }
+                inputType="number"
+              />
+            </Grid>
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <CustomTextField
-            placeholder="Correo Secundario"
-            field="secondary_email"
-            register={register}
-            errorsField={errors.secondary_email}
-            errorsMessageField={
-              errors.secondary_email && errors.secondary_email.message
-            }
-            inputType="email"
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <CustomTextField
-            placeholder="Telefono 1"
-            field="telephone1"
-            register={register}
-            errorsField={errors.telephone1}
-            errorsMessageField={errors.telephone1 && errors.telephone1.message}
-            inputType="number"
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <CustomTextField
-            placeholder="Telefono 2"
-            field="telephone2"
-            register={register}
-            errorsField={errors.telephone2}
-            errorsMessageField={errors.telephone2 && errors.telephone2.message}
-            inputType="number"
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <CustomTextField
-            placeholder="Celular 1"
-            field="phone_mobile1"
-            register={register}
-            errorsField={errors.phone_mobile1}
-            errorsMessageField={
-              errors.phone_mobile1 && errors.phone_mobile1.message
-            }
-            inputType="number"
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <CustomTextField
-            placeholder="Celular 2"
-            field="phone_mobile2"
-            register={register}
-            errorsField={errors.phone_mobile2}
-            errorsMessageField={
-              errors.phone_mobile2 && errors.phone_mobile2.message
-            }
-            inputType="number"
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <CustomTextField
-            placeholder="Fax"
-            field="fax"
-            register={register}
-            errorsField={errors.fax}
-            errorsMessageField={errors.fax && errors.fax.message}
-            inputType="number"
-          />
+
+        <Grid item xs={6} style={{
+          display: 'flex',
+          alignItems: 'center',
+        }}>
+          <Grid
+            container spacing={3}
+            direction="row"
+            justify="flex-start"
+            alignItems="center"
+          >
+            <Grid item xs={6}>
+              <CustomTextField
+                placeholder="Fax"
+                field="fax"
+                register={register}
+                errorsField={errors.fax}
+                errorsMessageField={errors.fax && errors.fax.message}
+                inputType="number"
+              />
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     );
@@ -2044,7 +2084,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                           </ExpansionPanelSummary>
                           <ExpansionPanelDetails>
                             <Grid container spacing={3}>
-                            <Grid item xs={12}>
+                              <Grid item xs={12}>
                                 {countryList.length > 0 && (
                                   <TransferList
                                     data={countryList}

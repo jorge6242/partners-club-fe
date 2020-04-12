@@ -57,7 +57,7 @@ const SearchAutoComplete: FunctionComponent<CustomSearchdProps> = ({
   const onChange = async (event: any) => {
     setOpen(false);
     setInputValue(event.target.value);
-    await handleSearch(event.target.value);
+    const response: any = await handleSearch(event.target.value);
     setOpen(true);
   };
 
@@ -106,7 +106,7 @@ const SearchAutoComplete: FunctionComponent<CustomSearchdProps> = ({
           }
         </Grid>
       </Grid>
-      {open && (
+      {options.length > 0 && (
         <Grid item xs={12}>
           <List component="nav" className={classes.options}>
             {options.length > 0 ?

@@ -1,6 +1,6 @@
 import Person from "../api/Person";
 import snackBarUpdate from "../actions/snackBarActions";
-import { updateModal } from "../actions/customModalActions";
+import { updateModal } from "../actions/modalActions";
 import { updateModal as updateSecondModal } from "../actions/secondModalActions";
 import { ACTIONS } from "../interfaces/actionTypes/personTypes";
 import Axios from "../config/Axios";
@@ -149,6 +149,12 @@ export const search = (term: string) => async (dispatch: Function) => {
   }
 };
 
+
+export const clearSearchCompanyPersons = () => ({
+  type: ACTIONS.GET_COMPANY_PERSONS,
+  payload: []
+});
+
 export const searchCompanyPersons = (term: string) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_COMPANY_PERSONS_LOADING,
@@ -187,6 +193,11 @@ export const searchCompanyPersons = (term: string) => async (dispatch: Function)
     return error;
   }
 };
+
+export const clearSearchPersonsByType = () => ({
+  type: ACTIONS.GET_PERSONS_BY_TYPE,
+  payload: []
+});
 
 export const searchPersonsByType = (queryString: object) => async (dispatch: Function) => {
   dispatch({
@@ -275,6 +286,11 @@ export const searchByGuest = (term: string) => async (dispatch: Function) => {
     return error;
   }
 };
+
+export const clearPersonToAssignFamily = () => ({
+  type: ACTIONS.GET_PERSON_TO_ASSIGN,
+  payload: []
+});
 
 export const searchPersonToAssignFamily = (
   id: any,

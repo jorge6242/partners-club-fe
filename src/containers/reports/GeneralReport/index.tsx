@@ -7,7 +7,12 @@ import SearchIcon from "@material-ui/icons/Search";
 import Button from '@material-ui/core/Button';
 import Chip from "@material-ui/core/Chip";
 
-import { getAll, filter, filterReport, clearPersons } from "../../../actions/personActions";
+import { 
+  // getAll, 
+  filter, 
+  filterReport, 
+  clearPersons 
+} from "../../../actions/personActions";
 import PersonColumn from '../../../interfaces/PersonColumn';
 import DataTable4 from "../../../components/DataTable4";
 import PrintIcon from "@material-ui/icons/Print";

@@ -135,7 +135,9 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                   align={column.align}
                   className={classes.tableCellHeader}
                   style={{
-                    minWidth: column.minWidth, fontSize
+                    minWidth: column.minWidth, 
+                    fontSize,
+                    fontWeight: 'bold'
                   }}
                 >
                   {column.label}

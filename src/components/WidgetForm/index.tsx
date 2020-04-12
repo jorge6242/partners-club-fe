@@ -26,7 +26,8 @@ const useStyles = makeStyles(theme => ({
     },
     wrapper: {
         margin: theme.spacing(1),
-        position: "relative"
+        position: "relative",
+        textAlign: 'center',
     },
     buttonProgress: {
         position: "absolute",
@@ -36,16 +37,9 @@ const useStyles = makeStyles(theme => ({
         marginLeft: -9
     },
     submit: {
-        margin: theme.spacing(3, 0, 2)
+        margin: theme.spacing(3, 0, 2),
+        width: '30%'
     },
-    select: {
-        padding: "10px 0px 10px 0px",
-        width: " 100%",
-        backgroundColor: "transparent",
-        border: 0,
-        borderBottom: "1px solid grey",
-        fontSize: "16px"
-    }
 }));
 
 type FormData = {
@@ -91,7 +85,6 @@ const WidgetForm: FunctionComponent<ComponentProps> = ({
     const onRolesChange = (event: any, type: string, selected: any) => {
         let roleList = selectedRoles;
         if (type === "add") {
-            console.log(' add selected ', selected);
             selected.forEach((element: any) => {
                 const exist = roleList.itemsToAdd.find(
                     (e: any) => e.id === element.id
@@ -106,10 +99,8 @@ const WidgetForm: FunctionComponent<ComponentProps> = ({
                     roleList.itemsToAdd.push(element);
                 }
             });
-            console.log('add roleList ', roleList);
         }
         if (type === "remove") {
-            console.log('remov selected ', selected);
             selected.forEach((element: any) => {
                 const exist = roleList.itemsToRemove.find(
                     (e: any) => e.id === element.id
@@ -120,7 +111,6 @@ const WidgetForm: FunctionComponent<ComponentProps> = ({
                     roleList.itemsToRemove.push(element);
                 }
             });
-            console.log('remove roleList ', roleList);
         }
 
         setSelectedRoles(roleList);
@@ -146,7 +136,6 @@ const WidgetForm: FunctionComponent<ComponentProps> = ({
                         setSelectedRoles(selectedRoles);
                     });
                 }
-                console.log('selectedRoles ', selectedRoles);
             }
         }
         fetch();
@@ -188,48 +177,43 @@ const WidgetForm: FunctionComponent<ComponentProps> = ({
                 >
                     <Grid container spacing={2}>
                         <Grid item xs={4}>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12}>
-                                    <CustomTextField
-                                        placeholder="Nombre"
-                                        field="name"
-                                        required
-                                        register={register}
-                                        errorsField={errors.name}
-                                        errorsMessageField={
-                                            errors.name && errors.name.message
-                                        }
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <CustomTextField
-                                        placeholder="Clave"
-                                        field="slug"
-                                        required
-                                        register={register}
-                                        errorsField={errors.slug}
-                                        errorsMessageField={
-                                            errors.slug && errors.slug.message
-                                        }
-                                    />
-
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <CustomTextField
-                                        placeholder="Descripcion"
-                                        field="description"
-                                        required
-                                        register={register}
-                                        errorsField={errors.description}
-                                        errorsMessageField={
-                                            errors.description && errors.description.message
-                                        }
-                                    />
-                                </Grid>
-                            </Grid>
+                            <CustomTextField
+                                placeholder="Nombre"
+                                field="name"
+                                required
+                                register={register}
+                                errorsField={errors.name}
+                                errorsMessageField={
+                                    errors.name && errors.name.message
+                                }
+                            />
                         </Grid>
-                        <Grid item xs={8}>
-                            <Grid item xs={12}>
+                        <Grid item xs={4}>
+                            <CustomTextField
+                                placeholder="Clave"
+                                field="slug"
+                                required
+                                register={register}
+                                errorsField={errors.slug}
+                                errorsMessageField={
+                                    errors.slug && errors.slug.message
+                                }
+                            />
+
+                        </Grid>
+                        <Grid item xs={4}>
+                            <CustomTextField
+                                placeholder="Descripcion"
+                                field="description"
+                                required
+                                register={register}
+                                errorsField={errors.description}
+                                errorsMessageField={
+                                    errors.description && errors.description.message
+                                }
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
                                 {list.length > 0 && (
                                     <TransferList
                                         data={list}
@@ -239,7 +223,6 @@ const WidgetForm: FunctionComponent<ComponentProps> = ({
                                     />
                                 )}
                             </Grid>
-                        </Grid>
                     </Grid>
 
 

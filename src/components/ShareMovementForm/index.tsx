@@ -12,7 +12,7 @@ import moment from 'moment';
 
 import CustomTextField from "../FormElements/CustomTextField";
 import { create } from "../../actions/shareMovementActions";
-import { searchToAssign, reset as resetShare } from "../../actions/shareActions";
+import { searchToAssign, reset as resetShare, updateSharetoAssign } from "../../actions/shareActions";
 
 import {
   searchPartnersToAssign,
@@ -138,6 +138,8 @@ const ShareMovementForm: FunctionComponent<ShareMovementFormProps> = ({
   const handleSearchShares = _.debounce((term: any) => {
     if (term !== "") {
       dispatch(searchToAssign(term));
+    } else {
+      dispatch(updateSharetoAssign());
     }
   }, 1000);
 
@@ -159,14 +161,17 @@ const ShareMovementForm: FunctionComponent<ShareMovementFormProps> = ({
 
   const handleSelectShare = (option: any) => {
     setValue("share_id", option.id);
+    dispatch(updateSharetoAssign());
   };
 
   const handleSelectPartner = (option: any) => {
     setValue("people_id", option.id);
+    dispatch(clearPartnersToAssign());
   };
 
   const handleSelectOwner = (option: any) => {
     setValue("id_titular_persona", option.id);
+    dispatch(clearTitularToAssign());
   };
 
   const getOptionLabelShare = (option: any) => option.share_number;

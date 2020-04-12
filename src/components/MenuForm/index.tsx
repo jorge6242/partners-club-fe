@@ -15,6 +15,9 @@ import TransferList from "../TransferList";
 import { getList as getAllItems } from "../../actions/menuItemActions";
 
 const useStyles = makeStyles(theme => ({
+    rootShareMovementForm: {
+        flexGrow: 1
+    },
     paper: {
         display: "flex",
         flexDirection: "column",
@@ -26,7 +29,8 @@ const useStyles = makeStyles(theme => ({
     },
     wrapper: {
         margin: theme.spacing(1),
-        position: "relative"
+        position: "relative",
+        textAlign: 'center',
     },
     buttonProgress: {
         position: "absolute",
@@ -36,16 +40,9 @@ const useStyles = makeStyles(theme => ({
         marginLeft: -9
     },
     submit: {
-        margin: theme.spacing(3, 0, 2)
+        margin: theme.spacing(3, 0, 2),
+        width: '30%',
     },
-    select: {
-        padding: "10px 0px 10px 0px",
-        width: " 100%",
-        backgroundColor: "transparent",
-        border: 0,
-        borderBottom: "1px solid grey",
-        fontSize: "16px"
-    }
 }));
 
 type FormData = {
@@ -144,11 +141,10 @@ const MenuForm: FunctionComponent<ComponentProps> = ({
                         setSelectedItems(selectedItems);
                     });
                 }
-                console.log('selectedItems ', selectedItems);
             }
         }
         fetch();
-    }, [id, dispatch, setValue]);
+    }, [id, dispatch, setValue, selectedItems]);
 
     useEffect(() => {
         return () => {
@@ -168,10 +164,10 @@ const MenuForm: FunctionComponent<ComponentProps> = ({
         }
     };
 
-    const onPermissionsChange = (event: any) => {
-        setValue("roles", JSON.stringify(event));
-    };
-    console.log('selectedData ', selectedData);
+    // const onPermissionsChange = (event: any) => {
+    //     setValue("roles", JSON.stringify(event));
+    // };
+
     return (
         <Container component="main">
             <div className={classes.paper}>
@@ -183,49 +179,45 @@ const MenuForm: FunctionComponent<ComponentProps> = ({
                     onSubmit={handleSubmit(handleForm)}
                     noValidate
                 >
-                    <Grid container spacing={2}>
-                        <Grid item xs={4}>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12}>
-                                    <CustomTextField
-                                        placeholder="Nombre"
-                                        field="name"
-                                        required
-                                        register={register}
-                                        errorsField={errors.name}
-                                        errorsMessageField={
-                                            errors.name && errors.name.message
-                                        }
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <CustomTextField
-                                        placeholder="Clave"
-                                        field="slug"
-                                        required
-                                        register={register}
-                                        errorsField={errors.slug}
-                                        errorsMessageField={
-                                            errors.slug && errors.slug.message
-                                        }
-                                    />
-
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <CustomTextField
-                                        placeholder="Descripcion"
-                                        field="description"
-                                        required
-                                        register={register}
-                                        errorsField={errors.description}
-                                        errorsMessageField={
-                                            errors.description && errors.description.message
-                                        }
-                                    />
-                                </Grid>
+                    <div className={classes.rootShareMovementForm}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={4}>
+                                <CustomTextField
+                                    placeholder="Nombre"
+                                    field="name"
+                                    required
+                                    register={register}
+                                    errorsField={errors.name}
+                                    errorsMessageField={
+                                        errors.name && errors.name.message
+                                    }
+                                />
                             </Grid>
-                        </Grid>
-                        <Grid item xs={8}>
+                            <Grid item xs={4}>
+                                <CustomTextField
+                                    placeholder="Clave"
+                                    field="slug"
+                                    required
+                                    register={register}
+                                    errorsField={errors.slug}
+                                    errorsMessageField={
+                                        errors.slug && errors.slug.message
+                                    }
+                                />
+
+                            </Grid>
+                            <Grid item xs={4}>
+                                <CustomTextField
+                                    placeholder="Descripcion"
+                                    field="description"
+                                    required
+                                    register={register}
+                                    errorsField={errors.description}
+                                    errorsMessageField={
+                                        errors.description && errors.description.message
+                                    }
+                                />
+                            </Grid>
                             <Grid item xs={12}>
                                 {list.length > 0 && (
                                     <TransferList
@@ -236,26 +228,24 @@ const MenuForm: FunctionComponent<ComponentProps> = ({
                                     />
                                 )}
                             </Grid>
+                            <Grid item xs={12}>
+                                <div className={classes.wrapper}>
+                                    <Button
+                                        type="submit"
+                                        fullWidth
+                                        variant="contained"
+                                        color="primary"
+                                        disabled={loading}
+                                        className={classes.submit}
+                                    >
+                                        {id ? "Actualizar" : "Crear"}
+                                    </Button>
+                                    {loading && (
+                                        <CircularProgress size={24} className={classes.buttonProgress} />
+                                    )}
+                                </div>
+                            </Grid>
                         </Grid>
-                    </Grid>
-
-
-
-
-                    <div className={classes.wrapper}>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            disabled={loading}
-                            className={classes.submit}
-                        >
-                            {id ? "Actualizar" : "Crear"}
-                        </Button>
-                        {loading && (
-                            <CircularProgress size={24} className={classes.buttonProgress} />
-                        )}
                     </div>
                 </form>
             </div>

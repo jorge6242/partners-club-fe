@@ -117,6 +117,7 @@ const ShareForm: FunctionComponent<ShareFormProps> = ({ id }) => {
 
   const handleSelectShare = (option: any) => {
     setValue("father_share_id", option.id);
+    dispatch(updateSharetoAssign());
   };
 
   const getOptionLabelShare = (option: any) => option.share_number;
