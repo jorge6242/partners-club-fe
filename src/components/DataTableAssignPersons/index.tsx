@@ -96,7 +96,7 @@ const DataTableAssignPersons: FunctionComponent<DataTableProps> = ({
                                             {columns.map((column: any) => {
                                                 const value = row[column.id];
                                                 return (
-                                                    <TableCell key={column.id} align={column.align} style={{ fontSize: '10px' }}>
+                                                    <TableCell key={column.id} align={column.align} style={{ fontSize: '12px' }}>
                                                         {column.format && typeof value === "number"
                                                             ? column.format(value)
                                                             : value}

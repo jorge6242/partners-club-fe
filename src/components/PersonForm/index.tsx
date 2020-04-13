@@ -71,6 +71,7 @@ import {
   reset as resetShare
 } from "../../actions/shareActions";
 import { updateModal } from "../../actions/secondModalActions";
+import { getList as getParameterList } from "../../actions/parameterActions";
 import { update as updateNote } from "../../actions/noteActions";
 import TransferList from "../TransferList";
 import DataTableAssignPersons from "../DataTableAssignPersons";
@@ -99,6 +100,7 @@ import { update as updateShare } from "../../actions/shareActions";
 import NoteForm from "../NoteForm";
 import FamilyForm from "../FamilyForm";
 import SearchAutoComplete from "../SearchAutoComplete";
+import Helper from '../../helpers/utilities';
 
 const ExpansionPanelSummary = withStyles({
   root: {
@@ -678,6 +680,8 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     (state: any) => state.paymentMethodReducer
   );
 
+  const { listData: parameterList } = useSelector((state: any) => state.parameterReducer);
+
   const {
     recordsByPerson,
     loading: recordsByPersonLoading,
@@ -724,6 +728,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
         dispatch(getLockersByPartner(id));
         dispatch(getRecordsByPerson({ id }));
         dispatch(getNotesByPerson({ id }));
+        dispatch(getParameterList());
         // dispatch(searchPersonToAssignFamily(id));
         const {
           name,
@@ -1204,7 +1209,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
           <CustomTextField
             placeholder="Pasaporte"
             field="passport"
-            required
             register={register}
             errorsField={errors.passport}
             errorsMessageField={errors.passport && errors.passport.message}
@@ -1215,7 +1219,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
           <CustomTextField
             placeholder="N° Carnet"
             field="card_number"
-            required
             register={register}
             errorsField={errors.card_number}
             errorsMessageField={
@@ -1599,7 +1602,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             isDelete
             handleDelete={handleCardPersonDelete}
             loading={cardPersonLoading}
-            fontSize="10px"
+            fontSize="12px"
           />
         </Grid>
         {cardList.length < 3 && (
@@ -2180,19 +2183,23 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                               justify="space-around"
                               alignItems="center"
                             >
-                              <Grid item xs={6}>
+                              <Grid item xs={Helper.checkParameter(parameterList, "PARTNER_ALLOW_ADD") ? 6 : 12}>
                                 Familiares
                               </Grid>
-                              <Grid
-                                item
-                                xs={6}
-                                className={classes.personRecordTitle}
-                                onClick={() => handleFamilyCreate()}
-                              >
-                                <Fab size="small" color="primary" aria-label="add">
-                                  <AddIcon />
-                                </Fab>
-                              </Grid>
+                              {
+                                Helper.checkParameter(parameterList, "PARTNER_ALLOW_ADD") && (
+                                  <Grid
+                                    item
+                                    xs={6}
+                                    className={classes.personRecordTitle}
+                                    onClick={() => handleFamilyCreate()}
+                                  >
+                                    <Fab size="small" color="primary" aria-label="add">
+                                      <AddIcon />
+                                    </Fab>
+                                  </Grid>
+                                )
+                              }
                             </Grid>
                           </Grid>
                         </Grid>
@@ -2389,42 +2396,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                     </TabPanel>
                     <TabPanel value={tabValue} index={5} dir={theme.direction}>
                       <Grid container spacing={3}>
-                        <Grid item xs={7}>
-                          <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                              <select
-                                name="locker_location_id"
-                                onChange={handleSelectLockerLocation}
-                                className={classes.select}
-                              >
-                                <option value="">Seleccione Ubicacion</option>
-                                {lockerLocationList.map((item: any) => (
-                                  <option key={item.id} value={item.id}>
-                                    {item.description}
-                                  </option>
-                                ))}
-                              </select>
-                            </Grid>
-                            <Grid item xs={12}>
-                              {lockerLoading ? (
-                                <Loader />
-                              ) : (
-                                  <TransferList
-                                    data={lockerList}
-                                    selectedData={personLockersByLocation}
-                                    leftTitle="Lockers"
-                                    onSelectedList={onLockersChange}
-                                  />
-                                )}
-                              <input
-                                style={{ display: "none" }}
-                                name="locker_list"
-                                ref={register}
-                              />
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                        <Grid item xs={5}>
+                      <Grid item xs={12}>
                           <Grid container spacing={3}>
                             <Grid
                               item
@@ -2445,6 +2417,41 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                           </Grid>
                         </Grid>
                       </Grid>
+                      <Grid item xs={12} style={{ marginTop: '20px' }}>
+                              <select
+                                name="locker_location_id"
+                                onChange={handleSelectLockerLocation}
+                                className={classes.select}
+                              >
+                                <option value="">Seleccione Ubicacion</option>
+                                {lockerLocationList.map((item: any) => (
+                                  <option key={item.id} value={item.id}>
+                                    {item.description}
+                                  </option>
+                                ))}
+                              </select>
+                            </Grid>
+                            <Grid item xs={12}>
+                          <Grid container spacing={3}>
+                            <Grid item xs={12}>
+                              {lockerLoading ? (
+                                <Loader />
+                              ) : (
+                                  <TransferList
+                                    data={lockerList}
+                                    selectedData={personLockersByLocation}
+                                    leftTitle="Lockers"
+                                    onSelectedList={onLockersChange}
+                                  />
+                                )}
+                              <input
+                                style={{ display: "none" }}
+                                name="locker_list"
+                                ref={register}
+                              />
+                            </Grid>
+                          </Grid>
+                        </Grid>
                     </TabPanel>
                   </SwipeableViews>
                 </div>
