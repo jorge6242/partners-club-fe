@@ -180,14 +180,23 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     }
   }
 
-  const renderThirdMenu = (Icon: React.ReactType, title: string, route: string) => (
-    <ListItem button onClick={() => handeClick(route)}>
-      <ListItemIcon>
-        <SettingsIcon />
-      </ListItemIcon>
-      <ListItemText primary={title} />
-    </ListItem>
-  )
+  const renderThirdMenu = (item: any) => {
+    let Icon = SettingsIcon;
+    if(item.icons) {
+      let currenMenutIcon = icons.find((e: any) => e.slug === item.icons.slug);
+      if(currenMenutIcon) {
+        Icon = currenMenutIcon.name;
+      }
+    }
+    return (
+      <ListItem button onClick={() => handeClick(item.route ? item.route : '/dashboard/main')}>
+        <ListItemIcon>
+          <Icon />
+        </ListItemIcon>
+        <ListItemText primary={item.name} />
+      </ListItem>
+    )
+  }
 
   const secondMenu = (CustomIcon: React.ReactType, title: string, route: string, menu: any, item: any) => {
     const findChildrens: any = menu.filter((e: any) => e.parent == item.id);
@@ -200,7 +209,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     }
     return (
       <React.Fragment key={item.id}>
-        <ListItem button onClick={() => findChildrens.length > 0 ? setSecondSubMenu(item.id) : handeClick(item.route ? item.route : '')}>
+        <ListItem button onClick={() => findChildrens.length > 0 ? setSecondSubMenu(item.id) : handeClick(item.route ? item.route : '/dashboard/main')}>
           <ListItemIcon >
             <Icon />
           </ListItemIcon>
@@ -213,7 +222,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
         {findChildrens.length > 0 && (
           <Collapse in={item.id === subMenuItem2 ? true : false} timeout="auto" unmountOnExit>
             <List dense>
-              {findChildrens.map((e: any) => renderThirdMenu(DoubleArrowIcon, e.name, ""))}
+              {findChildrens.map((e: any) => renderThirdMenu(item))}
             </List>
           </Collapse>
         )
@@ -237,7 +246,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
         }
         return (
           <React.Fragment>
-            <ListItem button onClick={() => findChildrens.length > 0 ? setSubMenu(item.id) : handeClick(item.route ? item.route : '')}>
+            <ListItem button onClick={() => findChildrens.length > 0 ? setSubMenu(item.id) : handeClick(item.route ? item.route : '/dashboard/main')}>
               <ListItemIcon >
                 <Icon />
               </ListItemIcon>
