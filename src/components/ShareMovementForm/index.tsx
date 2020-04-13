@@ -246,7 +246,7 @@ const ShareMovementForm: FunctionComponent<ShareMovementFormProps> = ({
               </Grid>
               <Grid item xs={6}>
                 <SearchAutoComplete
-                  label="Socio"
+                  label="Nuevo Socio"
                   options={partnersToAssign}
                   loading={setPartnersLoading}
                   handleSearch={handleSearchPartners}
@@ -268,7 +268,7 @@ const ShareMovementForm: FunctionComponent<ShareMovementFormProps> = ({
               </Grid>
               <Grid item xs={6}>
                 <SearchAutoComplete
-                  label="Titular"
+                  label="Nuevo Titular"
                   options={titularToAssign}
                   loading={setTitularLoading}
                   handleSearch={handleSearchOwner}
