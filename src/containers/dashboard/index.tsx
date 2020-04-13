@@ -188,6 +188,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
         Icon = currenMenutIcon.name;
       }
     }
+    console.log('item.route ', item.route);
     return (
       <ListItem button onClick={() => handeClick(item.route ? item.route : '/dashboard/main')}>
         <ListItemIcon>
@@ -222,7 +223,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
         {findChildrens.length > 0 && (
           <Collapse in={item.id === subMenuItem2 ? true : false} timeout="auto" unmountOnExit>
             <List dense>
-              {findChildrens.map((e: any) => renderThirdMenu(item))}
+              {findChildrens.map((e: any) => renderThirdMenu(e))}
             </List>
           </Collapse>
         )
