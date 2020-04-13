@@ -6,6 +6,9 @@ const API = {
   getAll() {
     return AXIOS.get(`${Prefix.api}/relation-type`, { headers: headers() });
   },
+  getList() {
+    return AXIOS.get(`${Prefix.api}/relation-type`, { headers: headers() });
+  },
   create(data: any) {
     return AXIOS.post(
       `${Prefix.api}/relation-type`,

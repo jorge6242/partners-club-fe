@@ -18,6 +18,7 @@ export const ACTIONS = {
   SET_PERSONS_BY_TYPE_LOADING: "person/set_persons_by_type_loading",
   SET_SECOND_LOADING: "person/set_second_loading",
   SET_RELATION_LOADING: "person/set_relation_loading",
+  SET_FAMILY_LOADING: "person/set_family_loading",
   SET_ASSIGN_LOADING: "person/set_assign_loading",
   SET_REPORT_BY_PARTNER_LOADING: "person/set_report_by_partner_loading",
   SET_FAMILIES_PARTNER_CARD_LOADING: "person/set_families_partner_card_loading",

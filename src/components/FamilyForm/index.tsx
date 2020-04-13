@@ -13,7 +13,9 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import CardMedia from "@material-ui/core/CardMedia";
 
 import CustomTextField from "../FormElements/CustomTextField";
-import { createGuest } from "../../actions/personActions";
+import { create, update , get, createFamily } from "../../actions/personActions";
+import { getList as getRelationTypeList } from "../../actions/relationTypeActions";
+import { getAll as getGenderList } from "../../actions/genderActions";
 import CustomSelect from "../FormElements/CustomSelect";
 
 const useStyles = makeStyles(theme => ({
@@ -64,17 +66,15 @@ type FormData = {
   gender_id: string;
   picture: string;
   rif_ci: string;
+  isPartner: string;
+  relation_type_id: number;
 };
 
-type GuestFormProps = {
-  identification: any;
-  refresh: Function;
+type ComponentProps = {
+  id?: any;
 };
 
-const GuestForm: FunctionComponent<GuestFormProps> = ({
-  identification,
-  refresh
-}) => {
+const FamilyForm: FunctionComponent<ComponentProps> = ({ id }) => {
   const classes = useStyles();
   const [image, setImage] = useState({ preview: "", raw: "" });
   const [imageField, setImageField] = useState();
@@ -88,15 +88,33 @@ const GuestForm: FunctionComponent<GuestFormProps> = ({
   } = useForm<FormData>();
   const {
     personReducer: { loading },
-    genderReducer: { list: genderList }
+    genderReducer: { list: genderList },
+    relationTypeReducer: { dataList: relationTypeList },
   } = useSelector((state: any) => state);
 
   const dispatch = useDispatch();
   const { picture } = getValues();
 
+
   useEffect(() => {
-    setValue("rif_ci", identification);
-  }, [setValue, identification]);
+    async function fetch() {
+        dispatch(getRelationTypeList());
+        dispatch(getGenderList());
+        // if (id) {
+        //     const response: any = await dispatch(get(id));
+        //     const { name, last_name, rif_ci, primary_email, telephone1, picture, gender_id } = response;
+        //     setValue("name", name);
+        //     setValue("last_name", last_name);
+        //     setValue("rif_ci", rif_ci);
+        //     setValue("primary_email", primary_email);
+        //     setValue("telephone1", telephone1);
+        //     setValue("picture", picture);
+        //     setValue("gender_id", gender_id);
+        //     setImage({ ...image, preview: picture });
+        // }
+    }
+    fetch();
+}, [id, dispatch, setValue, setImage, image]);
 
   useEffect(() => {
     return () => {
@@ -118,9 +136,14 @@ const GuestForm: FunctionComponent<GuestFormProps> = ({
       marital_statuses_id: 0,
       countries_id: 0,
       profession_list: null,
-      isPartner: 3,
+      isPartner: 2,
+      country_list: null,
+      sport_list: null,
+      locker_list: null,
+      lockers: null,
+      base_id: id,
     };
-    dispatch(createGuest(body, refresh));
+      dispatch(createFamily(body));
   }
 
   const triggerClick = (input: any) => {
@@ -147,14 +170,12 @@ const GuestForm: FunctionComponent<GuestFormProps> = ({
     reader.readAsDataURL(e.target.files[0]);
   };
 
-  let imagePreview = picture;
-  if (image.preview) imagePreview = image.preview;
-
+  let imagePreview = picture !== "" ? picture : image.preview;
   return (
     <Container component="main">
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Invitado
+          Familiar
         </Typography>
         <form
           className={classes.form}
@@ -165,7 +186,7 @@ const GuestForm: FunctionComponent<GuestFormProps> = ({
             <Grid item xs={4}>
               <Card className={classes.pictureContainer}>
                 <CardActionArea onClick={() => handleImage()}>
-                  <CardMedia className={classes.media} image={imagePreview} />
+                  <CardMedia className={classes.media} image={image.preview} />
                 </CardActionArea>
               </Card>
               <input
@@ -258,6 +279,24 @@ const GuestForm: FunctionComponent<GuestFormProps> = ({
                     ))}
                   </CustomSelect>
                 </Grid>
+                <Grid item xs={6}>
+                  <CustomSelect
+                    label="Parentesco"
+                    field="relation_type_id"
+                    required
+                    register={register}
+                    errorsMessageField={
+                      errors.relation_type_id && errors.relation_type_id.message
+                    }
+                    selectionMessage="Seleccione Sexo"
+                  >
+                    {relationTypeList.map((item: any) => (
+                      <option key={item.id} value={item.id}>
+                        {item.description}
+                      </option>
+                    ))}
+                  </CustomSelect>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -271,7 +310,7 @@ const GuestForm: FunctionComponent<GuestFormProps> = ({
               disabled={loading}
               className={classes.submit}
             >
-              Registrar
+              Crear
             </Button>
             {loading && (
               <CircularProgress size={24} className={classes.buttonProgress} />
@@ -283,4 +322,4 @@ const GuestForm: FunctionComponent<GuestFormProps> = ({
   );
 };
 
-export default GuestForm;
+export default FamilyForm;

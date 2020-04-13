@@ -97,6 +97,7 @@ import {
 } from "../../actions/noteActions";
 import { update as updateShare } from "../../actions/shareActions";
 import NoteForm from "../NoteForm";
+import FamilyForm from "../FamilyForm";
 import SearchAutoComplete from "../SearchAutoComplete";
 
 const ExpansionPanelSummary = withStyles({
@@ -935,7 +936,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   };
 
   const handleSearch = (event: any) => {
-    if(event.value !== "") {
+    if (event.value !== "") {
       dispatch(searchPersonToAssignFamily(id, event.value));
     } else {
       dispatch(clearPersonToAssignFamily());
@@ -1065,8 +1066,19 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     );
   };
 
+  const handleFamilyCreate = () => {
+    dispatch(
+      updateModal({
+        payload: {
+          status: true,
+          element: <FamilyForm id={id} />
+        }
+      })
+    );
+  };
+
   const handleSearchCompanys = _.debounce((term: any) => {
-    if(term !== "") {
+    if (term !== "") {
       dispatch(searchCompanyPersons(term));
     } else {
       dispatch(clearSearchCompanyPersons())
@@ -2159,6 +2171,31 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                     </TabPanel>
                     <TabPanel value={tabValue} index={1} dir={theme.direction}>
                       <div className={classes.root}>
+                        <Grid container spacing={3}>
+                          <Grid item xs={12}>
+                            <Grid
+                              container
+                              spacing={3}
+                              direction="row"
+                              justify="space-around"
+                              alignItems="center"
+                            >
+                              <Grid item xs={6}>
+                                Familiares
+                              </Grid>
+                              <Grid
+                                item
+                                xs={6}
+                                className={classes.personRecordTitle}
+                                onClick={() => handleFamilyCreate()}
+                              >
+                                <Fab size="small" color="primary" aria-label="add">
+                                  <AddIcon />
+                                </Fab>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        </Grid>
                         <ExpansionPanel
                           expanded={expanded === "panel-familiars-assing"}
                           onChange={handleExpandedPanel(
