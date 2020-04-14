@@ -1192,24 +1192,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
           </CustomSelect>
         </Grid>
         <Grid item xs={3}>
-          <CustomSelect
-            label="Estatus"
-            selectionMessage="Seleccione Estatus"
-            field="status_person_id"
-            required
-            register={register}
-            errorsMessageField={
-              errors.status_person_id && errors.status_person_id.message
-            }
-          >
-            {statusPersonList.map((item: any) => (
-              <option key={item.id} value={item.id}>
-                {item.description}
-              </option>
-            ))}
-          </CustomSelect>
-        </Grid>
-        <Grid item xs={3}>
           <CustomTextField
             placeholder="Cedula / Rif"
             field="rif_ci"
@@ -1218,41 +1200,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             errorsField={errors.rif_ci}
             errorsMessageField={errors.rif_ci && errors.rif_ci.message}
             inputType="number"
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <CustomTextField
-            placeholder="Pasaporte"
-            field="passport"
-            register={register}
-            errorsField={errors.passport}
-            errorsMessageField={errors.passport && errors.passport.message}
-            inputType="number"
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <CustomTextField
-            placeholder="N° Carnet"
-            field="card_number"
-            register={register}
-            errorsField={errors.card_number}
-            errorsMessageField={
-              errors.card_number && errors.card_number.message
-            }
-            inputType="number"
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <CustomTextField
-            placeholder="Fecha de Vencimiento"
-            field="expiration_date"
-            required
-            register={register}
-            errorsField={errors.expiration_date}
-            errorsMessageField={
-              errors.expiration_date && errors.expiration_date.message
-            }
-            type="date"
           />
         </Grid>
         <Grid item xs={3}>
@@ -1284,6 +1231,17 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             errorsField={errors.birth_date}
             errorsMessageField={errors.birth_date && errors.birth_date.message}
             type="date"
+          />
+        </Grid>
+        
+        <Grid item xs={3}>
+          <CustomTextField
+            placeholder="Pasaporte"
+            field="passport"
+            register={register}
+            errorsField={errors.passport}
+            errorsMessageField={errors.passport && errors.passport.message}
+            inputType="number"
           />
         </Grid>
         <Grid item xs={3}>
@@ -1320,6 +1278,55 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             ))}
           </CustomSelect>
         </Grid>
+        <Grid item xs={3}>
+          <CustomTextField
+            placeholder="N° Carnet"
+            field="card_number"
+            register={register}
+            errorsField={errors.card_number}
+            errorsMessageField={
+              errors.card_number && errors.card_number.message
+            }
+            inputType="number"
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <CustomTextField
+            placeholder="Fecha de Vencimiento"
+            field="expiration_date"
+            register={register}
+            errorsField={errors.expiration_date}
+            errorsMessageField={
+              errors.expiration_date && errors.expiration_date.message
+            }
+            type="date"
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <CustomSelect
+            label="Estatus"
+            selectionMessage="Seleccione Estatus"
+            field="status_person_id"
+            required
+            register={register}
+            errorsMessageField={
+              errors.status_person_id && errors.status_person_id.message
+            }
+          >
+            {statusPersonList.map((item: any) => (
+              <option key={item.id} value={item.id}>
+                {item.description}
+              </option>
+            ))}
+          </CustomSelect>
+        </Grid>
+        
+        
+        
+        
+       
+        
+        
         {/* <Grid item xs={3}>
           <CustomTextField
             placeholder="Representante"

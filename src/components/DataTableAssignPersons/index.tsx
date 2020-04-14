@@ -108,7 +108,7 @@ const DataTableAssignPersons: FunctionComponent<DataTableProps> = ({
                                                     <div className="custom-select-container">
                                                         <select name="relation"
                                                             onChange={(e) => handleSelect(e, row.id)}
-                                                            style={{ fontSize: '10px' }}
+                                                            style={{ fontSize: '12px' }}
                                                         >
                                                             <option value="">Seleccione</option>
                                                             {

@@ -130,9 +130,9 @@ const ShareMovementForm: FunctionComponent<ShareMovementFormProps> = ({
     }
   }, [watch, setValue, transactionTypeList])
 
-  const handleForm = (form: object) => {
+  const handleForm = (form: any) => {
     const created = moment().format('YYYY-MM-DD');
-    dispatch(create({ ...form, number_procesed: 1, created }));
+    dispatch(create({ ...form, number_procesed: 1, created, currencie_id: form.currency_sale_price_id }));
   };
 
   const handleSearchShares = _.debounce((term: any) => {

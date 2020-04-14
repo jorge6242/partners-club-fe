@@ -67,12 +67,12 @@ const columns: ShareMovementColumns[] = [
     component: (value: any) => <span>{value.value}</span>
   },
   {
-    id: "rate",
-    label: "Tarifa",
+    id: "currency",
+    label: "Moneda",
     minWidth: 30,
     align: "right",
     
-    component: (value: any) => <span>{value.value}</span>
+    component: (value: any) => <span>{value.value ? value.value.description : '-'}</span>
   },
   {
     id: "number_sale_price",

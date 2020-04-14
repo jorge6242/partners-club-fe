@@ -11,6 +11,7 @@ export default interface ShareMovementColumns {
     | "share"
     | "transaction"
     | "partner"
+    | "currency"
     | "titular";
   label: string;
   minWidth?: number;
