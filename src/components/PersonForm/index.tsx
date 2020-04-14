@@ -1305,7 +1305,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
               errors.expiration_date && errors.expiration_date.message
             }
             type="date"
-            readOnly
           />
         </Grid>
         <Grid item xs={3}>
