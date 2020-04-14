@@ -83,8 +83,7 @@ const DataTable3: FunctionComponent<DataTableProps> = ({
                 </TableCell>
               ))}
               {handleSwitch && <TableCell style={{ minWidth: 5 }}></TableCell>}
-              {handleEdit && <TableCell style={{ minWidth: 5 }}></TableCell>}
-              {handleDelete && <TableCell style={{ minWidth: 5 }}></TableCell>}
+              <TableCell style={{ minWidth: 5 }}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -93,59 +92,61 @@ const DataTable3: FunctionComponent<DataTableProps> = ({
                 <CircularProgress color="primary" />
               </TableRow>
             ) : (
-              data.map((row: any) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                    {columns.map((column: any) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell
-                          key={column.id}
-                          align={column.align}
-                          style={{ fontSize }}
-                        >
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : createElement(column.component, { value })}
+                data.map((row: any) => {
+                  return (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                      {columns.map((column: any) => {
+                        const value = row[column.id];
+                        return (
+                          <TableCell
+                            key={column.id}
+                            align={column.align}
+                            style={{ fontSize }}
+                          >
+                            {column.format && typeof value === "number"
+                              ? column.format(value)
+                              : createElement(column.component, { value })}
+                          </TableCell>
+                        );
+                      })}
+                      {handleSwitch && (
+                        <TableCell style={{ minWidth: 5, fontSize }}>
+                          <GreenSwitch
+                            checked={row.status === "1" ? true : false}
+                            onChange={() => handleSwitch(row.id, row.status)}
+                          />
                         </TableCell>
-                      );
-                    })}
-                    {handleSwitch && (
+                      )}
                       <TableCell style={{ minWidth: 5, fontSize }}>
-                        <GreenSwitch
-                          checked={row.status === "1" ?  true : false}
-                          onChange={() => handleSwitch(row.id, row.status)}
-                        />
+                        {
+                          handleEdit && (
+                            <IconButton
+                              aria-label="delete"
+                              size="small"
+                              color="primary"
+                              onClick={() => handleEdit(row)}
+                            >
+                              <EditIcon fontSize="inherit" />
+                            </IconButton>
+                          )
+                        }
+                        {
+                          handleDelete && (
+                            <IconButton
+                              aria-label="delete"
+                              size="small"
+                              color="secondary"
+                              onClick={() => handleDelete(row)}
+                            >
+                              <DeleteIcon fontSize="inherit" />
+                            </IconButton>
+                          )
+                        }
                       </TableCell>
-                    )}
-                    {handleEdit && (
-                      <TableCell style={{ minWidth: 5, fontSize }}>
-                        <IconButton
-                          aria-label="delete"
-                          size="small"
-                          color="primary"
-                          onClick={() => handleEdit(row)}
-                        >
-                          <EditIcon fontSize="inherit" />
-                        </IconButton>
-                      </TableCell>
-                    )}
-                    {isDelete && (
-                      <TableCell style={{ minWidth: 5, fontSize }}>
-                        <IconButton
-                          aria-label="delete"
-                          size="small"
-                          color="secondary"
-                          onClick={() => handleDelete(row)}
-                        >
-                          <DeleteIcon fontSize="inherit" />
-                        </IconButton>
-                      </TableCell>
-                    )}
-                  </TableRow>
-                );
-              })
-            )}
+                    </TableRow>
+                  );
+                })
+              )}
           </TableBody>
         </Table>
       </TableContainer>
