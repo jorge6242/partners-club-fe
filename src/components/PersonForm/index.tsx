@@ -727,11 +727,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     setSelectedProff([]);
     async function fetch() {
       if (id) {
-        const shareResponse: any = await dispatch(getSharesByPartner(id));
-        if(shareResponse) {
-          const currentShare = shareResponse.find((e: any, i: any) => i === 0);
-          setValue("payment_method_id", currentShare.payment_method_id);
-        }
         const response: any = await dispatch(get(id));
         dispatch(getProfessions());
         dispatch(searchFamilyByPerson(id));
@@ -773,7 +768,16 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
           sports,
           lockers,
           company,
+          isPartner
         } = response;
+        if (isPartner === "1") {
+          const shareResponse: any = await dispatch(getSharesByPartner(id));
+          if (shareResponse.length > 0) {
+            console.log('shareResponse ', shareResponse);
+            const currentShare = shareResponse.find((e: any, i: any) => i === 0);
+            setValue("payment_method_id", currentShare.payment_method_id);
+          }
+        }
         setValue("name", name);
         setValue("last_name", last_name);
         setValue("rif_ci", rif_ci);
@@ -800,6 +804,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
         setValue("status_person_id", status_person_id);
         setValue("marital_statuses_id", marital_statuses_id);
         setValue("countries_id", countries_id);
+        setImage({ ...image, preview: picture });
         if (company) {
           setSelectedCompany(company);
         }
@@ -1233,7 +1238,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             type="date"
           />
         </Grid>
-        
+
         <Grid item xs={3}>
           <CustomTextField
             placeholder="Pasaporte"
@@ -1300,6 +1305,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
               errors.expiration_date && errors.expiration_date.message
             }
             type="date"
+            readOnly
           />
         </Grid>
         <Grid item xs={3}>
@@ -1320,13 +1326,13 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             ))}
           </CustomSelect>
         </Grid>
-        
-        
-        
-        
-       
-        
-        
+
+
+
+
+
+
+
         {/* <Grid item xs={3}>
           <CustomTextField
             placeholder="Representante"
@@ -1527,16 +1533,16 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                 Forma de Pago
               </TableCell>
               <TableCell align="left" style={{ fontSize: "12px", minWidth: 20 }}>
-                Tarjeta 1
+                Primaria
               </TableCell>
               <TableCell align="left" style={{ fontSize: "12px", minWidth: 20 }}>
-                Tarjeta 2
+                Secundaria
               </TableCell>
               <TableCell align="left" style={{ fontSize: "12px", minWidth: 20 }}>
-                Tarjeta 3
+                Terciaria
               </TableCell>
               <TableCell align="left" style={{ fontSize: "12px", minWidth: 30 }}>
-                
+
               </TableCell>
             </TableRow>
           </TableHead>
@@ -1571,16 +1577,16 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                 {tarjeta_terciaria && formatCreditCard(tarjeta_terciaria.card_number)}
               </TableCell>
               <TableCell align="left" style={{ fontSize: "12px" }}>
-              <Button
-              size="small"
-              type="button"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.cardPaymentMethodPersonButton}
-              onClick={() => updatePaymentMethodShare()}
-            >
-              Actualizar
+                <Button
+                  size="small"
+                  type="button"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.cardPaymentMethodPersonButton}
+                  onClick={() => updatePaymentMethodShare()}
+                >
+                  Actualizar
             </Button>
               </TableCell>
             </TableRow>
@@ -1968,6 +1974,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                   <input
                     style={{ display: "none" }}
                     name="picture"
+                    id="picture"
                     ref={register}
                   />
                 </Grid>
@@ -2211,23 +2218,41 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                               justify="space-around"
                               alignItems="center"
                             >
-                              <Grid item xs={Helper.checkParameter(parameterList, "PARTNER_ALLOW_ADD") ? 6 : 12}>
+                              <Grid item xs={6}>
                                 Familiares
                               </Grid>
-                              {
-                                Helper.checkParameter(parameterList, "PARTNER_ALLOW_ADD") && (
+                              <Grid item xs={6}>
+                                <Grid container direction="row"
+                                  justify="flex-end" spacing={3}>
+                                  {
+                                    Helper.checkParameter(parameterList, "PARTNER_ALLOW_ADD") && (
+                                      <Grid
+                                        item
+                                        xs={2}
+                                        onClick={() => handleFamilyCreate()}
+                                        style={{ textAlign: 'right' }}
+                                      >
+                                        <Fab size="small" color="primary" aria-label="add">
+                                          <AddIcon />
+                                        </Fab>
+                                      </Grid>
+                                    )
+                                  }
                                   <Grid
                                     item
-                                    xs={6}
-                                    className={classes.personRecordTitle}
-                                    onClick={() => handleFamilyCreate()}
+                                    xs={2}
+                                    onClick={() => handleReportByPartner()}
+                                    style={{ textAlign: 'right' }}
                                   >
-                                    <Fab size="small" color="primary" aria-label="add">
-                                      <AddIcon />
-                                    </Fab>
+                                    <div>
+                                      <Fab size="small" color="primary" aria-label="report">
+                                        <PrintIcon />
+                                      </Fab>
+                                    </div>
                                   </Grid>
-                                )
-                              }
+                                </Grid>
+                              </Grid>
+
                             </Grid>
                           </Grid>
                         </Grid>
@@ -2291,17 +2316,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                                   handleSwitch={handleSwitchRelation}
                                   loading={relationLoading}
                                   fontSize="12px"
-                                />
-                              </Grid>
-                              <Grid
-                                item
-                                xs={12}
-                                className={classes.reportButtonContainer}
-                              >
-                                <LoadingButton
-                                  Icon={PrintIcon}
-                                  loading={reportByPartnerLoading}
-                                  handleClick={() => handleReportByPartner()}
                                 />
                               </Grid>
                             </Grid>

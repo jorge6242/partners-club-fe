@@ -36,6 +36,7 @@ type CustomTextFieldProps = {
   inputType?: string;
   Icon?: React.ReactType;
   multiline?: boolean;
+  readOnly?: boolean;
 };
 
 const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
@@ -51,6 +52,7 @@ const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
   inputType,
   Icon,
   multiline = false,
+  readOnly = false,
 }) => (
   <TextField
     rows={multiline ? "4" : ""}
@@ -75,6 +77,7 @@ const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
       shrink: true,
     }}
     InputProps={{
+      readOnly,
       startAdornment: Icon ? (
         <InputAdornment position="start">
           <Icon />

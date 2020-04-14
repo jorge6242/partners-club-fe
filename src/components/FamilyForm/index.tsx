@@ -130,12 +130,12 @@ const FamilyForm: FunctionComponent<ComponentProps> = ({ id }) => {
   const handleForm = async (form: object) => {
     const body = {
       ...form,
-      id_card_picture: "N/A",
-      passport: "N/A",
-      card_number: "N/A",
+      id_card_picture: "",
+      passport: "",
+      card_number: "",
       expiration_date: moment().format('YYYY-MM-DD'),
       birth_date: moment().format('YYYY-MM-DD'),
-      representante: "N/A",
+      representante: "",
       company_person_id: 0,
       status_person_id: 1,
       marital_statuses_id: 0,
