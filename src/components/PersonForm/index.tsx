@@ -101,6 +101,7 @@ import NoteForm from "../NoteForm";
 import FamilyForm from "../FamilyForm";
 import SearchAutoComplete from "../SearchAutoComplete";
 import Helper from '../../helpers/utilities';
+import moment from "moment";
 
 const formatCreditCard = (card: string) => card.replace(/.(?=.{4})/g, 'x');
 
@@ -1180,6 +1181,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   const getOptionLabelCompanyPerson = (option: any) => `${option.name} ${option.last_name}`;
 
   const renderMainData = () => {
+    const { expiration_date } = getValues();
     return (
       <Grid container spacing={2}>
         <Grid item xs={3}>
@@ -1295,7 +1297,15 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             inputType="number"
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={3} style={{ lineHeight: 2.5 }}>
+          <Paper className={classes.parsedPersonContainerDetail}>
+            <strong>Vencimiento</strong> {expiration_date && moment(expiration_date).format('DD-MM-YYYY')}
+          </Paper>
+          <input
+            style={{ display: "none" }}
+            name="expiration_date"
+            ref={register}
+          />
           {/* <CustomTextField
             placeholder="Fecha de Vencimiento"
             field="expiration_date"
@@ -1305,8 +1315,8 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
               errors.expiration_date && errors.expiration_date.message
             }
             type="date"
-          />
-        </Grid> */}
+          /> */}
+        </Grid>
         <Grid item xs={3}>
           <CustomSelect
             label="Estatus"

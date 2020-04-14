@@ -4,7 +4,7 @@ import axios from 'axios';
 //http://localhost:8000
 
 const AXIOS = axios.create({
-  baseURL: 'http://club.api.com',
+  baseURL: 'http://localhost:8000',
   headers: {
     'Content-Type': 'application/json',
     'Partners-Application': 'admin'
