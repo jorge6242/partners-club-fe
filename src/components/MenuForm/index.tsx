@@ -128,12 +128,10 @@ const MenuForm: FunctionComponent<ComponentProps> = ({
         async function fetch() {
             if (id) {
                 const response: any = await dispatch(get(id));
-                console.log('response ', response);
                 const { name, slug, description, items } = response;
                 setValue("name", name);
                 setValue("slug", slug);
                 setValue("description", description);
-                console.log('items', items);
                 if (items && items.length > 0) {
                     setSelectedData(items);
                     items.forEach((element: any) => {

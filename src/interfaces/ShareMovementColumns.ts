@@ -14,6 +14,6 @@ export default interface ShareMovementColumns {
     | "titular";
   label: string;
   minWidth?: number;
-  align?: "left" | "right";
+  align?: "left" | "right" | "center";
   component?: any;
 }

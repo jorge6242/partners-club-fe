@@ -10,6 +10,7 @@ import ShareMovemenForm from "../../components/ShareMovementForm";
 import DataTable4 from '../../components/DataTable4'
 import ShareMovementColumns from '../../interfaces/ShareMovementColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
+import moment from "moment";
 
 const columns: ShareMovementColumns[] = [
   { 
@@ -17,6 +18,14 @@ const columns: ShareMovementColumns[] = [
     label: "Id", 
     minWidth: 10,
     component: (value: any) => <span>{value.value}</span>
+  },
+  {
+    id: "created",
+    label: "Fecha",
+    minWidth: 30,
+    align: "left",
+    
+    component: (value: any) => <span>{moment(value.value).format('DD-MM-YYYY')}</span>
   },
   {
     id: "transaction",
@@ -61,7 +70,7 @@ const columns: ShareMovementColumns[] = [
     id: "rate",
     label: "Tarifa",
     minWidth: 30,
-    align: "left",
+    align: "right",
     
     component: (value: any) => <span>{value.value}</span>
   },
@@ -69,7 +78,7 @@ const columns: ShareMovementColumns[] = [
     id: "number_sale_price",
     label: "Precio Venta",
     minWidth: 30,
-    align: "left",
+    align: "right",
     
     component: (value: any) => <span>{value.value}</span>
   },
@@ -77,7 +86,7 @@ const columns: ShareMovementColumns[] = [
     id: "number_procesed",
     label: "N° Procesado",
     minWidth: 30,
-    align: "left",
+    align: "center",
     
     component: (value: any) => <span>{value.value}</span>
   },

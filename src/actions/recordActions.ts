@@ -368,7 +368,6 @@ export const getRecordStatistics = () => async (dispatch: Function) => {
     let response = [];
     if (status === 200) {
       response = data;
-      console.log('data ', data);
       dispatch({
         type: ACTIONS.GET_RECORD_STATISTICS,
         payload: response

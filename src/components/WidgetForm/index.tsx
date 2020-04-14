@@ -152,7 +152,6 @@ const WidgetForm: FunctionComponent<ComponentProps> = ({
             ...form,
             roles: selectedRoles,
         }
-        console.log('body', body);
         if (id) {
             dispatch(update({ id, ...body }));
         } else {

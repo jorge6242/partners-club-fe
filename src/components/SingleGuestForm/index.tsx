@@ -168,7 +168,6 @@ const SingleGuestForm: FunctionComponent<ComponentProps> = ({ id }) => {
   };
 
   let imagePreview = picture !== "" ? picture : image.preview;
-  console.log('picture ', picture);
   return (
     <Container component="main">
       <div className={classes.paper}>

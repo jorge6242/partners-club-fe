@@ -102,6 +102,8 @@ import FamilyForm from "../FamilyForm";
 import SearchAutoComplete from "../SearchAutoComplete";
 import Helper from '../../helpers/utilities';
 
+const formatCreditCard = (card: string) => `${card.substring(0, 12).replace(/[0-9]/g, "x")}${card.substring(12, 16)}`;
+
 const ExpansionPanelSummary = withStyles({
   root: {
     backgroundColor: "rgba(0, 0, 0, .03)"
@@ -134,14 +136,14 @@ const cardPersonColumns: CardPersonColumns[] = [
     label: "Numero",
     minWidth: 20,
     align: "left",
-    component: (value: any) => <span>{value.value}</span>
+    component: (value: any) => <span>{formatCreditCard(value.value)}</span>
   },
   {
     id: "sec_code",
     label: "CVC",
     minWidth: 10,
     align: "left",
-    component: (value: any) => <span>{value.value}</span>
+    component: (value: any) => <span>{value.value.replace(/[0-9]/g, "x")}</span>
   },
   {
     id: "expiration_date",
@@ -374,23 +376,23 @@ function getParsePerson(data: any, classes: any) {
   } = data;
   return (
     <Grid container spacing={1} className={classes.parsedPersonContainer}>
-      <Grid item xs={3} className={classes.parsedPersonContainerTitle}>
+      <Grid item xs={4} className={classes.parsedPersonContainerTitle}>
         <Paper className={classes.parsedPersonContainerDetail}>
           <strong>Tipo Persona:</strong>
           {type_person === 1 ? "Natural" : "Empresa"}
         </Paper>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={4}>
         <Paper className={classes.parsedPersonContainerDetail}>
-          <strong>RIF/CI:</strong> {rif_ci}
+          <strong>Cedula/RIF:</strong> {rif_ci}
         </Paper>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={4}>
         <Paper className={classes.parsedPersonContainerDetail}>
           <strong>Nombre:</strong> {name} {last_name}
         </Paper>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={12}>
         <Paper className={classes.parsedPersonContainerDetail}>
           <strong>Direccion:</strong> {address}
         </Paper>
@@ -512,6 +514,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   cardPersonButton: {
     width: "15%",
+    fontSize: "12px"
+  },
+  cardPaymentMethodPersonButton: {
+    width: "100%",
     fontSize: "12px"
   },
   parsedPersonContainer: {
@@ -720,7 +726,11 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     setSelectedProff([]);
     async function fetch() {
       if (id) {
-        dispatch(getSharesByPartner(id));
+        const shareResponse: any = await dispatch(getSharesByPartner(id));
+        if(shareResponse) {
+          const currentShare = shareResponse.find((e: any, i: any) => i === 0);
+          setValue("payment_method_id", currentShare.payment_method_id);
+        }
         const response: any = await dispatch(get(id));
         dispatch(getProfessions());
         dispatch(searchFamilyByPerson(id));
@@ -839,7 +849,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
       lockers: selectedLockers,
       id_card_picture: "empty.png"
     };
-    console.log('form ', form);
     if (tempPersonId > 0) {
       await dispatch(update({ id: tempPersonId, ...form, ...data }));
       dispatch(getLockersByPartner(tempPersonId));
@@ -1154,7 +1163,12 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   };
 
   const updatePersonShare = (body: object) => {
-    dispatch(updateShare(body));
+    dispatch(updateShare(body, true));
+  }
+
+  const updatePaymentMethodShare = () => {
+    const { payment_method_id } = getValues();
+    dispatch(updateShare({ id: selectedShare.id, payment_method_id }, true));
   }
 
   const getOptionLabelCompanyPerson = (option: any) => `${option.name} ${option.last_name}`;
@@ -1492,26 +1506,29 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   };
 
   const renderPaymentMethod = () => {
-    const { share_number } = selectedShare;
+    const { share_number, tarjeta_primaria, tarjeta_secundaria, tarjeta_terciaria } = selectedShare;
     return (
       <TableContainer component={Paper}>
         <Table size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
-              <TableCell align="left" style={{ fontSize: "12px" }}>
+              <TableCell align="left" style={{ fontSize: "12px", minWidth: 20 }}>
                 Accion
               </TableCell>
-              <TableCell align="left" style={{ fontSize: "12px" }}>
+              <TableCell align="left" style={{ fontSize: "12px", minWidth: 20 }}>
                 Forma de Pago
               </TableCell>
-              <TableCell align="left" style={{ fontSize: "12px" }}>
+              <TableCell align="left" style={{ fontSize: "12px", minWidth: 20 }}>
                 Tarjeta 1
               </TableCell>
-              <TableCell align="left" style={{ fontSize: "12px" }}>
+              <TableCell align="left" style={{ fontSize: "12px", minWidth: 20 }}>
                 Tarjeta 2
               </TableCell>
-              <TableCell align="left" style={{ fontSize: "12px" }}>
+              <TableCell align="left" style={{ fontSize: "12px", minWidth: 20 }}>
                 Tarjeta 3
+              </TableCell>
+              <TableCell align="left" style={{ fontSize: "12px", minWidth: 30 }}>
+                
               </TableCell>
             </TableRow>
           </TableHead>
@@ -1536,23 +1553,27 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                   ))}
                 </CustomSelect>
               </TableCell>
-              <TableCell align="left" style={{ fontSize: "12px" }}></TableCell>
-              <TableCell align="left" style={{ fontSize: "12px" }}></TableCell>
               <TableCell align="left" style={{ fontSize: "12px" }}>
-                <div className="custom-select-container">
-                  <select
-                    name="card_people3"
-                    onChange={() => { }}
-                    style={{ fontSize: "13px" }}
-                  >
-                    <option value="">Seleccione</option>
-                    {cardPersonList.map((item: any) => (
-                      <option key={item.id} value={item.id}>
-                        {item.card_number}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                {tarjeta_primaria && formatCreditCard(tarjeta_primaria.card_number)}
+              </TableCell>
+              <TableCell align="left" style={{ fontSize: "12px" }}>
+                {tarjeta_secundaria && formatCreditCard(tarjeta_secundaria.card_number)}
+              </TableCell>
+              <TableCell align="left" style={{ fontSize: "12px" }}>
+                {tarjeta_terciaria && formatCreditCard(tarjeta_terciaria.card_number)}
+              </TableCell>
+              <TableCell align="left" style={{ fontSize: "12px" }}>
+              <Button
+              size="small"
+              type="button"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.cardPaymentMethodPersonButton}
+              onClick={() => updatePaymentMethodShare()}
+            >
+              Actualizar
+            </Button>
               </TableCell>
             </TableRow>
           </TableBody>
@@ -1714,9 +1735,8 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
       <Grid container spacing={3}>
         <Grid item xs={6}>
           <CustomTextField
-            placeholder="Representante"
+            placeholder="Cargo"
             field="representante"
-            required
             register={register}
             errorsField={errors.representante}
             errorsMessageField={
@@ -2396,7 +2416,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                     </TabPanel>
                     <TabPanel value={tabValue} index={5} dir={theme.direction}>
                       <Grid container spacing={3}>
-                      <Grid item xs={12}>
+                        <Grid item xs={12}>
                           <Grid container spacing={3}>
                             <Grid
                               item
@@ -2418,40 +2438,40 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                         </Grid>
                       </Grid>
                       <Grid item xs={12} style={{ marginTop: '20px' }}>
-                              <select
-                                name="locker_location_id"
-                                onChange={handleSelectLockerLocation}
-                                className={classes.select}
-                              >
-                                <option value="">Seleccione Ubicacion</option>
-                                {lockerLocationList.map((item: any) => (
-                                  <option key={item.id} value={item.id}>
-                                    {item.description}
-                                  </option>
-                                ))}
-                              </select>
-                            </Grid>
-                            <Grid item xs={12}>
-                          <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                              {lockerLoading ? (
-                                <Loader />
-                              ) : (
-                                  <TransferList
-                                    data={lockerList}
-                                    selectedData={personLockersByLocation}
-                                    leftTitle="Lockers"
-                                    onSelectedList={onLockersChange}
-                                  />
-                                )}
-                              <input
-                                style={{ display: "none" }}
-                                name="locker_list"
-                                ref={register}
-                              />
-                            </Grid>
+                        <select
+                          name="locker_location_id"
+                          onChange={handleSelectLockerLocation}
+                          className={classes.select}
+                        >
+                          <option value="">Seleccione Ubicacion</option>
+                          {lockerLocationList.map((item: any) => (
+                            <option key={item.id} value={item.id}>
+                              {item.description}
+                            </option>
+                          ))}
+                        </select>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Grid container spacing={3}>
+                          <Grid item xs={12}>
+                            {lockerLoading ? (
+                              <Loader />
+                            ) : (
+                                <TransferList
+                                  data={lockerList}
+                                  selectedData={personLockersByLocation}
+                                  leftTitle="Lockers"
+                                  onSelectedList={onLockersChange}
+                                />
+                              )}
+                            <input
+                              style={{ display: "none" }}
+                              name="locker_list"
+                              ref={register}
+                            />
                           </Grid>
                         </Grid>
+                      </Grid>
                     </TabPanel>
                   </SwipeableViews>
                 </div>

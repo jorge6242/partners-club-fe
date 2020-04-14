@@ -242,7 +242,7 @@ export const get = (id: number) => async (dispatch: Function) => {
   }
 };
 
-export const update = (body: object) => async (dispatch: Function) => {
+export const update = (body: object, isUpdatePartner: boolean = false) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,
     payload: true
@@ -262,14 +262,16 @@ export const update = (body: object) => async (dispatch: Function) => {
           status: true
         }
       })(dispatch);
-      dispatch(
-        updateModal({
-          payload: {
-            status: false,
-            element: null
-          }
-        })
-      );
+      if(!isUpdatePartner) {
+        dispatch(
+          updateModal({
+            payload: {
+              status: false,
+              element: null
+            }
+          })
+        );
+      }
       dispatch(getAll());
       dispatch({
         type: ACTIONS.SET_LOADING,

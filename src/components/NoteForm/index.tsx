@@ -88,7 +88,6 @@ const NoteForm: FunctionComponent<NoteFormProps> = ({
         async function fetch() {
             if (id) {
                 const response: any = await dispatch(get(id));
-                console.log('response ', response);
                 setSelectedNote(response);
             } else {
                 setSelectedNote({});

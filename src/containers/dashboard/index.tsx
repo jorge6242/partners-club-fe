@@ -188,7 +188,6 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
         Icon = currenMenutIcon.name;
       }
     }
-    console.log('item.route ', item.route);
     return (
       <ListItem button onClick={() => handeClick(item.route ? item.route : '/dashboard/main')}>
         <ListItemIcon>
@@ -451,7 +450,6 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
   );
 
   const nameRole: any = !_.isEmpty(user) ? _.first(user.roles) : '';
-  console.log('nameRole ', nameRole);
   return (
     <div className={classes.root}>
       <CssBaseline />
