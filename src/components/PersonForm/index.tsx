@@ -1296,7 +1296,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
           />
         </Grid>
         <Grid item xs={3}>
-          <CustomTextField
+          {/* <CustomTextField
             placeholder="Fecha de Vencimiento"
             field="expiration_date"
             register={register}
@@ -1306,7 +1306,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             }
             type="date"
           />
-        </Grid>
+        </Grid> */}
         <Grid item xs={3}>
           <CustomSelect
             label="Estatus"
