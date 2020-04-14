@@ -102,7 +102,7 @@ import FamilyForm from "../FamilyForm";
 import SearchAutoComplete from "../SearchAutoComplete";
 import Helper from '../../helpers/utilities';
 
-const formatCreditCard = (card: string) => `${card.substring(0, 12).replace(/[0-9]/g, "x")}${card.substring(12, 16)}`;
+const formatCreditCard = (card: string) => card.replace(/.(?=.{4})/g, 'x');
 
 const ExpansionPanelSummary = withStyles({
   root: {
@@ -2208,7 +2208,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                     </TabPanel>
                     <TabPanel value={tabValue} index={1} dir={theme.direction}>
                       <div className={classes.root}>
-                        <Grid container spacing={3}>
+                        <Grid container spacing={3} style={{ marginBottom: 10 }}>
                           <Grid item xs={12}>
                             <Grid
                               container

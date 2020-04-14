@@ -106,7 +106,9 @@ export default function Home() {
     return false;
   }
 
-
+  // var str="3465389025"; //VERY BAD: Credit Card # *unencrypted* in source!
+  // var n = str.replace(/.(?=.{4})/g, 'x');
+  // console.log('n ', n);
   return (
     <div className="home-container">
       <Grid container spacing={3} className={classes.widgetContainer}>
