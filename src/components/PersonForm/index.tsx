@@ -437,7 +437,8 @@ function TabPanel(props: TabPanelProps) {
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
-    backgroundColor: theme.palette.background.paper
+    backgroundColor: theme.palette.background.paper,
+    width: '100%',
   },
   paper: {
     display: "flex",
