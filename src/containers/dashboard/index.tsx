@@ -352,8 +352,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
 
   const drawer = (
     <div>
-      {/* <Logo /> */}
-      <div className={classes.toolbar} />
+      <Logo />
       <Divider />
       <List dense >
         {!_.isEmpty(menuList) && buildMenu(menuList.items)}
@@ -459,7 +458,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
       </List>
     </div>
   );
-
+  const client =Helper.getParameter(parameterList, 'CLIENT_NAME')
   const nameRole: any = !_.isEmpty(user) ? _.first(user.roles) : '';
   return (
     <div className={classes.root}>
@@ -480,11 +479,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
               <Grid container spacing={1}>
                 <Grid item xs={12}>Suite Gestion Clubes</Grid>
               </Grid>
-
-              {/* {Helper.checkParameter(parameterList, "CLIENT_NAME") && (
-                <Grid item xs={12} style={{ fontSize: 14, fontStyle: 'italic' }}>{Helper.getParameter(parameterList, 'CLIENT_NAME')}</Grid>
-              )
-              } */}
+                  <Grid item xs={12} style={{ fontSize: 14, fontStyle: 'italic' }}>{client.value}</Grid>
             </Typography>
             <Typography variant="h6" noWrap style={{ lineHeight: 3 }}>
               <div>

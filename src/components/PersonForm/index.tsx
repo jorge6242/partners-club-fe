@@ -1044,14 +1044,13 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   };
 
   const handleShareSelect = (event: any) => {
-    console.log('event.target.value ', event.target.value);
     dispatch(getShare(event.target.value));
-    // const share: any = sharesByPartner.find((e: any) => e.id === event.target.value);
-    // if (share) {
-    //   dispatch(getLastMovement(share.share_number));
-    // } else {
-    //   dispatch(updateLastMovement());
-    // }
+    const share: any = sharesByPartner.find((e: any) => e.id == event.target.value);
+    if (share) {
+      dispatch(getLastMovement(share.share_number));
+    } else {
+      dispatch(updateLastMovement());
+    }
   };
 
   const handleSelectLockerLocation = async (

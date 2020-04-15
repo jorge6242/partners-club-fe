@@ -90,6 +90,7 @@ const ShareMovementForm: FunctionComponent<ShareMovementFormProps> = ({
     watch
   } = useForm<FormData>();
   const [selectedTypeTransaction, setSelectedTypeTransaction] = useState<any>(null);
+  const [ tempPartnersToAssign, setTempPartnersToAssign] = useState<any>([]);
   const { shareToAssignList, shareToAssignLoading } = useSelector(
     (state: any) => state.shareReducer
   );
@@ -143,11 +144,15 @@ const ShareMovementForm: FunctionComponent<ShareMovementFormProps> = ({
     }
   }, 1000);
 
-  const handleSearchPartners = _.debounce((term: any) => {
+  const handleSearchPartners = _.debounce(async (term: any) => {
     if (term !== "") {
-      dispatch(searchPartnersToAssign(term));
+      const res: any = await dispatch(searchPartnersToAssign(term));
+      if(res) {
+        setTempPartnersToAssign(res);
+      }
     } else {
       dispatch(clearPartnersToAssign());
+      setTempPartnersToAssign([]);
     }
   }, 1000);
 
@@ -184,7 +189,7 @@ const ShareMovementForm: FunctionComponent<ShareMovementFormProps> = ({
     if (people_id === "") {
       return false;
     }
-    const partner = partnersToAssign.find(
+    const partner = tempPartnersToAssign.find(
       (e: any) => e.id.toString() === people_id
     );
     return partner;

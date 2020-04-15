@@ -58,10 +58,10 @@ const LoginForm: FunctionComponent<LoginFormProps> = ({ handleForm, loading }) =
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
-        {/* <Logo /> */}
-        <Avatar className={classes.avatar}>
+        <Logo />
+        {/* <Avatar className={classes.avatar}>
           <SupervisorAccountIcon />
-        </Avatar>
+        </Avatar> */}
         <Typography component="h1" variant="h5">
           Control de Socios
         </Typography>
