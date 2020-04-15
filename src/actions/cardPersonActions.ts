@@ -59,7 +59,7 @@ export const create = (body: any) => async (dispatch: Function) => {
         }
       })(dispatch);
       dispatch(getAll(body.people_id));
-      dispatch(getSharesByPartner(body.share));
+      dispatch(getSharesByPartner(body.people_id));
       dispatch(
         updateModal({
           payload: {
@@ -156,7 +156,7 @@ export const update = (body: any) => async (dispatch: Function) => {
         })
       );
       dispatch(getAll(body.people_id));
-      dispatch(getSharesByPartner(body.share));
+      dispatch(getSharesByPartner(body.people_id));
       dispatch({
         type: ACTIONS.SET_LOADING,
         payload: false
@@ -201,7 +201,7 @@ export const remove = (id: number, personId: any, share: number, order: number) 
         }
       })(dispatch);
       dispatch(getAll(personId));
-      dispatch(getSharesByPartner(share));
+      dispatch(getSharesByPartner(personId));
     }
     return response;
   } catch (error) {
