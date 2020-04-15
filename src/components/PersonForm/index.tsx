@@ -858,7 +858,8 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
 
   useEffect(() => {
     if (!_.isEmpty(sharesByPartner)) {
-      const share: any = _.first(sharesByPartner);
+      const shares = sharesByPartner;
+      const share: any = _.first(shares);
       dispatch(getLastMovement(share.share_number));
     }
   }, [dispatch, sharesByPartner]);
@@ -1977,13 +1978,35 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     )
   }
 
+
+  // const renderShareProfile = () => {
+  //   if (!_.isEmpty(promotor)) {
+  //     return (
+  //       <Grid item xs={12}>
+  //         <Grid item xs={12} className={classes.profileShareTitle}>Acciones</Grid>
+  //         <div className="custom-select-container">
+  //           <select
+  //             name="relation"
+  //             onChange={handleShareSelect}
+  //             style={{ fontSize: "13px" }}
+  //           >
+  //             {sharesByPartner.map((item: any, i: number) => (
+  //               <option value={item.id}>{item.share_number}</option>
+  //             ))}
+  //           </select>
+  //         </div>
+  //       </Grid>
+  //     )
+  //   }
+  // }
+
   const renderLastMovement = () => {
     if (lastMovementLoading) {
       return <Loader />
     }
     return !_.isEmpty(lastMovement) &&
       (
-        <Grid container spacing={0}>
+        <Grid container spacing={0} style={{ marginTop: 20 }}>
           <Grid item xs={12} className={classes.profileMovement}>{lastMovement.created}</Grid>
           <Grid item xs={12} className={classes.profileMovement}>{lastMovement.description}</Grid>
           <Grid item xs={12} className={classes.profileMovement}>{lastMovement.transaction.description}</Grid>
