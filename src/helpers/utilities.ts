@@ -18,7 +18,7 @@ const checkParameter =  (list: Array<string | number>, param: string) => {
         return current;
     }
     return {};
-}  
+  }  
 
 export default {
     checkParameter,
