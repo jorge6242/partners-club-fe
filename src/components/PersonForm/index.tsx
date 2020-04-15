@@ -102,6 +102,7 @@ import FamilyForm from "../FamilyForm";
 import SearchAutoComplete from "../SearchAutoComplete";
 import Helper from '../../helpers/utilities';
 import moment from "moment";
+import { getLastMovement, updateLastMovement } from "../../actions/shareMovementActions";
 
 const formatCreditCard = (card: string) => card.replace(/.(?=.{4})/g, 'x');
 
@@ -535,7 +536,17 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   personRecordTitle: {
     textAlign: "right"
-  }
+  },
+  profileShareTitle: {
+    textAlign: "left",
+    fontWeight: "bold",
+    color: "#3f51b5",
+    fontSize: "16px"
+  },
+  profileMovement: {
+    textAlign: "left",
+    fontSize: "14px"
+  },
 }));
 
 type FormData = {
@@ -686,6 +697,10 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   );
   const { list: paymentMethodList } = useSelector(
     (state: any) => state.paymentMethodReducer
+  );
+
+  const { lastMovement, lastMovementLoading } = useSelector(
+    (state: any) => state.shareMovementReducer
   );
 
   const { listData: parameterList } = useSelector((state: any) => state.parameterReducer);
@@ -840,6 +855,13 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     }
     fetch();
   }, [id, dispatch, setValue]);
+
+  useEffect(() => {
+    if (!_.isEmpty(sharesByPartner)) {
+      const share: any = _.first(sharesByPartner);
+      dispatch(getLastMovement(share.share_number));
+    }
+  }, [dispatch, sharesByPartner]);
 
   useEffect(() => {
     return () => {
@@ -1021,7 +1043,14 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   };
 
   const handleShareSelect = (event: any) => {
+    console.log('event.target.value ', event.target.value);
     dispatch(getShare(event.target.value));
+    // const share: any = sharesByPartner.find((e: any) => e.id === event.target.value);
+    // if (share) {
+    //   dispatch(getLastMovement(share.share_number));
+    // } else {
+    //   dispatch(updateLastMovement());
+    // }
   };
 
   const handleSelectLockerLocation = async (
@@ -1948,6 +1977,20 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     )
   }
 
+  const renderLastMovement = () => {
+    if (lastMovementLoading) {
+      return <Loader />
+    }
+    return !_.isEmpty(lastMovement) &&
+      (
+        <Grid container spacing={0}>
+          <Grid item xs={12} className={classes.profileMovement}>{lastMovement.created}</Grid>
+          <Grid item xs={12} className={classes.profileMovement}>{lastMovement.description}</Grid>
+          <Grid item xs={12} className={classes.profileMovement}>{lastMovement.transaction.description}</Grid>
+        </Grid>
+      )
+  }
+
   const getNacionalityLabel = (row: any) => row.citizenship;
 
   let imagePreview = picture;
@@ -2006,6 +2049,8 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                   </Grid>
                 )}
               </Grid>
+                {/* {renderShareProfile()} */}
+                {renderLastMovement()}
             </Grid>
 
             <Grid item xs={10}>
