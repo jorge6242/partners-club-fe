@@ -9,7 +9,7 @@ const AXIOS = axios.create({
   headers: {
     'Content-Type': 'application/json',
     'Partners-Application': 'admin'
-  },
+    },
   timeout: 100000,
 });
 

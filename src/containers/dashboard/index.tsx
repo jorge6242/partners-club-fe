@@ -53,7 +53,12 @@ import { getList as getCurrencies } from "../../actions/currencyActions";
 import { getAll as getSports } from "../../actions/sportActions";
 import { getList as getLockerLocationList } from "../../actions/lockerLocationsActions";
 import { getList as getMenuList } from "../../actions/menuActions";
+import { getList as getParameterList } from "../../actions/parameterActions";
 import icons from "../../helpers/collectionIcons";
+import Helper from '../../helpers/utilities';
+import { Grid } from "@material-ui/core";
+
+import Logo from '../../components/Logo'
 
 const drawerWidth = 240;
 
@@ -127,6 +132,10 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
 
   const { listData: menuList } = useSelector((state: any) => state.menuReducer);
 
+  const {
+    parameterReducer: { listData: parameterList }
+  } = useSelector((state: any) => state);
+
   const [open1, setOpen1] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
   const [open3, setOpen3] = React.useState(false);
@@ -182,9 +191,9 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
 
   const renderThirdMenu = (item: any) => {
     let Icon = SettingsIcon;
-    if(item.icons) {
+    if (item.icons) {
       let currenMenutIcon = icons.find((e: any) => e.slug === item.icons.slug);
-      if(currenMenutIcon) {
+      if (currenMenutIcon) {
         Icon = currenMenutIcon.name;
       }
     }
@@ -201,9 +210,9 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
   const secondMenu = (CustomIcon: React.ReactType, title: string, route: string, menu: any, item: any) => {
     const findChildrens: any = menu.filter((e: any) => e.parent == item.id);
     let Icon = SettingsIcon;
-    if(item.icons) {
+    if (item.icons) {
       let currenMenutIcon = icons.find((e: any) => e.slug === item.icons.slug);
-      if(currenMenutIcon) {
+      if (currenMenutIcon) {
         Icon = currenMenutIcon.name;
       }
     }
@@ -238,9 +247,9 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
       if (item.parent === "0") {
         const findChildrens: any = menu.filter((e: any) => e.parent == item.id);
         let Icon = SettingsIcon;
-        if(item.icons) {
+        if (item.icons) {
           let currenMenutIcon = icons.find((e: any) => e.slug === item.icons.slug);
-          if(currenMenutIcon) {
+          if (currenMenutIcon) {
             Icon = currenMenutIcon.name;
           }
         }
@@ -288,6 +297,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     dispatch(getCurrencies());
     dispatch(getSports());
     dispatch(getLockerLocationList());
+    dispatch(getParameterList());
   }, [dispatch])
 
   useEffect(() => {
@@ -342,6 +352,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
 
   const drawer = (
     <div>
+      {/* <Logo /> */}
       <div className={classes.toolbar} />
       <Divider />
       <List dense >
@@ -466,9 +477,16 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
           </IconButton>
           <div className={classes.header}>
             <Typography variant="h6" noWrap>
-              Suite Gestion Clubes
+              <Grid container spacing={1}>
+                <Grid item xs={12}>Suite Gestion Clubes</Grid>
+              </Grid>
+
+              {/* {Helper.checkParameter(parameterList, "CLIENT_NAME") && (
+                <Grid item xs={12} style={{ fontSize: 14, fontStyle: 'italic' }}>{Helper.getParameter(parameterList, 'CLIENT_NAME')}</Grid>
+              )
+              } */}
             </Typography>
-            <Typography variant="h6" noWrap>
+            <Typography variant="h6" noWrap style={{ lineHeight: 3 }}>
               <div>
                 <Button
                   startIcon={<AccountCircleIcon />}

@@ -54,6 +54,7 @@ import MenuItem from "../containers/MenuItem";
 import CustomModal from "../components/CustomModal";
 import AccessControl from "../containers/accessControl";
 import Guest from "../containers/guest";
+import About from "../containers/about";
 
 export default function Routes() {
   const dispatch = useDispatch();
@@ -139,6 +140,7 @@ export default function Routes() {
                       <Route path="/dashboard/menu-item" exact component={MenuItem} />
                       <Route path="/dashboard/access-control" exact component={AccessControl} />
                       <Route path="/dashboard/guest" exact component={Guest} />
+                      <Route path="/dashboard/about" exact component={About} />
                     </Dashboard>
                   </Switch>
                 );

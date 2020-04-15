@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useForm } from "react-hook-form";
+import Logo from "../Logo";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -57,6 +58,7 @@ const LoginForm: FunctionComponent<LoginFormProps> = ({ handleForm, loading }) =
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
+        {/* <Logo /> */}
         <Avatar className={classes.avatar}>
           <SupervisorAccountIcon />
         </Avatar>
