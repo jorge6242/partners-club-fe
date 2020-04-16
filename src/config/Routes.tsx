@@ -62,18 +62,19 @@ export default function Routes() {
 
   useEffect(() => {
     async function run(){
+      console.log('paso');
       if(window.location.pathname !== '/') {
         await dispatch(checkLogin());
-        dispatch(getStatusPersonAll());
-        dispatch(getMaritalStatusAll());
-        dispatch(getGenderAll());
-        dispatch(getCountries());
-        dispatch(getRelationTypes());
-        dispatch(getPaymentMethods());
-        dispatch(getTransactionTypes());
-        dispatch(getCurrencies());
-        dispatch(getSports());
-        dispatch(getLockerLocationList());
+        // await dispatch(getStatusPersonAll());
+        // await dispatch(getMaritalStatusAll());
+        // await dispatch(getGenderAll());
+        // await dispatch(getCountries());
+        // await dispatch(getRelationTypes());
+        // await dispatch(getPaymentMethods());
+        // await dispatch(getTransactionTypes());
+        // await dispatch(getCurrencies());
+        // await dispatch(getSports());
+        // await dispatch(getLockerLocationList());
       }
     }
     run();

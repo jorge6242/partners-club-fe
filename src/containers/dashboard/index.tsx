@@ -288,18 +288,18 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
   useEffect(() => {
       async function run() {
        await dispatch(checkLogin());
-        dispatch(getMenuList());
-        dispatch(getStatusPersonAll());
-        dispatch(getMaritalStatusAll());
-        dispatch(getGenderAll());
-        dispatch(getCountries());
-        dispatch(getRelationTypes());
-        dispatch(getPaymentMethods());
-        dispatch(getTransactionTypes());
-        dispatch(getCurrencies());
-        dispatch(getSports());
-        dispatch(getLockerLocationList());
-        dispatch(getParameterList());
+       await dispatch(getMenuList());
+       await dispatch(getStatusPersonAll());
+       await dispatch(getMaritalStatusAll());
+       await dispatch(getGenderAll());
+       await dispatch(getCountries());
+       await dispatch(getRelationTypes());
+       await dispatch(getPaymentMethods());
+       await dispatch(getTransactionTypes());
+       await dispatch(getCurrencies());
+       await dispatch(getSports());
+       await dispatch(getLockerLocationList());
+       await dispatch(getParameterList());
       }
       run();
   }, [dispatch])
