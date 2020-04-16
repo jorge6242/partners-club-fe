@@ -3,7 +3,7 @@ import snackBarUpdate from "./snackBarActions";
 import { updateModal } from "./modalActions";
 import { ACTIONS } from '../interfaces/actionTypes/paymentMethodTypes';
 
-export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch: Function) => {
+export const getAll = (page: number = 1, perPage: number = 8, intento: boolean = true) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,
     payload: true
@@ -36,6 +36,9 @@ export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch
     }
     return response;
   } catch (error) {
+    if(intento) {
+      dispatch(getAll(page, perPage ,false));
+    }
     snackBarUpdate({
       payload: {
         message: error.message,
