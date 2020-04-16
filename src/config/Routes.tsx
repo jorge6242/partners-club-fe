@@ -61,27 +61,27 @@ export default function Routes() {
   const token = SecureStorage.getItem("token");
 
   useEffect(() => {
-    if(window.location.pathname !== '/') {
-      dispatch(getStatusPersonAll());
-      dispatch(getMaritalStatusAll());
-      dispatch(getGenderAll());
-      dispatch(getCountries());
-      dispatch(getRelationTypes());
-      dispatch(getPaymentMethods());
-      dispatch(getTransactionTypes());
-      dispatch(getCurrencies());
-      dispatch(getSports());
-      dispatch(getLockerLocationList());
+    async function run(){
+      if(window.location.pathname !== '/') {
+        await dispatch(checkLogin());
+        dispatch(getStatusPersonAll());
+        dispatch(getMaritalStatusAll());
+        dispatch(getGenderAll());
+        dispatch(getCountries());
+        dispatch(getRelationTypes());
+        dispatch(getPaymentMethods());
+        dispatch(getTransactionTypes());
+        dispatch(getCurrencies());
+        dispatch(getSports());
+        dispatch(getLockerLocationList());
+      }
     }
+    run();
   },[dispatch, token])
 
-  useEffect(() => {
-    dispatch(checkLogin());
-  }, [dispatch, token]);
-
-  useEffect(() => {
-    setupInterceptors();
-  }, [token]);
+  // useEffect(() => {
+  //   setupInterceptors();
+  // }, [token]);
 
   return (
     <HashRouter>
