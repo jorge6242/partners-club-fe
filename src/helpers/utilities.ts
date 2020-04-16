@@ -18,9 +18,23 @@ const checkParameter =  (list: Array<string | number>, param: string) => {
         return current;
     }
     return {};
-  }  
+  }
+
+  const parseError = (err: any) => {
+    console.log('err ', typeof err);
+    if(typeof err === 'string' && err === 'Error: Network Error') {
+      return 'Error en el Servidor';
+    }
+    if(typeof err === 'object') {
+      if(err.response && err.response.status === 500) {
+        return 'Error interno del Servidor';
+      }
+    }
+    return err;
+  }
 
 export default {
     checkParameter,
     getParameter,
+    parseError,
 }

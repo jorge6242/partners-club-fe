@@ -2,8 +2,9 @@ import MaritalStatus from "../api/MaritalStatus";
 import snackBarUpdate from "../actions/snackBarActions";
 import { updateModal } from "../actions/modalActions";
 import { ACTIONS } from '../interfaces/actionTypes/maritalStatusTypes';
+import Utils from '../helpers/utilities';
 
-export const getAll = () => async (dispatch: Function) => {
+export const getAll = (intento: boolean = true) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,
     payload: true
@@ -24,6 +25,9 @@ export const getAll = () => async (dispatch: Function) => {
     }
     return response;
   } catch (error) {
+    if(intento) {
+      dispatch(getAll(false));
+    }
     snackBarUpdate({
       payload: {
         message: error.message,
