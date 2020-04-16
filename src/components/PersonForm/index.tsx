@@ -1276,7 +1276,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             register={register}
             errorsField={errors.passport}
             errorsMessageField={errors.passport && errors.passport.message}
-            inputType="number"
           />
         </Grid>
         <Grid item xs={3}>
@@ -1489,7 +1488,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                 register={register}
                 errorsField={errors.telephone1}
                 errorsMessageField={errors.telephone1 && errors.telephone1.message}
-                inputType="number"
               />
             </Grid>
             <Grid item xs={6}>
@@ -1499,7 +1497,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                 register={register}
                 errorsField={errors.telephone2}
                 errorsMessageField={errors.telephone2 && errors.telephone2.message}
-                inputType="number"
               />
             </Grid>
             <Grid item xs={6}>
@@ -1511,7 +1508,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                 errorsMessageField={
                   errors.phone_mobile1 && errors.phone_mobile1.message
                 }
-                inputType="number"
               />
             </Grid>
             <Grid item xs={6}>
@@ -1523,7 +1519,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                 errorsMessageField={
                   errors.phone_mobile2 && errors.phone_mobile2.message
                 }
-                inputType="number"
               />
             </Grid>
           </Grid>
@@ -1546,7 +1541,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                 register={register}
                 errorsField={errors.fax}
                 errorsMessageField={errors.fax && errors.fax.message}
-                inputType="number"
               />
             </Grid>
           </Grid>

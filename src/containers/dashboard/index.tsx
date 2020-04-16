@@ -39,7 +39,7 @@ import Collapse from '@material-ui/core/Collapse'
 import SettingsIcon from '@material-ui/icons/Settings';
 import _ from 'lodash';
 
-import { logout } from "../../actions/loginActions";
+import { logout, checkLogin } from "../../actions/loginActions";
 import AccessControlForm from "../../components/AccessControlForm";
 import { updateModal } from "../../actions/modalActions";
 import { getAll as getStatusPersonAll } from "../../actions/statusPersonActions";
@@ -286,18 +286,22 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
 
 
   useEffect(() => {
-    dispatch(getMenuList());
-    dispatch(getStatusPersonAll());
-    dispatch(getMaritalStatusAll());
-    dispatch(getGenderAll());
-    dispatch(getCountries());
-    dispatch(getRelationTypes());
-    dispatch(getPaymentMethods());
-    dispatch(getTransactionTypes());
-    dispatch(getCurrencies());
-    dispatch(getSports());
-    dispatch(getLockerLocationList());
-    dispatch(getParameterList());
+      async function run() {
+       await dispatch(checkLogin());
+        dispatch(getMenuList());
+        dispatch(getStatusPersonAll());
+        dispatch(getMaritalStatusAll());
+        dispatch(getGenderAll());
+        dispatch(getCountries());
+        dispatch(getRelationTypes());
+        dispatch(getPaymentMethods());
+        dispatch(getTransactionTypes());
+        dispatch(getCurrencies());
+        dispatch(getSports());
+        dispatch(getLockerLocationList());
+        dispatch(getParameterList());
+      }
+      run();
   }, [dispatch])
 
   useEffect(() => {
