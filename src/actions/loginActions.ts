@@ -49,7 +49,7 @@ export const login = (body: object) => async (dispatch: Function) => {
 
 export const logout = () => ({ type: ACTIONS.LOGOUT })
 
-export const checkLogin = () => async (dispatch: Function) => {
+export const checkLogin = (intento: boolean = true) => async (dispatch: Function) => {
     dispatch(mainStatusLoading(true))
     try {
         const {
@@ -65,6 +65,9 @@ export const checkLogin = () => async (dispatch: Function) => {
         }
         return checkLoginResponse;
     } catch (error) {
+        if(intento) {
+            dispatch(checkLogin(false));
+          }
         dispatch(mainStatusLoading(false))
         return error;
     }

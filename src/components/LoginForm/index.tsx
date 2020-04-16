@@ -111,7 +111,7 @@ const LoginForm: FunctionComponent<LoginFormProps> = ({ handleForm, loading }) =
             disabled={loading}
             className={classes.submit}
           >
-            Sign In
+            Iniciar Sesion
           </Button>
         {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
       </div>
