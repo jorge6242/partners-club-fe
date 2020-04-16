@@ -6,7 +6,7 @@ import axios from 'axios';
 //http://190.216.224.53/api/portalsocios/public/
 
 const AXIOS = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: 'http://club.api.com',
   headers: {
     'Content-Type': 'application/json',
     'Partners-Application': 'admin'
