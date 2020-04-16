@@ -202,13 +202,13 @@ const FamilysColumns: FamilyPersonColumns[] = [
     component: (value: any) => <span>{value.value}</span>
   },
   {
-    id: "relationType",
+    id: "description",
     label: "Parentesco",
     minWidth: 20,
     align: "right",
     component: (value: any) => (
       <span>
-        <strong>{value.value.description}</strong>
+        <strong>{value.value}</strong>
       </span>
     )
   },
@@ -233,7 +233,7 @@ const FamilysColumns: FamilyPersonColumns[] = [
     align: "right",
     component: (value: any) => (
       <Chip
-        label={value.value === "1" ? "Activo" : "Inactivo"}
+        label={value.value.status === "1" ? "Activo" : "Inactivo"}
         style={{
           backgroundColor: value.value === "1" ? "#2ecc71" : "#e74c3c",
           color: "white",
