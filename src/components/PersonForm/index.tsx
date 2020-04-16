@@ -1235,7 +1235,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             register={register}
             errorsField={errors.rif_ci}
             errorsMessageField={errors.rif_ci && errors.rif_ci.message}
-            inputType="number"
           />
         </Grid>
         <Grid item xs={3}>
@@ -1323,7 +1322,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             errorsMessageField={
               errors.card_number && errors.card_number.message
             }
-            inputType="number"
           />
         </Grid>
         <Grid item xs={3} style={{ lineHeight: 2.5 }}>
