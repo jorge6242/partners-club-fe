@@ -15,6 +15,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import CustomTextField from "../FormElements/CustomTextField";
 import { createGuest } from "../../actions/personActions";
 import CustomSelect from "../FormElements/CustomSelect";
+import { getAll as getGenderAll } from "../../actions/genderActions";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -93,6 +94,10 @@ const GuestForm: FunctionComponent<GuestFormProps> = ({
 
   const dispatch = useDispatch();
   const { picture } = getValues();
+
+  useEffect(()=> {
+    dispatch(getGenderAll());
+  }, [dispatch]);
 
   useEffect(() => {
     setValue("rif_ci", identification);

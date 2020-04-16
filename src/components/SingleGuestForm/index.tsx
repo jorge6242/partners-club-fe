@@ -15,6 +15,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import CustomTextField from "../FormElements/CustomTextField";
 import { create, update , get } from "../../actions/personActions";
 import CustomSelect from "../FormElements/CustomSelect";
+import { getAll as getGenderAll } from "../../actions/genderActions";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -94,6 +95,7 @@ const SingleGuestForm: FunctionComponent<ComponentProps> = ({ id }) => {
 
   useEffect(() => {
     async function fetch() {
+        dispatch(getGenderAll());
         if (id) {
             const response: any = await dispatch(get(id));
             const { name, last_name, rif_ci, primary_email, telephone1, picture, gender_id } = response;
@@ -119,12 +121,12 @@ const SingleGuestForm: FunctionComponent<ComponentProps> = ({ id }) => {
   const handleForm = async (form: object) => {
     const body = {
       ...form,
-      id_card_picture: "N/A",
-      passport: "N/A",
-      card_number: "N/A",
+      id_card_picture: "",
+      passport: "",
+      card_number: "",
       expiration_date: moment().format('YYYY-MM-DD'),
       birth_date: moment().format('YYYY-MM-DD'),
-      representante: "N/A",
+      representante: "",
       company_person_id: 0,
       status_person_id: 1,
       marital_statuses_id: 0,

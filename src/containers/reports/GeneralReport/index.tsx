@@ -23,6 +23,8 @@ import RangePicker from "../../../components/FormElements/RangePicker";
 import RangeAge from "../../../components/FormElements/RangeAge";
 import { getAll as getProfessions } from "../../../actions/professionActions";
 import { getAll as getSports} from "../../../actions/sportActions";
+import { getAll as getStatusPersonAll } from "../../../actions/statusPersonActions";
+import { getAll as getGenderAll } from "../../../actions/genderActions";
 
 const columns: PersonColumn[] = [
   {
@@ -207,6 +209,7 @@ export default function GeneralReport() {
   useEffect(() => {
     dispatch(getProfessions());
     dispatch(getSports());
+    dispatch(getStatusPersonAll());
   },[dispatch])
 
   useEffect(() => {

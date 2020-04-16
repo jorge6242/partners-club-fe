@@ -103,6 +103,10 @@ import SearchAutoComplete from "../SearchAutoComplete";
 import Helper from '../../helpers/utilities';
 import moment from "moment";
 import { getLastMovement, updateLastMovement } from "../../actions/shareMovementActions";
+import { getAll as getMaritalStatusList } from "../../actions/maritalStatusActions";
+import { getAll as getSports } from "../../actions/sportActions";
+import { getAll as getStatusPersonAll } from "../../actions/statusPersonActions";
+import { getAll as getGenderAll } from "../../actions/genderActions";
 
 const formatCreditCard = (card: string) => card.replace(/.(?=.{4})/g, 'x');
 
@@ -742,6 +746,10 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   useEffect(() => {
     setSelectedProff([]);
     async function fetch() {
+      dispatch(getMaritalStatusList());
+      dispatch(getSports());
+      dispatch(getStatusPersonAll());
+      dispatch(getGenderAll());
       if (id) {
         const response: any = await dispatch(get(id));
         dispatch(getProfessions());
