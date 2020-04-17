@@ -22,7 +22,7 @@ const API = {
       {
         ...data
       },
-      { headers: headers() }
+      { headers: headers('form') }
     );
   },
   get(id: number) {

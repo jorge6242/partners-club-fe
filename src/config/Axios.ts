@@ -8,9 +8,8 @@ import axios from 'axios';
 //http://192.168.0.252:9002/
 
 const AXIOS = axios.create({
-  baseURL: 'http://192.168.0.252:9002',
+  baseURL: 'http://localhost:8000',
   headers: {
-    'Content-Type': 'application/json',
     'Partners-Application': 'admin'
     },
   timeout: 100000,

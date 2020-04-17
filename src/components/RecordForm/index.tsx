@@ -158,6 +158,7 @@ const RecordForm: FunctionComponent<RecordFormProps> = ({
           className={classes.form}
           onSubmit={handleSubmit(handleForm)}
           noValidate
+          encType="multipart/form-data"
         >
           <Grid container spacing={3}>
             <Grid item xs={12}>
@@ -220,7 +221,7 @@ const RecordForm: FunctionComponent<RecordFormProps> = ({
                 color="primary"
                 component="span"
                 size="small"
-              // onClick={() => handleImage()}
+                // onClick={() => handleImage()}
               >
                 Archivo 1
               </Button>
@@ -228,7 +229,6 @@ const RecordForm: FunctionComponent<RecordFormProps> = ({
                 style={{ display: "none" }}
                 type="file"
                 id="load_image"
-                accept="image/*,.pdf"
                 ref={triggerClick}
                 onChange={loadImage}
               />
