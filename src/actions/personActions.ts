@@ -1053,6 +1053,17 @@ export const searchTitularToAssign = (term: string) => async (
   }
 };
 
+export const clearGetFamiliesPartnerByCard = () => (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.GET_FAMILIES_PARTNER_BY_CARD,
+    payload: {}
+  });
+  dispatch({
+    type: ACTIONS.GET_GUEST_BY_PARTNER,
+    payload: {}
+  });
+}
+
 export const getFamiliesPartnerByCard = (card: string) => async (
   dispatch: Function
 ) => {
@@ -1087,6 +1098,7 @@ export const getFamiliesPartnerByCard = (card: string) => async (
     }
     return response;
   } catch (error) {
+    console.log('error ', error);
     let message = "Error en el Servidor";
     if (error && error.response) {
       const {

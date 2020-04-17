@@ -381,7 +381,7 @@ function getParsePerson(data: any, classes: any) {
       <Grid item xs={4} className={classes.parsedPersonContainerTitle}>
         <Paper className={classes.parsedPersonContainerDetail}>
           <strong>Tipo Persona:</strong>
-          {type_person === 1 ? "Natural" : "Empresa"}
+          {type_person === "1" ? "Natural" : "Empresa"}
         </Paper>
       </Grid>
       <Grid item xs={4}>
@@ -2430,7 +2430,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                               </Typography>
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails>
-                              {getParsePerson(selectedShare.titular, classes)}
+                              {selectedShare.titular && getParsePerson(selectedShare.titular, classes)}
                             </ExpansionPanelDetails>
                           </ExpansionPanel>
 

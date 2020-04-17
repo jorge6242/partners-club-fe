@@ -17,12 +17,14 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Paper from "@material-ui/core/Paper";
 
 import { create } from "../../actions/accessControlActions";
 import {
   getFamiliesPartnerByCard,
   clear,
-  getGuestByPartner
+  getGuestByPartner,
+  clearGetFamiliesPartnerByCard
 } from "../../actions/personActions";
 import CustomSelect from "../FormElements/CustomSelect";
 import { getList } from "../../actions/locationActions";
@@ -48,6 +50,13 @@ const useStyles = makeStyles(theme => ({
     padding: 0,
     textAlign: "center",
     fontWeight: "bold"
+  },
+  cardPartnerHeader: {
+    padding: 0,
+    textAlign: "center",
+    fontWeight: "bold",
+    background: '#2980b9',
+    color: 'white',
   },
   rootFamilyCards: {
     width: 150
@@ -107,7 +116,11 @@ const useStyles = makeStyles(theme => ({
     fontWeight: theme.typography.fontWeightRegular
   },
   partnerContainer: {
-  }
+  },
+  singleShare: {
+    textAlign: "left",
+    padding: "13px"
+  },
 }));
 
 type FormData = {
@@ -165,20 +178,32 @@ export default function AccessControlForm() {
     const body = { ...form, family, status, created };
     await dispatch(create(body));
     setSelectedFamilies([]);
+    reset();
   };
 
   const handleSearch = async (event: any) => {
     setSelectedFamilies([]);
-    const response: any = await dispatch(getFamiliesPartnerByCard(event.value));
-    if (!_.isEmpty(response)) {
-      setValue("people_id", response.id);
-      if(response.familyMembers) {
-        const family = response.familyMembers.find((e: any) => e.selectedFamily === true );
-        if(family) {
-          setSelectedFamilies([...selectedFamilies, family])
+    if(event.value !== "") {
+      const response: any = await dispatch(getFamiliesPartnerByCard(event.value));
+      if (!_.isEmpty(response) && !response.response) {
+        setValue("people_id", response.id);
+        if(response.shares.length === 1) {
+          const list = response.shares;
+          const current: any = _.first(list);
+          setValue("share_id", current.id);
         }
+        if (response.familyMembers) {
+          const family = response.familyMembers.find((e: any) => e.selectedFamily === true);
+          if (family) {
+            setSelectedFamilies([...selectedFamilies, family])
+          }
+        }
+      } else {
+        setValue("people_id", "");
       }
     } else {
+      dispatch(clearGetFamiliesPartnerByCard());
+      setSelectedFamilies([]);
       setValue("people_id", "");
     }
   };
@@ -284,62 +309,6 @@ export default function AccessControlForm() {
       return (
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Grid container>
-              <Grid item xs={familiesPartnerByCard.shares ? 6 : 12}>
-                <Card
-                  className={`${classes.rootFamilyCards} ${classes.activeCard}`}
-                >
-                  <CardHeader
-                    titleTypographyProps={{ variant: "subtitle1" }}
-                    title="Socio"
-                    className={classes.cardHeader}
-                  />
-                  <CardMedia
-                    className={classes.media}
-                    image={familiesPartnerByCard.picture}
-                  />
-                  <CardContent className={classes.cardContent}>
-                    <Typography
-                      color="textPrimary"
-                      className={classes.familyTitle}
-                    >
-                      <strong>
-                        Carnet N° {familiesPartnerByCard.card_number}
-                      </strong>
-                    </Typography>
-                    <Typography
-                      color="textPrimary"
-                      className={classes.familyTitle}
-                    >
-                      {familiesPartnerByCard.name}
-                      {familiesPartnerByCard.last_name}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-              {familiesPartnerByCard.shares && (
-                <Grid item xs={6}>
-                  <CustomSelect
-                    label="Accion"
-                    selectionMessage="Seleccione"
-                    field="share_id"
-                    required
-                    register={register}
-                    errorsMessageField={
-                      errors.share_id && errors.share_id.message
-                    }
-                  >
-                    {familiesPartnerByCard.shares.map((item: any) => (
-                      <option key={item.id} value={item.id}>
-                        {item.share_number}
-                      </option>
-                    ))}
-                  </CustomSelect>
-                </Grid>
-              )}
-            </Grid>
-          </Grid>
-          <Grid item xs={12}>
             <ExpansionPanel
               expanded={expanded === "panel-family-members"}
               onChange={handleExpandedPanel("panel-family-members")}
@@ -353,6 +322,38 @@ export default function AccessControlForm() {
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <Grid container justify="center" direction="row" spacing={3}>
+                  <Grid item xs={2}>
+                    <Card
+                      className={`${classes.rootFamilyCards} ${classes.activeCard}`}
+                    >
+                      <CardHeader
+                        titleTypographyProps={{ variant: "subtitle1" }}
+                        title="Socio"
+                        className={classes.cardPartnerHeader}
+                      />
+                      <CardMedia
+                        className={classes.media}
+                        image={familiesPartnerByCard.picture}
+                      />
+                      <CardContent className={classes.cardContent}>
+                        <Typography
+                          color="textPrimary"
+                          className={classes.familyTitle}
+                        >
+                          <strong>
+                            Carnet N° {familiesPartnerByCard.card_number}
+                          </strong>
+                        </Typography>
+                        <Typography
+                          color="textPrimary"
+                          className={classes.familyTitle}
+                        >
+                          {familiesPartnerByCard.name}
+                          {familiesPartnerByCard.last_name}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
                   {familiesPartnerByCard.familyMembers.map(
                     (element: any, i: number) => {
                       const currentRow = selectedFamilies.find(
@@ -360,14 +361,14 @@ export default function AccessControlForm() {
                       );
                       const active = currentRow ? classes.activeCard : "";
                       return (
-                        <Grid item xs={3} key={i}>
+                        <Grid item xs={2} key={i}>
                           <Card
                             className={`${classes.rootFamilyCards} ${active}`}
                             onClick={() => handleSelectFamily(element)}
                           >
                             <CardHeader
                               titleTypographyProps={{ variant: "subtitle1" }}
-                              title={element.relationType}
+                              title={element.relation}
                               className={classes.cardHeader}
                             />
                             <CardActionArea>
@@ -477,6 +478,42 @@ export default function AccessControlForm() {
     }
   };
 
+  const renderShares = () => {
+    const shares = familiesPartnerByCard.shares;
+    if(shares.length === 1) {
+      const current: any = _.first(shares);
+      setValue("share_id", current.id);
+      return (
+        <Paper className={classes.singleShare}>
+          <strong>Accion N°</strong> {current.share_number}
+          <input
+            style={{ display: "none" }}
+            name="share_id"
+            ref={register}
+          />
+        </Paper>
+      )
+    }
+    return (
+      <CustomSelect
+      label="Accion"
+      selectionMessage="Seleccione"
+      field="share_id"
+      required
+      register={register}
+      errorsMessageField={
+        errors.share_id && errors.share_id.message
+      }
+    >
+      {familiesPartnerByCard.shares.map((item: any) => (
+        <option key={item.id} value={item.id}>
+        {item.share_number}
+        </option>
+      ))}
+    </CustomSelect>
+    )
+  }
+
   return (
     <Container component="main">
       <div className={classes.paper}>
@@ -489,7 +526,7 @@ export default function AccessControlForm() {
           noValidate
         >
           <Grid container spacing={3} justify="center">
-            <Grid item xs={7}>
+            <Grid item xs={5}>
               <CustomSelect
                 label="Ubicacion"
                 selectionMessage="Seleccione"
@@ -507,7 +544,7 @@ export default function AccessControlForm() {
                 ))}
               </CustomSelect>
             </Grid>
-            <Grid item xs={5}>
+            <Grid item xs={3}>
               <CustomSearch
                 label="N° Carnet"
                 handleSearch={handleSearch}
@@ -521,6 +558,11 @@ export default function AccessControlForm() {
                 })}
               />
             </Grid>
+            {!familiesPartnerCardLoading && familiesPartnerByCard.shares && (
+              <Grid item xs={4}>
+                {renderShares()}
+              </Grid>
+            )}
             <Grid item xs={12} className={classes.partnerContainer}>
               {familiesPartnerCardLoading ? (
                 <div className={classes.progressContainer}>
