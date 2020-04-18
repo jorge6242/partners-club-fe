@@ -7,8 +7,10 @@ import axios from 'axios';
 
 //http://192.168.0.252:9002/
 
+//http://190.216.224.53:8082
+
 const AXIOS = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: 'http://190.216.224.53:8082',
   headers: {
     'Partners-Application': 'admin'
     },
