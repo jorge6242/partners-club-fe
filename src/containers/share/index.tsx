@@ -53,7 +53,7 @@ const columns: ShareColumns[] = [
     align: "left",
     component: (value: any) => {
         if(value.value) {
-            return (<span>{value.value.code}</span>)
+            return (<span>{value.value.description}</span>)
         }
         return (<span>Asignada como Padre</span>)
     }

@@ -3,5 +3,6 @@ export default interface Columns {
     label: string;
     minWidth?: number;
     align?: "left" | "right";
+    shortText?: boolean;
     component?: any;
   }

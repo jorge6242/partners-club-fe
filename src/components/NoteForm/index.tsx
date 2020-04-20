@@ -126,7 +126,7 @@ const NoteForm: FunctionComponent<NoteFormProps> = ({
                     <strong>Fecha:</strong> {selectedNote.created}
                 </Grid>
                 <Grid item xs={12}>
-                    <strong>Status:</strong> {selectedNote.status === 1 ? 'Activo' : 'Inactivo'}
+                    <strong>Status:</strong> {selectedNote.status === "1" ? 'Activo' : 'Inactivo'}
                 </Grid>
                 <Grid item xs={12}>
                     <strong>Description:</strong> {selectedNote.description}

@@ -15,6 +15,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import DeleteIcon from "@material-ui/icons/Delete";
 import Switch from "@material-ui/core/Switch";
 import { green } from "@material-ui/core/colors";
+import ArchiveIcon from '@material-ui/icons/Archive';
 
 const GreenSwitch = withStyles({
   switchBase: {
@@ -51,6 +52,12 @@ const useStyles = makeStyles({
       paddingRight: 10
     }
   },
+  truncateText: {
+    whiteSpace: 'nowrap',
+    maxWidth: 30,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  }
 });
 
 interface DataTableProps {
@@ -68,6 +75,7 @@ interface DataTableProps {
   handleSubRowComponent?: Function;
   renderSubRow?: any;
   handleSwitch?: any;
+  customFiles?: boolean;
 }
 
 const DataTable4: FunctionComponent<DataTableProps> = ({
@@ -85,6 +93,7 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
   renderSubRow,
   fontSize = '12px',
   handleSwitch,
+  customFiles = false,
 }) => {
   const classes = useStyles();
   const [selectedRow, setSelectedRow] = useState(0);
@@ -123,6 +132,20 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
     )
   }
 
+  const renderFile = (url: any) => {
+    return (
+      <a target="_blank" href={url} title="file2" >
+        <IconButton
+          size="small"
+          color="primary"
+        // onClick={() => handleEdit(row.id)}
+        >
+          <ArchiveIcon fontSize="inherit" />
+        </IconButton>
+      </a>
+    )
+  }
+
   return (
     <Paper className={classes.root}>
       <TableContainer className={classes.container}>
@@ -135,7 +158,7 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                   align={column.align}
                   className={classes.tableCellHeader}
                   style={{
-                    minWidth: column.minWidth, 
+                    minWidth: column.minWidth,
                     fontSize,
                     fontWeight: 'bold'
                   }}
@@ -168,8 +191,10 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                             <TableCell
                               key={column.id}
                               align={column.align}
-                              className={classes.tableCellHeader}
-                              style={{ fontSize }}
+                              className={`${classes.tableCellHeader} ${column.shortText ? classes.truncateText : ''}`}
+                              style={{
+                                fontSize,
+                              }}
                               onClick={() => handleSubRowComponent ? handleSubRowComponent() : {}}
                             >
                               {column.format && typeof value === "number"
@@ -186,8 +211,19 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                             />
                           </TableCell>
                         )}
+                        {
+                          customFiles && (
+                            <TableCell align="right">
+                              {row.file1 && row.file1 !== '' && renderFile(row.file1)}
+                              {row.file2 && row.file2 !== '' && renderFile(row.file2)}
+                              {row.file3 && row.file3 !== '' && renderFile(row.file3)}
+                              {row.file4 && row.file4 !== '' && renderFile(row.file4)}
+                              {row.file5 && row.file5 !== '' && renderFile(row.file5)}
+                            </TableCell>
+                          )
+                        }
                         <TableCell align="right">
-                        {handleView && (
+                          {handleView && (
                             <IconButton
                               aria-label="delete"
                               size="small"
@@ -196,7 +232,7 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                             >
                               <VisibilityIcon fontSize="inherit" />
                             </IconButton>
-                        )}
+                          )}
                           {handleEdit && (
                             <IconButton
                               aria-label="delete"

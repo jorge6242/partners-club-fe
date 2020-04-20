@@ -1,5 +1,6 @@
 export default interface Columns {
   id:
+    | ""
     | "id"
     | "description"
     | "type"
@@ -17,4 +18,5 @@ export default interface Columns {
   align?: "left" | "right";
   component?: any;
   download?: boolean;
+  shortText?: boolean;
 }

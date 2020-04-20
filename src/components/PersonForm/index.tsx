@@ -358,13 +358,6 @@ const recordColumns: RecordColumns[] = [
     component: (value: any) => <span>{value.value}</span>
   },
   {
-    id: "description",
-    label: "Descripcion",
-    minWidth: 10,
-    align: "left",
-    component: (value: any) => <span>{value.value}</span>
-  },
-  {
     id: "type",
     label: "Motivo",
     minWidth: 10,
@@ -372,12 +365,20 @@ const recordColumns: RecordColumns[] = [
     component: (value: any) => <span>{value.value.description}</span>
   },
   {
+    id: "description",
+    label: "Descripcion",
+    minWidth: 10,
+    align: "left",
+    shortText: true,
+    component: (value: any) => <span>{value.value}</span>
+  },
+  {
     id: "blocked",
     label: "Bloqueado",
     minWidth: 10,
     align: "left",
     component: (value: any) => <span>{value.value == 1 ? "SI" : "NO"}</span>
-  }
+  },
 ];
 
 const noteColumns: NoteColumns[] = [
@@ -411,14 +412,15 @@ const noteColumns: NoteColumns[] = [
   {
     id: "description",
     label: "Descripcion",
-    minWidth: 10,
+    minWidth: 20,
     align: "left",
+    shortText: true,
     component: (value: any) => <span>{value.value}</span>
   },
   {
     id: "status",
     label: "Status",
-    minWidth: 10,
+    minWidth: 5,
     align: "left",
     component: (value: any) => <span>{value.value == "1" ? 'Activo' : 'Inactivo'}</span>
   },
@@ -1818,6 +1820,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             loading={recordsByPersonLoading}
             onChangePage={handleRecordChangePage}
             onChangePerPage={handleRecordPerPage}
+            customFiles
           />
         </Grid>
       </Grid>
