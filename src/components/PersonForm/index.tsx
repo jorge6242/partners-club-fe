@@ -233,9 +233,9 @@ const FamilysColumns: FamilyPersonColumns[] = [
     align: "right",
     component: (value: any) => (
       <Chip
-        label={value.value.status == "1" ? "Activo" : "Inactivo"}
+        label={value.value === "1" ? "Activo" : "Inactivo"}
         style={{
-          backgroundColor: value.value == "1" ? "#2ecc71" : "#e74c3c",
+          backgroundColor: value.value === "1" ? "#2ecc71" : "#e74c3c",
           color: "white",
           fontWeight: "bold",
           fontSize: "10px"
@@ -1294,6 +1294,10 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   const getOptionLabelCompanyPerson = (option: any) => `${option.name} ${option.last_name}`;
 
   const handleLoadPerson = (personId: number) => {
+    const selected = selectedLockers;
+    selected.itemsToAdd.length = 0;
+    selected.itemsToRemove.length = 0;
+    setSelectedLockers(selected);
     loadPerson(personId);
   }
 
