@@ -55,7 +55,7 @@ const columns: ShareColumns[] = [
         if(value.value) {
             return (<span>{value.value.description}</span>)
         }
-        return (<span>Asignada como Padre</span>)
+        return (<span>-</span>)
     }
   },
   {
