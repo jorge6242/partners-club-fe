@@ -246,6 +246,71 @@ const FamilysColumns: FamilyPersonColumns[] = [
   }
 ];
 
+const relationsColumns: FamilyPersonColumns[] = [
+  {
+    id: "id",
+    label: "ID",
+    minWidth: 10,
+    align: "right",
+    component: (value: any) => <span>{value.value}</span>
+  },
+  {
+    id: "base",
+    label: "Rif/CI",
+    minWidth: 20,
+    align: "right",
+    component: (value: any) => (
+      <span>
+        <strong>{value.value.rif_ci}</strong>
+      </span>
+    )
+  },
+  {
+    id: "relation_type",
+    label: "Parentesco",
+    minWidth: 20,
+    align: "right",
+    component: (value: any) => (
+      <span>
+        <strong>{value.value.inverse_relation}</strong>
+      </span>
+    )
+  },
+  {
+    id: "base",
+    label: "Nombre",
+    minWidth: 20,
+    align: "right",
+    component: (value: any) => (
+      <span>
+        <strong>{value.value.name}</strong>
+      </span>
+    )
+  },
+  {
+    id: "base",
+    label: "Apellido",
+    minWidth: 20,
+    align: "right",
+    component: (value: any) => (
+      <span>
+        <strong>{value.value.last_name}</strong>
+      </span>
+    )
+  },
+  {
+    id: "shares",
+    label: "Acciones",
+    minWidth: 20,
+    align: "right",
+    component: (value: any) => (
+      <span>
+        <strong>{value.value}</strong>
+      </span>
+    )
+  },
+];
+
 const columns: PersonColumn[] = [
   {
     id: "id",
@@ -616,6 +681,8 @@ const initialSelectedItems = {
 const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   /* States */
   const [tempPersonId, setTempPersonId] = useState(0);
+  const [isPartner, setIsPartner] = useState<any>("0");
+  const [selectedRelations, setSelectedRelations] = useState<Array<string | number>>([]);
   const [expanded, setExpanded] = React.useState<string | false>("panel1");
   const [image, setImage] = useState({ preview: "", raw: "" });
   const [imageField, setImageField] = useState();
@@ -739,121 +806,127 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  useEffect(() => {
-    setSelectedProff([]);
-    async function fetch() {
-      if (id) {
-        const response: any = await dispatch(get(id));
-        dispatch(getProfessions());
-        dispatch(searchFamilyByPerson(id));
-        dispatch(getCardPerson(id));
-        dispatch(getLockersByPartner(id));
-        dispatch(getRecordsByPerson({ id }));
-        dispatch(getNotesByPerson({ id }));
-        dispatch(getParameterList());
-        // dispatch(searchPersonToAssignFamily(id));
-        const {
-          name,
-          last_name,
-          rif_ci,
-          primary_email,
-          secondary_email,
-          passport,
-          card_number,
-          birth_date,
-          expiration_date,
-          gender_id,
-          representante,
-          picture,
-          id_card_picture,
-          address,
-          telephone1,
-          telephone2,
-          phone_mobile1,
-          phone_mobile2,
-          fax,
-          city,
-          state,
-          type_person,
-          postal_code,
-          status_person_id,
-          marital_statuses_id,
-          countries_id,
-          professions,
-          countries,
-          sports,
-          lockers,
-          company,
-          isPartner
-        } = response;
-        if (isPartner === "1") {
-          const shareResponse: any = await dispatch(getSharesByPartner(id));
-          if (shareResponse.length > 0) {
-            console.log('shareResponse ', shareResponse);
-            const currentShare = shareResponse.find((e: any, i: any) => i === 0);
-            setValue("payment_method_id", currentShare.payment_method_id);
-          }
+  const loadPerson = async (personId: number) => {
+      setSelectedProff([]);
+      const response: any = await dispatch(get(personId));
+      dispatch(getProfessions());
+      dispatch(searchFamilyByPerson(personId));
+      dispatch(getCardPerson(personId));
+      dispatch(getLockersByPartner(personId));
+      dispatch(getRecordsByPerson({ id: personId }));
+      dispatch(getNotesByPerson({ id: personId }));
+      dispatch(getParameterList());
+      // dispatch(searchPersonToAssignFamily(id));
+      const {
+        name,
+        last_name,
+        rif_ci,
+        primary_email,
+        secondary_email,
+        passport,
+        card_number,
+        birth_date,
+        expiration_date,
+        gender_id,
+        representante,
+        picture,
+        id_card_picture,
+        address,
+        telephone1,
+        telephone2,
+        phone_mobile1,
+        phone_mobile2,
+        fax,
+        city,
+        state,
+        type_person,
+        postal_code,
+        status_person_id,
+        marital_statuses_id,
+        countries_id,
+        professions,
+        countries,
+        sports,
+        lockers,
+        company,
+        isPartner,
+        relations
+      } = response;
+      if (isPartner === "1") {
+        const shareResponse: any = await dispatch(getSharesByPartner(personId));
+        if (shareResponse.length > 0) {
+          console.log('shareResponse ', shareResponse);
+          const currentShare = shareResponse.find((e: any, i: any) => i === 0);
+          setValue("payment_method_id", currentShare.payment_method_id);
         }
-        setValue("name", name);
-        setValue("last_name", last_name);
-        setValue("rif_ci", rif_ci);
-        setValue("primary_email", primary_email);
-        setValue("secondary_email", secondary_email);
-        setValue("passport", passport);
-        setValue("card_number", card_number);
-        setValue("birth_date", birth_date);
-        setValue("expiration_date", expiration_date);
-        setValue("gender_id", gender_id);
-        setValue("representante", representante);
-        setValue("picture", picture);
-        setValue("id_card_picture", id_card_picture);
-        setValue("address", address);
-        setValue("telephone1", telephone1);
-        setValue("telephone2", telephone2);
-        setValue("phone_mobile1", phone_mobile1);
-        setValue("phone_mobile2", phone_mobile2);
-        setValue("fax", fax);
-        setValue("city", city);
-        setValue("state", state);
-        setValue("postal_code", postal_code);
-        setValue("type_person", type_person);
-        setValue("status_person_id", status_person_id);
-        setValue("marital_statuses_id", marital_statuses_id);
-        setValue("countries_id", countries_id);
-        setImage({ ...image, preview: picture });
-        if (company) {
-          setSelectedCompany(company);
-        }
-        if (countries.length > 0) {
-          const list = countries.map((element: any) => element.id);
-          setValue("country_list", JSON.stringify(list));
-          setSelectedCountries(countries);
-        } else {
-          setSelectedCountries([]);
-        }
-        if (sports.length > 0) {
-          const list = sports.map((element: any) => element.id);
-          setValue("sport_list", JSON.stringify(list));
-          setSelectedSports(sports);
-        } else {
-          setSelectedSports([]);
-        }
-        if (professions) {
-          const list = professions.map((element: any) => element.id);
-          setValue("profession_list", JSON.stringify(list));
-          setSelectedProff(professions);
-        } else {
-          setSelectedProff([]);
-        }
-        // if (lockers.length > 0) {
-        //   const list = lockers.map((element: any) => element.id);
-        //   setValue("locker_list", JSON.stringify(list));
-        //   setSelectedLockers(lockers);
-        // }
-        setTempPersonId(id);
       }
+      setValue("name", name);
+      setValue("last_name", last_name);
+      setValue("rif_ci", rif_ci);
+      setValue("primary_email", primary_email);
+      setValue("secondary_email", secondary_email);
+      setValue("passport", passport);
+      setValue("card_number", card_number);
+      setValue("birth_date", birth_date);
+      setValue("expiration_date", expiration_date);
+      setValue("gender_id", gender_id);
+      setValue("representante", representante);
+      setValue("picture", picture);
+      setValue("id_card_picture", id_card_picture);
+      setValue("address", address);
+      setValue("telephone1", telephone1);
+      setValue("telephone2", telephone2);
+      setValue("phone_mobile1", phone_mobile1);
+      setValue("phone_mobile2", phone_mobile2);
+      setValue("fax", fax);
+      setValue("city", city);
+      setValue("state", state);
+      setValue("postal_code", postal_code);
+      setValue("type_person", type_person);
+      setValue("status_person_id", status_person_id);
+      setValue("marital_statuses_id", marital_statuses_id);
+      setValue("countries_id", countries_id);
+      setImage({ ...image, preview: picture });
+      setIsPartner(isPartner);
+      if(isPartner === "2") {
+        setSelectedRelations(relations);
+      }
+      if (company) {
+        setSelectedCompany(company);
+      }
+      if (countries.length > 0) {
+        const list = countries.map((element: any) => element.id);
+        setValue("country_list", JSON.stringify(list));
+        setSelectedCountries(countries);
+      } else {
+        setSelectedCountries([]);
+      }
+      if (sports.length > 0) {
+        const list = sports.map((element: any) => element.id);
+        setValue("sport_list", JSON.stringify(list));
+        setSelectedSports(sports);
+      } else {
+        setSelectedSports([]);
+      }
+      if (professions) {
+        const list = professions.map((element: any) => element.id);
+        setValue("profession_list", JSON.stringify(list));
+        setSelectedProff(professions);
+      } else {
+        setSelectedProff([]);
+      }
+      // if (lockers.length > 0) {
+      //   const list = lockers.map((element: any) => element.id);
+      //   setValue("locker_list", JSON.stringify(list));
+      //   setSelectedLockers(lockers);
+      // }
+      setTempPersonId(personId);
+  }
+
+  useEffect(() => {
+    if(id) {
+      loadPerson(id);
     }
-    fetch();
   }, [id, dispatch, setValue]);
 
   useEffect(() => {
@@ -1097,8 +1170,8 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   };
 
 
-  const handleRecordDelete = (id: number) => {
-    dispatch(removeRecord(id));
+  const handleRecordDelete = (recordId: number) => {
+    dispatch(removeRecord(recordId, id));
   };
 
   const handleNoteDelete = (id: number) => {
@@ -1111,6 +1184,17 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
         payload: {
           status: true,
           element: <NoteForm isView id={id} />
+        }
+      })
+    );
+  };
+
+  const handleRecordView = (id: number) => {
+    dispatch(
+      updateModal({
+        payload: {
+          status: true,
+          element: <RecordForm isView id={id} />
         }
       })
     );
@@ -1208,6 +1292,10 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   }
 
   const getOptionLabelCompanyPerson = (option: any) => `${option.name} ${option.last_name}`;
+
+  const handleLoadPerson = (personId: number) => {
+    loadPerson(personId);
+  }
 
   const renderMainData = () => {
     const { expiration_date } = getValues();
@@ -1721,6 +1809,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             rows={recordsByPerson}
             pagination={recordPagination}
             handleDelete={handleRecordDelete}
+            handleView={handleRecordView}
             columns={recordColumns}
             loading={recordsByPersonLoading}
             onChangePage={handleRecordChangePage}
@@ -2063,8 +2152,8 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                   </Grid>
                 )}
               </Grid>
-                {/* {renderShareProfile()} */}
-                {renderLastMovement()}
+              {/* {renderShareProfile()} */}
+              {renderLastMovement()}
             </Grid>
 
             <Grid item xs={10}>
@@ -2286,109 +2375,150 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
                               justify="space-around"
                               alignItems="center"
                             >
-                              <Grid item xs={6}>
+                              <Grid item xs={isPartner === "1" ? 6 : 12}>
                                 Familiares
                               </Grid>
-                              <Grid item xs={6}>
-                                <Grid container direction="row"
-                                  justify="flex-end" spacing={3}>
-                                  {
-                                    Helper.checkParameter(parameterList, "PARTNER_ALLOW_ADD") && (
+                              {
+                                isPartner === "1" && (
+                                  <Grid item xs={6}>
+                                    <Grid container direction="row"
+                                      justify="flex-end" spacing={3}>
+                                      {
+                                        Helper.checkParameter(parameterList, "PARTNER_ALLOW_ADD") && (
+                                          <Grid
+                                            item
+                                            xs={2}
+                                            onClick={() => handleFamilyCreate()}
+                                            style={{ textAlign: 'right' }}
+                                          >
+                                            <Fab size="small" color="primary" aria-label="add">
+                                              <AddIcon />
+                                            </Fab>
+                                          </Grid>
+                                        )
+                                      }
                                       <Grid
                                         item
                                         xs={2}
-                                        onClick={() => handleFamilyCreate()}
+                                        onClick={() => handleReportByPartner()}
                                         style={{ textAlign: 'right' }}
                                       >
-                                        <Fab size="small" color="primary" aria-label="add">
-                                          <AddIcon />
-                                        </Fab>
+                                        <div>
+                                          <Fab size="small" color="primary" aria-label="report">
+                                            <PrintIcon />
+                                          </Fab>
+                                        </div>
                                       </Grid>
-                                    )
-                                  }
-                                  <Grid
-                                    item
-                                    xs={2}
-                                    onClick={() => handleReportByPartner()}
-                                    style={{ textAlign: 'right' }}
-                                  >
-                                    <div>
-                                      <Fab size="small" color="primary" aria-label="report">
-                                        <PrintIcon />
-                                      </Fab>
-                                    </div>
+                                    </Grid>
                                   </Grid>
-                                </Grid>
-                              </Grid>
+                                )
+                              }
 
                             </Grid>
                           </Grid>
                         </Grid>
-                        <ExpansionPanel
-                          expanded={expanded === "panel-familiars-assing"}
-                          onChange={handleExpandedPanel(
-                            "panel-familiars-assing"
-                          )}
-                        >
-                          <ExpansionPanelSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel-familiarsa-assing-content"
-                            id="panel-familiarsa-assing-header"
-                          >
-                            <Typography className={classes.heading}>
-                              Buscar familiares
-                            </Typography>
-                          </ExpansionPanelSummary>
-                          <ExpansionPanelDetails>
-                            <Grid container spacing={2}>
-                              <Grid item xs={12}>
-                                <CustomSearch handleSearch={handleSearch} />
-                              </Grid>
-                              <Grid item xs={12}>
-                                <DataTableAssignPersons
-                                  rows={personsToAssign}
-                                  pagination={paginationPersonsToAssign}
-                                  handleAssign={handleAssign}
-                                  columns={columns}
-                                  onChangePage={handleChangePage}
-                                  onChangePerPage={handlePerPage}
-                                  selectOptionData={relationTypeList}
-                                  loading={setFamilyByPersonLoading}
-                                />
-                              </Grid>
-                            </Grid>
-                          </ExpansionPanelDetails>
-                        </ExpansionPanel>
+                        {
+                          isPartner === "1" && (
+                            <React.Fragment>
+                              <ExpansionPanel
+                                expanded={expanded === "panel-familiars-assing"}
+                                onChange={handleExpandedPanel(
+                                  "panel-familiars-assing"
+                                )}
+                              >
+                                <ExpansionPanelSummary
+                                  expandIcon={<ExpandMoreIcon />}
+                                  aria-controls="panel-familiarsa-assing-content"
+                                  id="panel-familiarsa-assing-header"
+                                >
+                                  <Typography className={classes.heading}>
+                                    Buscar familiares
+                              </Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                  <Grid container spacing={2}>
+                                    <Grid item xs={12}>
+                                      <CustomSearch handleSearch={handleSearch} />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                      <DataTableAssignPersons
+                                        rows={personsToAssign}
+                                        pagination={paginationPersonsToAssign}
+                                        handleAssign={handleAssign}
+                                        columns={columns}
+                                        onChangePage={handleChangePage}
+                                        onChangePerPage={handlePerPage}
+                                        selectOptionData={relationTypeList}
+                                        loading={setFamilyByPersonLoading}
+                                      />
+                                    </Grid>
+                                  </Grid>
+                                </ExpansionPanelDetails>
+                              </ExpansionPanel>
 
-                        <ExpansionPanel
-                          expanded={expanded === "panel-familiars"}
-                          onChange={handleExpandedPanel("panel-familiars")}
-                        >
-                          <ExpansionPanelSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel-familiarsa-content"
-                            id="panel-familiarsa-header"
+                              <ExpansionPanel
+                                expanded={expanded === "panel-familiars"}
+                                onChange={handleExpandedPanel("panel-familiars")}
+                              >
+                                <ExpansionPanelSummary
+                                  expandIcon={<ExpandMoreIcon />}
+                                  aria-controls="panel-familiarsa-content"
+                                  id="panel-familiarsa-header"
+                                >
+                                  <Typography className={classes.heading}>
+                                    Familiares Asignados
+                              </Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                  <Grid container spacing={2}>
+                                    <Grid item xs={12}>
+                                      <DataTable2
+                                        data={familyByPerson}
+                                        columns={FamilysColumns}
+                                        isDelete
+                                        handleDelete={handleDeleteRelation}
+                                        handleSwitch={handleSwitchRelation}
+                                        handleEdit={handleLoadPerson}
+                                        loading={relationLoading}
+                                        fontSize="12px"
+                                      />
+                                    </Grid>
+                                  </Grid>
+                                </ExpansionPanelDetails>
+                              </ExpansionPanel>
+                            </React.Fragment>
+                          )
+                        }
+                        {
+                          isPartner === "2" && (
+                            <ExpansionPanel
+                            expanded={expanded === "panel-familiars"}
+                            onChange={handleExpandedPanel("panel-familiars")}
                           >
-                            <Typography className={classes.heading}>
-                              Familiares Asignados
-                            </Typography>
-                          </ExpansionPanelSummary>
-                          <ExpansionPanelDetails>
-                            <Grid container spacing={2}>
-                              <Grid item xs={12}>
-                                <DataTable2
-                                  data={familyByPerson}
-                                  columns={FamilysColumns}
-                                  isDelete
-                                  handleDelete={handleDeleteRelation}
-                                  handleSwitch={handleSwitchRelation}
-                                  loading={relationLoading}
-                                  fontSize="12px"
-                                />
+                            <ExpansionPanelSummary
+                              expandIcon={<ExpandMoreIcon />}
+                              aria-controls="panel-familiarsa-content"
+                              id="panel-familiarsa-header"
+                            >
+                              <Typography className={classes.heading}>
+                                Relacionados
+                          </Typography>
+                            </ExpansionPanelSummary>
+                            <ExpansionPanelDetails>
+                              <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                  <DataTable2
+                                    data={selectedRelations}
+                                    columns={relationsColumns}
+                                    fontSize="12px"
+                                    handleEdit={handleLoadPerson}
+                                  />
+                                </Grid>
                               </Grid>
-                            </Grid>
-                          </ExpansionPanelDetails>
-                        </ExpansionPanel>
+                            </ExpansionPanelDetails>
+                          </ExpansionPanel>
+                          )
+                        }
                       </div>
                     </TabPanel>
                     <TabPanel value={tabValue} index={2} dir={theme.direction}>

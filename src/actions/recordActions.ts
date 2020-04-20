@@ -158,7 +158,7 @@ export const create = (body: any) => async (dispatch: Function) => {
           status: true
         }
       })(dispatch);
-      dispatch(getRecordsByPerson({id: body.id}));
+      dispatch(getRecordsByPerson({id: body.people_id}));
       dispatch(
         updateSecondModal({
           payload: {
@@ -270,7 +270,7 @@ export const update = (body: object) => async (dispatch: Function) => {
   }
 };
 
-export const remove = (id: number) => async (dispatch: Function) => {
+export const remove = (id: number, person: any) => async (dispatch: Function) => {
   try {
     const { data, status } = await API.remove(id);
     let response: any = [];
@@ -286,7 +286,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
           status: true
         }
       })(dispatch);
-      dispatch(getAll());
+      dispatch(getRecordsByPerson({id: person}));
     }
     return response;
   } catch (error) {

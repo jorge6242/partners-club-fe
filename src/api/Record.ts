@@ -19,10 +19,8 @@ const API = {
   create(data: any) {
     return AXIOS.post(
       `${Prefix.api}/record`,
-      {
-        ...data
-      },
-      { headers: headers('form') }
+      { ...data },
+      { headers: headers() }
     );
   },
   get(id: number) {

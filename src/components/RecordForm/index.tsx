@@ -9,11 +9,15 @@ import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 import Grid from '@material-ui/core/Grid';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import _ from 'lodash';
+import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
+import Fab from "@material-ui/core/Fab";
 
 import CustomTextField from "../FormElements/CustomTextField";
-import { create, getRecordsByPerson } from "../../actions/recordActions";
+import { create, getRecordsByPerson, get as getRecord } from "../../actions/recordActions";
 import { getList as getTypeList, get } from "../../actions/recordTypeActions";
 import CustomSelect from "../FormElements/CustomSelect";
+import Upload from "../FormElements/Upload";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -58,12 +62,17 @@ const useStyles = makeStyles(theme => ({
 
 type FormData = {
   description: string;
-  file1: string;
+  exp1: string;
+  exp2: string;
+  exp3: string;
+  exp4: string;
+  exp5: string;
   record_type_id: number;
 };
 
 type RecordFormProps = {
   id?: number;
+  isView?: boolean;
 };
 
 interface selectedRecordType {
@@ -72,12 +81,14 @@ interface selectedRecordType {
 }
 
 const RecordForm: FunctionComponent<RecordFormProps> = ({
-  id
+  id,
+  isView
 }) => {
   const classes = useStyles();
-  const [image, setImage] = useState({ preview: "", raw: "" });
+  const [selectedRecord, setSelectedRecord] = useState<any>({});
+  // const [image, setImage] = useState({ preview: "", raw: "" });
   const [selectedRecordType, setSelectedRecordType] = useState<any>(null);
-  const [imageField, setImageField] = useState();
+  // const [imageField, setImageField] = useState();
   const { handleSubmit, register, errors, reset, getValues, setValue, watch } = useForm<
     FormData
   >();
@@ -97,6 +108,77 @@ const RecordForm: FunctionComponent<RecordFormProps> = ({
     };
   }, [reset]);
 
+
+  const handleForm = async (form: object) => {
+    const { record_type_id } = getValues();
+    const res: any = await dispatch(get(record_type_id));
+    const { days, blocked } = res;
+    const expiration_date = moment().add(days, 'days').format('YYYY-MM-DD');
+    const created = moment().format('YYYY-MM-DD');
+    const data = {
+      ...form,
+      people_id: id,
+      created,
+      days,
+      expiration_date,
+      blocked,
+    };;
+    dispatch(create({ ...data }));
+  };
+
+  useEffect(() => {
+    async function fetch() {
+      if (id && isView) {
+        const response: any = await dispatch(getRecord(id));
+        setSelectedRecord(response);
+      } else {
+        setSelectedRecord({});
+      }
+    }
+    fetch();
+  }, [id, dispatch]);
+
+  const handleLink = (url: any) => {
+    window.open(url,"_blank");
+  }
+
+  const renderFile = (url: any) => {
+    return (
+      <Grid item xs={1}>
+      <a target="_blank" href={url} title="file2" >
+        <Fab size="small" color="primary" aria-label="add" >
+          <SystemUpdateAltIcon />
+        </Fab>
+      </a>
+    </Grid>
+    )
+  }
+
+  const renderDetail = () => {
+    return !_.isEmpty(selectedRecord) && (
+      <Grid container spacing={3} style={{ marginTop: 20 }}>
+        <Grid item xs={6}>
+          <strong>Fecha:</strong> {selectedRecord.created}
+        </Grid>
+        <Grid item xs={6}>
+          <strong>Motivo:</strong> {selectedRecord.type.description}
+        </Grid>
+        <Grid item xs={12}>
+          <strong>Description:</strong> {selectedRecord.description}
+        </Grid>
+        <Grid item xs={12}>
+          <strong>Adjuntos</strong>
+        </Grid>
+        {selectedRecord.file1 && selectedRecord.file1 !== '' && renderFile(selectedRecord.file1)}
+        {selectedRecord.file2 && selectedRecord.file2 !== '' && renderFile(selectedRecord.file2)}
+        {selectedRecord.file3 && selectedRecord.file3 !== '' && renderFile(selectedRecord.file3)}
+        {selectedRecord.file4 && selectedRecord.file4 !== '' && renderFile(selectedRecord.file4)}
+        {selectedRecord.file5 && selectedRecord.file5 !== '' && renderFile(selectedRecord.file5)}
+
+      </Grid>
+    )
+  }
+
   const onTypeChange = async () => {
     const recordType = watch('record_type_id');
     if (recordType > 0) {
@@ -107,204 +189,136 @@ const RecordForm: FunctionComponent<RecordFormProps> = ({
     }
   }
 
-  const handleForm = async (form: object) => {
-    const { record_type_id } = getValues();
-    const res: any = await dispatch(get(record_type_id));
-    const { days, blocked } = res;
-    const expiration_date = moment().add(days, 'days').format('YYYY-MM-DD');
-    const created = moment().format('YYYY-MM-DD');
-    const data = {
-      people_id: id,
-      created,
-      days,
-      expiration_date,
-      blocked,
-    };
-    await dispatch(create({ ...form, ...data }));
-    dispatch(getRecordsByPerson({ id }));
-  };
+  const renderForm = () => {
+    return (
+      <form
+        className={classes.form}
+        onSubmit={handleSubmit(handleForm)}
+        noValidate
+      >
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Grid container spacing={3} >
+              <Grid item xs={6}>
+                <CustomSelect
+                  label="Motivo"
+                  selectionMessage="Seleccione"
+                  field="record_type_id"
+                  required
+                  register={register}
+                  errorsMessageField={
+                    errors.record_type_id && errors.record_type_id.message
+                  }
+                  onChange={onTypeChange}
+                >
+                  {recordTypeList.map((item: any) => (
+                    <option key={item.id} value={item.id}>
+                      {item.description}
+                    </option>
+                  ))}
+                </CustomSelect>
+              </Grid>
+              <Grid item xs={6}>
+                {
+                  selectedRecordType && (
+                    <div className={`${classes.typeRecordDetail} ${selectedRecordType.blocked == 1 ? classes.typeRecorBlocked : ''}`}>
+                      <div>Bloqueo: {selectedRecordType.blocked == 1 ? 'SI' : 'NO'}</div>
+                      {
+                        selectedRecordType.blocked == 1 && (
+                          <React.Fragment>
+                            <div>Dias: {selectedRecordType.days}</div>
+                            <div>Vencimiento: {moment().add(selectedRecordType.days, 'days').format('YYYY-MM-DD')}</div>
+                          </React.Fragment>
+                        )
+                      }
 
-  const loadImage = (e: any) => {
-    const ObjecUrlImage = window.URL.createObjectURL(e.target.files[0]);
-    setImage({
-      preview: ObjecUrlImage,
-      raw: e.target.files[0]
-    });
-    const reader: any = new FileReader();
-    reader.onload = () => {
-      setValue("file1", reader.result);
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  };
+                    </div>
+                  )
+                }
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={12}>
+            <CustomTextField
+              placeholder="Description"
+              field="description"
+              required
+              register={register}
+              errorsField={errors.description}
+              errorsMessageField={
+                errors.description && errors.description.message
+              }
+              multiline
+            /></Grid>
+          <Grid item xs={12}>
+            <Upload
+              field="exp1"
+              label="Archivo 1"
+              register={register}
+              setValue={setValue}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Upload
+              field="exp2"
+              label="Archivo 2"
+              register={register}
+              setValue={setValue}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Upload
+              field="exp3"
+              label="Archivo 3"
+              register={register}
+              setValue={setValue}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Upload
+              field="exp4"
+              label="Archivo 4"
+              register={register}
+              setValue={setValue}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Upload
+              field="exp5"
+              label="Archivo 5"
+              register={register}
+              setValue={setValue}
+            />
+          </Grid>
 
-  const triggerClick = (input: any) => {
-    if (input) {
-      setImageField(input);
-    }
-  };
-
-  const handleImage = () => {
-    imageField.click();
-    setImageField(imageField);
-  };
-
+          <Grid item xs={12}>
+            <div className={classes.wrapper}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                disabled={loading}
+                className={classes.submit}
+              >
+                Crear
+                </Button>
+              {loading && (
+                <CircularProgress size={24} className={classes.buttonProgress} />
+              )}
+            </div>
+          </Grid>
+        </Grid>
+      </form>
+    )
+  }
   return (
     <Container component="main">
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
           Expediente
         </Typography>
-        <form
-          className={classes.form}
-          onSubmit={handleSubmit(handleForm)}
-          noValidate
-          encType="multipart/form-data"
-        >
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Grid container spacing={3} >
-                <Grid item xs={6}>
-                  <CustomSelect
-                    label="Motivo"
-                    selectionMessage="Seleccione"
-                    field="record_type_id"
-                    required
-                    register={register}
-                    errorsMessageField={
-                      errors.record_type_id && errors.record_type_id.message
-                    }
-                    onChange={onTypeChange}
-                  >
-                    {recordTypeList.map((item: any) => (
-                      <option key={item.id} value={item.id}>
-                        {item.description}
-                      </option>
-                    ))}
-                  </CustomSelect>
-                </Grid>
-                <Grid item xs={6}>
-                  {
-                    selectedRecordType && (
-                      <div className={`${classes.typeRecordDetail} ${selectedRecordType.blocked == 1 ? classes.typeRecorBlocked : ''}`}>
-                        <div>Bloqueo: {selectedRecordType.blocked == 1 ? 'SI' : 'NO'}</div>
-                        {
-                          selectedRecordType.blocked == 1 && (
-                            <React.Fragment>
-                              <div>Dias: {selectedRecordType.days}</div>
-                              <div>Vencimiento: {moment().add(selectedRecordType.days, 'days').format('YYYY-MM-DD')}</div>
-                            </React.Fragment>
-                          )
-                        }
-
-                      </div>
-                    )
-                  }
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={12}>
-              <CustomTextField
-                placeholder="Description"
-                field="description"
-                required
-                register={register}
-                errorsField={errors.description}
-                errorsMessageField={
-                  errors.description && errors.description.message
-                }
-                multiline
-              /></Grid>
-            <Grid item xs={3}>
-              <Button
-                startIcon={<CloudUploadIcon />}
-                variant="contained"
-                color="primary"
-                component="span"
-                size="small"
-                // onClick={() => handleImage()}
-              >
-                Archivo 1
-              </Button>
-              <input
-                style={{ display: "none" }}
-                type="file"
-                id="load_image"
-                ref={triggerClick}
-                onChange={loadImage}
-              />
-              <input
-                style={{ display: "none" }}
-                name="file1"
-                ref={register}
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <Button
-                startIcon={<CloudUploadIcon />}
-                variant="contained"
-                color="primary"
-                size="small"
-                component="span"
-              >
-                Archivo 2
-              </Button>
-
-            </Grid>
-            <Grid item xs={3}>
-              <Button
-                startIcon={<CloudUploadIcon />}
-                variant="contained"
-                color="primary"
-                component="span"
-                size="small"
-              >
-                Archivo 3
-              </Button>
-
-            </Grid>
-            <Grid item xs={3}>
-              <Button
-                startIcon={<CloudUploadIcon />}
-                variant="contained"
-                color="primary"
-                size="small"
-                component="span"
-              >
-                Archivo 4
-              </Button>
-
-            </Grid>
-            <Grid item xs={3}>
-              <Button
-                startIcon={<CloudUploadIcon />}
-                variant="contained"
-                color="primary"
-                size="small"
-                component="span"
-              >
-                Archivo 5
-              </Button>
-
-            </Grid>
-            <Grid item xs={12}>
-              <div className={classes.wrapper}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  disabled={loading}
-                  className={classes.submit}
-                >
-                  Crear
-                </Button>
-                {loading && (
-                  <CircularProgress size={24} className={classes.buttonProgress} />
-                )}
-              </div>
-            </Grid>
-          </Grid>
-        </form>
+        {isView ? renderDetail() : renderForm()}
       </div>
     </Container>
   );
