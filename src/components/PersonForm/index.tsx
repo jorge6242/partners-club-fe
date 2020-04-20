@@ -233,9 +233,9 @@ const FamilysColumns: FamilyPersonColumns[] = [
     align: "right",
     component: (value: any) => (
       <Chip
-        label={value.value.status === "1" ? "Activo" : "Inactivo"}
+        label={value.value.status == "1" ? "Activo" : "Inactivo"}
         style={{
-          backgroundColor: value.value === "1" ? "#2ecc71" : "#e74c3c",
+          backgroundColor: value.value == "1" ? "#2ecc71" : "#e74c3c",
           color: "white",
           fontWeight: "bold",
           fontSize: "10px"

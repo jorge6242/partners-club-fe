@@ -10,7 +10,7 @@ import axios from 'axios';
 //http://190.216.224.53:8082
 
 const AXIOS = axios.create({
-  baseURL: 'http://club.api.com',
+  baseURL: 'http://localhost:8000',
   headers: {
     'Partners-Application': 'admin'
     },
