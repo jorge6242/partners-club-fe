@@ -12,6 +12,7 @@ export default interface Columns {
     | "file3"
     | "file4"
     | "file5"
+    | "user"
     | "expiration_date";
   label: string;
   minWidth?: number;

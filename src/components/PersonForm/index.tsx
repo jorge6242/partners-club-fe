@@ -365,19 +365,18 @@ const recordColumns: RecordColumns[] = [
     component: (value: any) => <span>{value.value.description}</span>
   },
   {
-    id: "description",
-    label: "Descripcion",
-    minWidth: 10,
-    align: "left",
-    shortText: true,
-    component: (value: any) => <span>{value.value}</span>
-  },
-  {
     id: "blocked",
     label: "Bloqueado",
     minWidth: 10,
     align: "left",
     component: (value: any) => <span>{value.value == 1 ? "SI" : "NO"}</span>
+  },
+  {
+    id: "user",
+    label: "Usuario",
+    minWidth: 10,
+    align: "left",
+    component: (value: any) => <span>{value.value ? value.value.username : '-'}</span>
   },
 ];
 
@@ -410,14 +409,6 @@ const noteColumns: NoteColumns[] = [
     component: (value: any) => <span>{value.value}</span>
   },
   {
-    id: "description",
-    label: "Descripcion",
-    minWidth: 20,
-    align: "left",
-    shortText: true,
-    component: (value: any) => <span>{value.value}</span>
-  },
-  {
     id: "status",
     label: "Status",
     minWidth: 5,
@@ -430,6 +421,13 @@ const noteColumns: NoteColumns[] = [
     minWidth: 10,
     align: "left",
     component: (value: any) => <span>{value.value.description}</span>
+  },
+  {
+    id: "user",
+    label: "Usuario",
+    minWidth: 10,
+    align: "left",
+    component: (value: any) => <span>{value.value ? value.value.username : '-'}</span>
   },
 ];
 
