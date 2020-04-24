@@ -1174,8 +1174,8 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
     dispatch(removeRecord(recordId, id));
   };
 
-  const handleNoteDelete = (id: number) => {
-    dispatch(removeNotes(id));
+  const handleNoteDelete = (redordId: number) => {
+    dispatch(removeNotes(redordId, id));
   };
 
   const handleNoteView = (id: number) => {

@@ -12,12 +12,14 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import _ from 'lodash';
 import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
 import Fab from "@material-ui/core/Fab";
+import parse from 'react-html-parser'
 
 import CustomTextField from "../FormElements/CustomTextField";
 import { create, getRecordsByPerson, get as getRecord } from "../../actions/recordActions";
 import { getList as getTypeList, get } from "../../actions/recordTypeActions";
 import CustomSelect from "../FormElements/CustomSelect";
 import Upload from "../FormElements/Upload";
+import CustomEditor from "../Editor";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -84,6 +86,7 @@ const RecordForm: FunctionComponent<RecordFormProps> = ({
   id,
   isView
 }) => {
+  const [ selectedDescription, setSelectedDecription ] = useState<any>('');
   const classes = useStyles();
   const [selectedRecord, setSelectedRecord] = useState<any>({});
   // const [image, setImage] = useState({ preview: "", raw: "" });
@@ -122,6 +125,7 @@ const RecordForm: FunctionComponent<RecordFormProps> = ({
       days,
       expiration_date,
       blocked,
+      description: selectedDescription
     };;
     dispatch(create({ ...data }));
   };
@@ -156,7 +160,7 @@ const RecordForm: FunctionComponent<RecordFormProps> = ({
 
   const renderDetail = () => {
     return !_.isEmpty(selectedRecord) && (
-      <Grid container spacing={3} style={{ marginTop: 20 }}>
+      <Grid container spacing={1} style={{ marginTop: 20 }}>
         <Grid item xs={6}>
           <strong>Fecha:</strong> {selectedRecord.created}
         </Grid>
@@ -164,7 +168,7 @@ const RecordForm: FunctionComponent<RecordFormProps> = ({
           <strong>Motivo:</strong> {selectedRecord.type.description}
         </Grid>
         <Grid item xs={12}>
-          <strong>Description:</strong> {selectedRecord.description}
+          <strong>Description:</strong> {selectedRecord.description && parse(selectedRecord.description)}
         </Grid>
         <Grid item xs={12}>
           <strong>Adjuntos</strong>
@@ -187,6 +191,10 @@ const RecordForm: FunctionComponent<RecordFormProps> = ({
     } else {
       setSelectedRecordType(null);
     }
+  }
+
+  const handleDescription = (content: string) => {
+    setSelectedDecription(content);
   }
 
   const renderForm = () => {
@@ -239,17 +247,8 @@ const RecordForm: FunctionComponent<RecordFormProps> = ({
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <CustomTextField
-              placeholder="Description"
-              field="description"
-              required
-              register={register}
-              errorsField={errors.description}
-              errorsMessageField={
-                errors.description && errors.description.message
-              }
-              multiline
-            /></Grid>
+            <CustomEditor onChange={handleDescription} content={selectedDescription} />
+            </Grid>
           <Grid item xs={12}>
             <Upload
               field="exp1"

@@ -262,7 +262,7 @@ export const update = (body: any) => async (dispatch: Function) => {
   }
 };
 
-export const remove = (id: number) => async (dispatch: Function) => {
+export const remove = (id: number, person: any) => async (dispatch: Function) => {
   try {
     const { data, status } = await API.remove(id);
     let response: any = [];
@@ -273,12 +273,12 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "DepartmNotaado!",
+          message: "Nota ha sido eliminada!",
           type: "success",
           status: true
         }
       })(dispatch);
-      dispatch(getAll());
+      dispatch(getNotesByPerson({id: person}));
     }
     return response;
   } catch (error) {

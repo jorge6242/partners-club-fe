@@ -9,12 +9,14 @@ import { useDispatch, useSelector } from "react-redux";
 import Grid from '@material-ui/core/Grid';
 import moment from 'moment';
 import _ from 'lodash';
+import parse from 'react-html-parser'
 
 import CustomTextField from "../FormElements/CustomTextField";
 import { create, get } from "../../actions/noteActions";
 import { getList as getDepartmentList } from "../../actions/departmentActions";
 import { getList as getNoteTypeList } from "../../actions/noteTypeActions";
 import CustomSelect from "../FormElements/CustomSelect";
+import CustomEditor from "../Editor";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -73,6 +75,7 @@ const NoteForm: FunctionComponent<NoteFormProps> = ({
     id,
     isView = false
 }) => {
+    const [ selectedDescription, setSelectedDecription ] = useState<any>('');
     const [selectedNote, setSelectedNote] = useState<any>({});
     const classes = useStyles();
     const { handleSubmit, register, errors, reset, setValue } = useForm<FormData>();
@@ -115,13 +118,18 @@ const NoteForm: FunctionComponent<NoteFormProps> = ({
             status: 1,
             created: moment().format('YYYY-MM-DD'),
             ...form,
+            description: selectedDescription
         };
         dispatch(create(data));
     };
 
+    const handleDescription = (content: string) => {
+        setSelectedDecription(content);
+      }
+
     const renderDetail = () => {
         return !_.isEmpty(selectedNote) && (
-            <Grid container spacing={3}>
+            <Grid container spacing={1}>
                 <Grid item xs={12}>
                     <strong>Fecha:</strong> {selectedNote.created}
                 </Grid>
@@ -129,10 +137,10 @@ const NoteForm: FunctionComponent<NoteFormProps> = ({
                     <strong>Status:</strong> {selectedNote.status === "1" ? 'Activo' : 'Inactivo'}
                 </Grid>
                 <Grid item xs={12}>
-                    <strong>Description:</strong> {selectedNote.description}
+                    <strong>Departamento:</strong> {selectedNote.department.description}
                 </Grid>
                 <Grid item xs={12}>
-                    <strong>Departamento:</strong> {selectedNote.department.description}
+                    <strong>Description:</strong> {selectedNote.description && parse(selectedNote.description)}
                 </Grid>
             </Grid>
         )
@@ -194,18 +202,8 @@ const NoteForm: FunctionComponent<NoteFormProps> = ({
                             ))}
                         </CustomSelect>
                     </Grid>
-                    <Grid item xs={6}>
-                        <CustomTextField
-                            placeholder="Description"
-                            field="description"
-                            required
-                            register={register}
-                            errorsField={errors.description}
-                            errorsMessageField={
-                                errors.description && errors.description.message
-                            }
-                            multiline
-                        />
+                    <Grid item xs={12}>
+                    <CustomEditor onChange={handleDescription} content={selectedDescription} />
                     </Grid>
                     <Grid item xs={12}>
                         <div className={classes.wrapper}>
