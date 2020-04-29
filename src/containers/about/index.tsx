@@ -8,7 +8,7 @@ import Helper from '../../helpers/utilities';
 export default function About(){
     const dispatch = useDispatch();
     const { 
-        parameterReducer: { listData: parameterList } 
+        parameterReducer: { listData: parameterList, dbParameter, dbHost } 
     } = useSelector((state: any) => state);
 
     useEffect(() => {
@@ -17,7 +17,13 @@ export default function About(){
 
     const renderParameter = (param: string) => {
         const parameter = Helper.getParameter(parameterList, param);
-        return (<Grid item xs={12}>{parameter.description}: {parameter.value}</Grid>)
+        return (
+        <Grid item xs={12}>
+            <Grid container>
+                <Grid item xs={3}><strong>{parameter.description}:</strong></Grid>
+                <Grid item xs={9} style={{ textAlign: 'left' }}>{parameter.value}</Grid>
+            </Grid>
+            </Grid>)
     }    
 
     return (
@@ -27,8 +33,14 @@ export default function About(){
             {renderParameter("FRONTEND_VERSION")}
             {renderParameter("BACKEND_VERSION")}
             {renderParameter("ENDPOINT_API_URL")}
-            {renderParameter("DB_NAME")}
-            {renderParameter("DB_SERVER")}
+            <Grid container>
+                <Grid item xs={3}><strong>Host Base de datos:</strong></Grid>
+                <Grid item xs={9} style={{ textAlign: 'left' }}>{dbHost}</Grid>
+            </Grid>
+            <Grid container>
+                <Grid item xs={3}><strong>Base de datos:</strong></Grid>
+                <Grid item xs={9} style={{ textAlign: 'left' }}>{dbParameter}</Grid>
+            </Grid>
         </Grid>
     )
 }
