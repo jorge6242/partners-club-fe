@@ -54,6 +54,7 @@ import { getAll as getSports } from "../../actions/sportActions";
 import { getList as getLockerLocationList } from "../../actions/lockerLocationsActions";
 import { getList as getMenuList } from "../../actions/menuActions";
 import { getList as getParameterList } from "../../actions/parameterActions";
+import { getAll as getProfessions } from "../../actions/professionActions";
 import icons from "../../helpers/collectionIcons";
 import Helper from '../../helpers/utilities';
 import { Grid } from "@material-ui/core";
@@ -300,6 +301,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
        await dispatch(getSports());
        await dispatch(getLockerLocationList());
        await dispatch(getParameterList());
+       await dispatch(getProfessions());
       }
       run();
   }, [dispatch])

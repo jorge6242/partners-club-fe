@@ -59,10 +59,8 @@ import {
   clearSearchPersonsByType,
   clearSearchCompanyPersons
 } from "../../actions/personActions";
-import { getAll as getProfessions } from "../../actions/professionActions";
 import { getByLocation, clearList } from "../../actions/lockerActions";
 import {
-  getAll as getCardPerson,
   remove as removeCardPerson
 } from "../../actions/cardPersonActions";
 import {
@@ -71,7 +69,6 @@ import {
   reset as resetShare
 } from "../../actions/shareActions";
 import { updateModal } from "../../actions/secondModalActions";
-import { getList as getParameterList } from "../../actions/parameterActions";
 import { update as updateNote } from "../../actions/noteActions";
 import TransferList from "../TransferList";
 import DataTableAssignPersons from "../DataTableAssignPersons";
@@ -759,7 +756,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   const { sharesByPartner, selectedShare } = useSelector(
     (state: any) => state.shareReducer
   );
-  const { loading: cardPersonLoading, list: cardPersonList } = useSelector(
+  const { loading: cardPersonLoading } = useSelector(
     (state: any) => state.cardPersonReducer
   );
   const { list: paymentMethodList } = useSelector(
@@ -809,13 +806,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   const loadPerson = async (personId: number) => {
       setSelectedProff([]);
       const response: any = await dispatch(get(personId));
-      dispatch(getProfessions());
-      dispatch(searchFamilyByPerson(personId));
-      dispatch(getCardPerson(personId));
-      dispatch(getLockersByPartner(personId));
-      dispatch(getRecordsByPerson({ id: personId }));
-      dispatch(getNotesByPerson({ id: personId }));
-      dispatch(getParameterList());
       // dispatch(searchPersonToAssignFamily(id));
       const {
         name,
@@ -852,14 +842,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
         isPartner,
         relations
       } = response;
-      if (isPartner === "1") {
-        const shareResponse: any = await dispatch(getSharesByPartner(personId));
-        if (shareResponse.length > 0) {
-          console.log('shareResponse ', shareResponse);
-          const currentShare = shareResponse.find((e: any, i: any) => i === 0);
-          setValue("payment_method_id", currentShare.payment_method_id);
-        }
-      }
       setValue("name", name);
       setValue("last_name", last_name);
       setValue("rif_ci", rif_ci);
@@ -888,6 +870,21 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
       setValue("countries_id", countries_id);
       setImage({ ...image, preview: picture });
       setIsPartner(isPartner);
+
+      if (isPartner === "1") {
+        const shareResponse: any = await dispatch(getSharesByPartner(personId));
+        if (shareResponse.length > 0) {
+          const currentShare = shareResponse.find((e: any, i: any) => i === 0);
+          setValue("payment_method_id", currentShare.payment_method_id);
+        }
+      }
+
+      dispatch(searchFamilyByPerson(personId));
+      dispatch(getLockersByPartner(personId));
+      dispatch(getRecordsByPerson({ id: personId }));
+      dispatch(getNotesByPerson({ id: personId }));
+
+      
       if(isPartner === "2") {
         setSelectedRelations(relations);
       }
