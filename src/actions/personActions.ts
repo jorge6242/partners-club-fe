@@ -739,7 +739,7 @@ export const removeRelation = (relationId: number, personId: any) => async (
     payload: true
   });
   try {
-    const { data, status } = await Person.removeRelation(relationId);
+    const { data, status } = await Person.removeRelation(relationId, personId);
     let response: any = [];
     if (status === 200) {
       response = {

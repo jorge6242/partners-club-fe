@@ -107,10 +107,14 @@ const Person = {
       { headers: headers() }
     );
   },
-  removeRelation(id: number) {
-    return AXIOS.delete(`${Prefix.api}/person-relation/${id}`, {
-      headers: headers()
-    });
+  removeRelation(id: number, base: any) {
+    return AXIOS.post(`${Prefix.api}/person-relation-remove`,
+      {
+        id,
+        base,
+      },
+      {headers: headers()}
+    );
   },
   searchToAssign(term: string) {
     return AXIOS.get(`${Prefix.api}/search-person-to-assign`, {
