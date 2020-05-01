@@ -20,7 +20,7 @@ export default function Login() {
     }
     
   };
-  console.log('process.env.NODE_ENV ', process.env.NODE_ENV);
+  console.log('process.env', process.env); 
   return (
     <div className="login-container">
       <div className="login-container__form">
