@@ -16,7 +16,7 @@ console.log('process.env.REACT_ENDPOINT_URL ', process.env.REACT_APP_ENDPOINT_UR
 const baseURL = process.env.REACT_APP_ENDPOINT_URL;
 
 const AXIOS = axios.create({
-  baseURL,
+  baseURL: 'http://club.api.com',
   headers: {
     'Partners-Application': 'admin'
     },
