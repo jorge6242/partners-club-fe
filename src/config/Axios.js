@@ -11,12 +11,10 @@ import axios from 'axios';
 
 //http://192.168.0.252:9002
 
-console.log('process.env.REACT_ENDPOINT_URL ', process.env.REACT_APP_ENDPOINT_URL);
-
-const baseURL = process.env.REACT_APP_ENDPOINT_URL;
+const baseURL = window.BASE_URL;
 
 const AXIOS = axios.create({
-  baseURL: 'http://192.168.0.252:9002',
+  baseURL,
   headers: {
     'Partners-Application': 'admin'
     },
