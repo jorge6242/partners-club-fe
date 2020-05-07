@@ -1304,8 +1304,8 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
       <Grid container spacing={2}>
         <Grid item xs={3}>
           <CustomSelect
-            label="Tipo"
-            selectionMessage="Seleccione Tipo"
+            label="Tipo Persona"
+            selectionMessage="Seleccione"
             field="type_person"
             register={register}
             errorsMessageField={
@@ -1370,7 +1370,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
         <Grid item xs={3}>
           <CustomSelect
             label="Estado Civil"
-            selectionMessage="Seleccione Estado Civil"
+            selectionMessage="Seleccione"
             field="marital_statuses_id"
             required
             register={register}
@@ -1392,7 +1392,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             required
             register={register}
             errorsMessageField={errors.gender_id && errors.gender_id.message}
-            selectionMessage="Seleccione Sexo"
+            selectionMessage="Seleccione"
           >
             {genderList.map((item: any) => (
               <option key={item.id} value={item.id}>
@@ -1435,7 +1435,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
         <Grid item xs={3}>
           <CustomSelect
             label="Estatus"
-            selectionMessage="Seleccione Estatus"
+            selectionMessage="Seleccione"
             field="status_person_id"
             required
             register={register}
@@ -1494,7 +1494,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
         <Grid item xs={3}>
           <CustomSelect
             label="Pais"
-            selectionMessage="Seleccione Pais"
+            selectionMessage="Seleccione"
             field="countries_id"
             register={register}
             errorsMessageField={
