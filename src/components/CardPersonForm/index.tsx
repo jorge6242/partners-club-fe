@@ -18,10 +18,10 @@ import {
 import { getAll as getCardTypes } from "../../actions/cardTypeActions";
 import { getList as getBanks } from "../../actions/bankActions";
 
-const options = [
-  { id: 1, description: "Primaria" },
-  { id: 2, description: "Secundaria" },
-  { id: 3, description: "Terciaria" }
+let options = [
+  { id: 1 , description: "Primaria" },
+  { id: 2 , description: "Secundaria" },
+  { id: 3 , description: "Terciaria" }
 ];
 
 const useStyles = makeStyles(theme => ({
@@ -110,6 +110,9 @@ const CardPersonForm: FunctionComponent<CardPersonFormProps> = ({
         setValue("expiration_date", response.expiration_date);
         setValue("card_type_id", response.card_type_id);
         setValue("bank_id", response.bank_id);
+        if(share.card_people1 == id) setValue("order", 1);
+        if(share.card_people2 == id) setValue("order", 2);
+        if(share.card_people3 == id) setValue("order", 3);
       }
     }
     fetch();

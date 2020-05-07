@@ -1090,7 +1090,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
       updateModal({
         payload: {
           status: true,
-          element: <CardPersonForm personId={id} share={selectedShare} />
+          element: <CardPersonForm personId={tempPersonId} share={selectedShare} />
         }
       })
     );
@@ -1102,7 +1102,7 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
         payload: {
           status: true,
           element: (
-            <CardPersonForm personId={id} id={row.id} share={selectedShare} />
+            <CardPersonForm personId={tempPersonId} id={row.id} share={selectedShare} />
           )
         }
       })
