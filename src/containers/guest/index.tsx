@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import './index.sass';
 import { getAllGuest, remove, search, searchByGuest } from "../../actions/personActions";
-import { updateModal } from "../../actions/customModalActions";
+import { updateModal } from "../../actions/modalActions";
 import DataTable4 from '../../components/DataTable4';
 import PersonColumn from '../../interfaces/PersonColumn';
 import CustomSearch from '../../components/FormElements/CustomSearch';
@@ -64,7 +64,6 @@ export default function Guest() {
         payload: {
           status: true,
           element: <SingleGuestForm id={id} />,
-          customSize: 'md'
         }
       })
     );
@@ -76,7 +75,6 @@ export default function Guest() {
         payload: {
           status: true,
           element: <SingleGuestForm />,
-          customSize: 'md'
         }
       })
     );

@@ -7,11 +7,11 @@ import SearchIcon from "@material-ui/icons/Search";
 import Button from '@material-ui/core/Button';
 import Chip from "@material-ui/core/Chip";
 
-import { 
+import {
   // getAll, 
-  filter, 
-  filterReport, 
-  clearPersons 
+  filter,
+  filterReport,
+  clearPersons
 } from "../../../actions/personActions";
 import PersonColumn from '../../../interfaces/PersonColumn';
 import DataTable4 from "../../../components/DataTable4";
@@ -22,7 +22,7 @@ import CustomSelect from "../../../components/FormElements/CustomSelect";
 import RangePicker from "../../../components/FormElements/RangePicker";
 import RangeAge from "../../../components/FormElements/RangeAge";
 import { getAll as getProfessions } from "../../../actions/professionActions";
-import { getAll as getSports} from "../../../actions/sportActions";
+import { getAll as getSports } from "../../../actions/sportActions";
 
 const columns: PersonColumn[] = [
   {
@@ -207,7 +207,7 @@ export default function GeneralReport() {
   useEffect(() => {
     dispatch(getProfessions());
     dispatch(getSports());
-  },[dispatch])
+  }, [dispatch])
 
   useEffect(() => {
     return () => {
@@ -223,12 +223,12 @@ export default function GeneralReport() {
   const handleChangePage = (newPage: number) => {
     const form = getValues();
     const page = pagination.currentPage === 1 ? 2 : newPage;
-    dispatch(filter(form,page, pagination.perPage))
+    dispatch(filter(form, page, pagination.perPage))
   };
 
   const handlePerPage = (page: number, perPage: number) => {
     const form = getValues();
-    dispatch(filter(form,page, perPage))
+    dispatch(filter(form, page, perPage))
   }
 
   const getReport = () => {
@@ -237,7 +237,7 @@ export default function GeneralReport() {
   }
 
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={3} style={{ marginLeft: 10 }}>
       <form
         onSubmit={handleSubmit(handleForm)}
         noValidate
@@ -257,16 +257,12 @@ export default function GeneralReport() {
           </Grid>
         </Grid>
 
-        <Grid item xs={12} >
-          <Grid container spacing={3} direction="row"
-            justify="space-between"
-            alignItems="center"
-            className={classes.filtersContainer}
-          >
-          <Grid item xs={2}>
+        <Grid item xs={11} >
+          <Grid container spacing={4} className={classes.filtersContainer} >
+            <Grid item xs={2}>
               <CustomSelect
                 label="Condicion"
-                selectionMessage="Seleccione Tipo"
+                selectionMessage="Seleccione"
                 field="isPartner"
                 register={register}
                 errorsMessageField={
@@ -278,7 +274,20 @@ export default function GeneralReport() {
                 <option value={3}> Invitados </option>
               </CustomSelect>
             </Grid>
-
+            <Grid item xs={2}>
+              <CustomSelect
+                label="Tipo"
+                selectionMessage="Seleccione"
+                field="type_person"
+                register={register}
+                errorsMessageField={
+                  errors.type_person && errors.type_person.message
+                }
+              >
+                <option value={1}> Natural </option>
+                <option value={2}> Empresa </option>
+              </CustomSelect>
+            </Grid>
             <Grid item xs={2}>
               <CustomTextField
                 placeholder="Nombre/Apellido"
@@ -341,20 +350,6 @@ export default function GeneralReport() {
                 endMsgErr={errors.expiration_end && errors.expiration_end.message}
               />
             </Grid>
-            <Grid item xs={2}>
-              <CustomSelect
-                label="Tipo"
-                selectionMessage="Seleccione Tipo"
-                field="type_person"
-                register={register}
-                errorsMessageField={
-                  errors.type_person && errors.type_person.message
-                }
-              >
-                <option value={1}> Natural </option>
-                <option value={2}> Empresa </option>
-              </CustomSelect>
-            </Grid>
             <Grid item xs={4}>
               <RangePicker
                 label="Nacimiento"
@@ -367,7 +362,7 @@ export default function GeneralReport() {
               />
             </Grid>
             <Grid item xs={4}>
-            <RangeAge
+              <RangeAge
                 label="Edad"
                 startField="age_start"
                 endField="age_end"
@@ -418,7 +413,6 @@ export default function GeneralReport() {
                 errorsMessageField={
                   errors.primary_email && errors.primary_email.message
                 }
-                inputType="email"
               />
             </Grid>
             <Grid item xs={2}>
@@ -468,7 +462,7 @@ export default function GeneralReport() {
                   errors.profession_id && errors.profession_id.message
                 }
               >
-               {professions.map((item: any) => (
+                {professions.map((item: any) => (
                   <option key={item.id} value={item.id}>
                     {item.description}
                   </option>
@@ -485,18 +479,22 @@ export default function GeneralReport() {
                   errors.sport_id && errors.sport_id.message
                 }
               >
-               {sports.map((item: any) => (
+                {sports.map((item: any) => (
                   <option key={item.id} value={item.id}>
                     {item.description}
                   </option>
                 ))}
               </CustomSelect>
             </Grid>
-            <Grid item xs={3}>
-              <Button variant="contained" color="primary" type="submit">
-                Buscar
+          </Grid>
+          <Grid item xs={12} style={{
+            textAlign: 'right',
+            marginTop: '-40px',
+            marginBottom: '10px'
+          }}>
+            <Button variant="contained" color="primary" type="submit">
+              Buscar
           </Button>
-            </Grid>
           </Grid>
           <Grid item xs={12}>
             <DataTable4

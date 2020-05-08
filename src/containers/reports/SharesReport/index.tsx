@@ -102,7 +102,7 @@ const shareMovementColumns: ShareMovementColumns[] = [
     minWidth: 10,
     align: "left",
 
-    component: (value: any) => <span>{value.value === 1 ? 'SI' : 'NO'}</span>
+    component: (value: any) => <span>{value.value === "1" ? 'SI' : 'NO'}</span>
   },
 ];
 
@@ -146,13 +146,13 @@ const columns: ShareColumns[] = [
     minWidth: 20,
     align: "right",
     component: (value: any) => <Chip
-      label={value.value === 1 ? 'Activo' : 'Inactivo'}
+      label={value.value === "1" ? 'Activo' : 'Inactivo'}
       style={{
         fontWeight: "bold",
         fontSize: "11px"
       }}
       size="small"
-      color={value.value === 1 ? 'primary' : 'secondary'}
+      color={value.value === "1" ? 'primary' : 'secondary'}
     />,
   },
   {
@@ -160,7 +160,7 @@ const columns: ShareColumns[] = [
     label: "Metodo de Pago",
     minWidth: 20,
     align: "right",
-    component: (value: any) => <span>{value.value.description}</span>,
+    component: (value: any) => <span>{value.value && value.value.description}</span>,
   },
   {
     id: "share_type",
@@ -271,10 +271,6 @@ export default function SharesReport() {
     watch,
     reset
   } = useForm<FormData>();
-
-  useEffect(() => {
-    dispatch(getList())
-  }, [dispatch]);
 
   useEffect(() => {
     return () => {
@@ -393,7 +389,7 @@ export default function SharesReport() {
                   errors.payment_method_id && errors.payment_method_id.message
                 }
               >
-                {paymentMethodList.map((item: any) => (
+                {paymentMethodList.length > 0 && paymentMethodList.map((item: any) => (
                   <option key={item.id} value={item.id}>
                     {item.description}
                   </option>

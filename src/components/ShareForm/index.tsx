@@ -104,7 +104,11 @@ const ShareForm: FunctionComponent<ShareFormProps> = ({ id }) => {
   }, [reset, dispatch]);
 
   const handleForm = (form: object) => {
-    dispatch(create(form));
+    const body = {
+      ...form,
+      status: 1,
+    }
+    dispatch(create(body));
   };
 
   const handleSearchShares = _.debounce((term: any) => {

@@ -88,7 +88,8 @@ const GuestForm: FunctionComponent<GuestFormProps> = ({
   } = useForm<FormData>();
   const {
     personReducer: { loading },
-    genderReducer: { list: genderList }
+    genderReducer: { list: genderList },
+    loginReducer: { user },
   } = useSelector((state: any) => state);
 
   const dispatch = useDispatch();
@@ -107,18 +108,20 @@ const GuestForm: FunctionComponent<GuestFormProps> = ({
   const handleForm = async (form: object) => {
     const body = {
       ...form,
-      id_card_picture: "N/A",
-      passport: "N/A",
-      card_number: "N/A",
+      id_card_picture: null,
+      passport: "",
+      card_number: "",
       expiration_date: moment().format('YYYY-MM-DD'),
       birth_date: moment().format('YYYY-MM-DD'),
-      representante: "N/A",
+      representante: "",
       company_person_id: 0,
       status_person_id: 1,
       marital_statuses_id: 0,
       countries_id: 0,
       profession_list: null,
       isPartner: 3,
+      user: user.username,
+      date: moment().format('YYYY-MM-DD'),
     };
     dispatch(createGuest(body, refresh));
   }
@@ -183,7 +186,7 @@ const GuestForm: FunctionComponent<GuestFormProps> = ({
               />
             </Grid>
             <Grid item xs={8}>
-              <Grid container spacing={3}>
+              <Grid container spacing={1}>
                 <Grid item xs={6}>
                   <CustomTextField
                     placeholder="Nombre"
@@ -258,25 +261,26 @@ const GuestForm: FunctionComponent<GuestFormProps> = ({
                     ))}
                   </CustomSelect>
                 </Grid>
+                <Grid item xs={12}>
+                  <div className={classes.wrapper}>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      disabled={loading}
+                      className={classes.submit}
+                    >
+                      Registrar
+                    </Button>
+                    {loading && (
+                      <CircularProgress size={24} className={classes.buttonProgress} />
+                    )}
+                  </div>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
-
-          <div className={classes.wrapper}>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              disabled={loading}
-              className={classes.submit}
-            >
-              Registrar
-            </Button>
-            {loading && (
-              <CircularProgress size={24} className={classes.buttonProgress} />
-            )}
-          </div>
         </form>
       </div>
     </Container>

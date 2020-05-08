@@ -141,6 +141,7 @@ export default function AccessControlForm() {
     string | number
   >("");
   const [isSuggestion, SetIsSuggestion] = React.useState<boolean>(false);
+  const [activePartner, setActivePartner] = React.useState<boolean>(true);
   const classes = useStyles();
   const { handleSubmit, register, errors, reset, setValue } = useForm<
     FormData
@@ -175,7 +176,13 @@ export default function AccessControlForm() {
     const family = familyValues.length > 0 ? familyValues : null;
     const created = moment().format('YYYY-MM-DD h:mm:ss');
     const status = 1;
-    const body = { ...form, family, status, created };
+    const body = { 
+      ...form, 
+      family, 
+      status, 
+      created,
+      selectedPartner: activePartner,
+    };
     await dispatch(create(body));
     setSelectedFamilies([]);
     reset();
@@ -195,7 +202,10 @@ export default function AccessControlForm() {
         if (response.familyMembers) {
           const family = response.familyMembers.find((e: any) => e.selectedFamily === true);
           if (family) {
-            setSelectedFamilies([...selectedFamilies, family])
+            setSelectedFamilies([...selectedFamilies, family]);
+            setActivePartner(false);
+          } else {
+            setActivePartner(true);
           }
         }
       } else {
@@ -324,7 +334,7 @@ export default function AccessControlForm() {
                 <Grid container justify="center" direction="row" spacing={3}>
                   <Grid item xs={2}>
                     <Card
-                      className={`${classes.rootFamilyCards} ${classes.activeCard}`}
+                      className={`${classes.rootFamilyCards} ${activePartner ? classes.activeCard : ''}`}
                     >
                       <CardHeader
                         titleTypographyProps={{ variant: "subtitle1" }}

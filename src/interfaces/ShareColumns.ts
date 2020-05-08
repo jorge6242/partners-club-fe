@@ -9,7 +9,8 @@ export default interface ShareColumns {
     | "fiador"
     | "payment_method"
     | "share_type"
-    | "father_share";
+    | "father_share"
+    | "status";
   label: string;
   minWidth?: number;
   align?: "left" | "right";

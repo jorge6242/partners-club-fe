@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Chip from "@material-ui/core/Chip";
 
 import './index.sass';
-import { getAll, search } from "../../actions/shareActions";
+import { getAll, search, update, reset as resetShare } from "../../actions/shareActions";
 import { updateModal } from "../../actions/modalActions";
 import ShareForm from "../../components/ShareForm";
 import DataTable4 from '../../components/DataTable4'
@@ -94,6 +94,24 @@ const columns: ShareColumns[] = [
         return (<span>N/A</span>)
     }
   },
+  {
+    id: "status",
+    label: "Status",
+    minWidth: 20,
+    align: "right",
+    component: (value: any) => (
+      <Chip
+        label={value.value === "1" ? "Activo" : "Inactivo"}
+        style={{
+          backgroundColor: value.value === "1" ? "#2ecc71" : "#e74c3c",
+          color: "white",
+          fontWeight: "bold",
+          fontSize: "10px"
+        }}
+        size="small"
+      />
+    )
+  }
 ];
 
 export default function Share() {
@@ -134,6 +152,21 @@ export default function Share() {
     dispatch(getAll(page, perPage))
   }
 
+  const handleSwitchStatus = async (selectedId: number, shareStatus: string) => {
+    const status = shareStatus === "1" ? 0 : 1;
+    const data = {
+      id: selectedId,
+    status
+    };
+    await dispatch(update(data));
+  };
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetShare());
+    };
+  }, [dispatch]);
+
   return (
     <div className="share-container">
       <div className="share-container__header">
@@ -155,6 +188,7 @@ export default function Share() {
           loading={loading}
           onChangePage={handleChangePage}
           onChangePerPage={handlePerPage}
+          handleSwitch={handleSwitchStatus}
         />
       </div>
     </div>

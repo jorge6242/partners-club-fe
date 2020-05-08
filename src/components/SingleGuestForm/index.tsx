@@ -13,7 +13,7 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import CardMedia from "@material-ui/core/CardMedia";
 
 import CustomTextField from "../FormElements/CustomTextField";
-import { create, update , get } from "../../actions/personActions";
+import { create, update, get } from "../../actions/personActions";
 import CustomSelect from "../FormElements/CustomSelect";
 
 const useStyles = makeStyles(theme => ({
@@ -28,7 +28,8 @@ const useStyles = makeStyles(theme => ({
   },
   wrapper: {
     margin: theme.spacing(1),
-    position: "relative"
+    position: "relative",
+    textAlign: 'center',
   },
   buttonProgress: {
     position: "absolute",
@@ -38,7 +39,7 @@ const useStyles = makeStyles(theme => ({
     marginLeft: -9
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
+    margin: theme.spacing(3, 0, 2),
   },
   select: {
     padding: "10px 0px 10px 0px",
@@ -85,7 +86,8 @@ const SingleGuestForm: FunctionComponent<ComponentProps> = ({ id }) => {
   } = useForm<FormData>();
   const {
     personReducer: { loading },
-    genderReducer: { list: genderList }
+    genderReducer: { list: genderList },
+    loginReducer: { user }
   } = useSelector((state: any) => state);
 
   const dispatch = useDispatch();
@@ -94,21 +96,21 @@ const SingleGuestForm: FunctionComponent<ComponentProps> = ({ id }) => {
 
   useEffect(() => {
     async function fetch() {
-        if (id) {
-            const response: any = await dispatch(get(id));
-            const { name, last_name, rif_ci, primary_email, telephone1, picture, gender_id } = response;
-            setValue("name", name);
-            setValue("last_name", last_name);
-            setValue("rif_ci", rif_ci);
-            setValue("primary_email", primary_email);
-            setValue("telephone1", telephone1);
-            setValue("picture", picture);
-            setValue("gender_id", gender_id);
-            setImage({ ...image, preview: picture });
-        }
+      if (id) {
+        const response: any = await dispatch(get(id));
+        const { name, last_name, rif_ci, primary_email, telephone1, picture, gender_id } = response;
+        setValue("name", name);
+        setValue("last_name", last_name);
+        setValue("rif_ci", rif_ci);
+        setValue("primary_email", primary_email);
+        setValue("telephone1", telephone1);
+        setValue("picture", picture);
+        setValue("gender_id", gender_id);
+        setImage({ ...image, preview: picture });
+      }
     }
     fetch();
-}, [id, dispatch, setValue, setImage, image]);
+  }, [id, dispatch, setValue, setImage]);
 
   useEffect(() => {
     return () => {
@@ -119,12 +121,12 @@ const SingleGuestForm: FunctionComponent<ComponentProps> = ({ id }) => {
   const handleForm = async (form: object) => {
     const body = {
       ...form,
-      id_card_picture: "N/A",
-      passport: "N/A",
-      card_number: "N/A",
+      id_card_picture: null,
+      passport: "",
+      card_number: "",
       expiration_date: moment().format('YYYY-MM-DD'),
       birth_date: moment().format('YYYY-MM-DD'),
-      representante: "N/A",
+      representante: "",
       company_person_id: 0,
       status_person_id: 1,
       marital_statuses_id: 0,
@@ -135,9 +137,11 @@ const SingleGuestForm: FunctionComponent<ComponentProps> = ({ id }) => {
       sport_list: null,
       locker_list: null,
       lockers: null,
+      user: user.username,
+      date: moment().format('YYYY-MM-DD'),
     };
-    if(id) {
-      dispatch(update({id, ...body}, true));
+    if (id) {
+      dispatch(update({ id, ...body }, true));
     } else {
       dispatch(create(body, true));
     }
@@ -179,7 +183,7 @@ const SingleGuestForm: FunctionComponent<ComponentProps> = ({ id }) => {
           onSubmit={handleSubmit(handleForm)}
           noValidate
         >
-          <Grid container spacing={3}>
+          <Grid container spacing={2}>
             <Grid item xs={4}>
               <Card className={classes.pictureContainer}>
                 <CardActionArea onClick={() => handleImage()}>
@@ -201,7 +205,7 @@ const SingleGuestForm: FunctionComponent<ComponentProps> = ({ id }) => {
               />
             </Grid>
             <Grid item xs={8}>
-              <Grid container spacing={3}>
+              <Grid container spacing={1}>
                 <Grid item xs={6}>
                   <CustomTextField
                     placeholder="Nombre"
@@ -232,6 +236,7 @@ const SingleGuestForm: FunctionComponent<ComponentProps> = ({ id }) => {
                     register={register}
                     errorsField={errors.rif_ci}
                     errorsMessageField={errors.rif_ci && errors.rif_ci.message}
+                    disable={id ? true : false}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -276,25 +281,26 @@ const SingleGuestForm: FunctionComponent<ComponentProps> = ({ id }) => {
                     ))}
                   </CustomSelect>
                 </Grid>
+                <Grid item xs={12}>
+                  <div className={classes.wrapper}>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      disabled={loading}
+                      className={classes.submit}
+                    >
+                      {id ? "Actualizar" : "Crear"}
+                    </Button>
+                    {loading && (
+                      <CircularProgress size={24} className={classes.buttonProgress} />
+                    )}
+                  </div>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
-
-          <div className={classes.wrapper}>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              disabled={loading}
-              className={classes.submit}
-            >
-              {id ? "Actualizar" : "Crear"}
-            </Button>
-            {loading && (
-              <CircularProgress size={24} className={classes.buttonProgress} />
-            )}
-          </div>
         </form>
       </div>
     </Container>

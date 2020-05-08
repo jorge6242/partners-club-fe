@@ -36,6 +36,7 @@ type ComponentProps = {
     required?: boolean;
     watch?: any;
     label: string;
+    type?: string;
 };
 
 const RangePicker: FunctionComponent<ComponentProps> = ({
@@ -46,7 +47,8 @@ const RangePicker: FunctionComponent<ComponentProps> = ({
     register,
     required,
     watch,
-    label
+    label,
+    type = "date"
 }) => {
     const classes = useStyles();
 
@@ -66,7 +68,7 @@ const RangePicker: FunctionComponent<ComponentProps> = ({
                 <TextField
                     label="Desde"
                     name={startField}
-                    type="date"
+                    type={type}
                     fullWidth
                     inputRef={register({
                         required: required ? "Required" : false,
@@ -82,7 +84,7 @@ const RangePicker: FunctionComponent<ComponentProps> = ({
             <Grid item xs={6} className={classes.fieldContainer}>
                 <TextField
                     label="Hasta"
-                    type="date"
+                    type={type}
                     name={endField}
                     fullWidth
                     className={classes.textFieldRangePicker}

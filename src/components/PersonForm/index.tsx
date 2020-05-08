@@ -769,6 +769,8 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
 
   const { listData: parameterList } = useSelector((state: any) => state.parameterReducer);
 
+  const { user } = useSelector((state: any) => state.loginReducer);
+
   const {
     recordsByPerson,
     loading: recordsByPersonLoading,
@@ -947,14 +949,16 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
   const handleForm = async (form: object) => {
     const data = {
       lockers: selectedLockers,
-      id_card_picture: "empty.png"
+      id_card_picture: null,
+      user: user.username,
+      date: moment().format('YYYY-MM-DD'),
     };
     if (tempPersonId > 0) {
       await dispatch(update({ id: tempPersonId, ...form, ...data }));
       dispatch(getLockersByPartner(tempPersonId));
     } else {
       const response: any = await dispatch(
-        create({ ...form, id_card_picture: "empty.png" })
+        create({ ...form, id_card_picture: null})
       );
       setTempPersonId(response.id);
       dispatch(searchPersonToAssignFamily(response.id));

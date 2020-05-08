@@ -86,7 +86,7 @@ const columns: AccessControlColumns[] = [
     minWidth: 10,
     align: "left",
     component: (value: any) => {
-      if(value.value) {
+      if (value.value) {
         return (
           <div>
             <div><span>{value.value.name} {value.value.last_name}</span></div>
@@ -157,7 +157,7 @@ export default function AccessControlReport() {
 
   useEffect(() => {
     dispatch(getLocationList());
-  },[dispatch])
+  }, [dispatch])
 
   const handleForm = async (form: FormData) => {
     dispatch(filter(form));
@@ -200,14 +200,27 @@ export default function AccessControlReport() {
           </Grid>
         </Grid>
 
-        <Grid item xs={12} >
-          <Grid container spacing={3} direction="row"
-            justify="space-between"
-            alignItems="center"
-            className={classes.filtersContainer}
-          >
+        <Grid item xs={12} style={{ marginLeft: 5 }} >
+          <Grid container spacing={1} className={classes.filtersContainer} >
             <Grid item xs={12}>
-              <Grid container spacing={3}>
+              <Grid container spacing={1}>
+                <Grid item xs={12}>
+                  <Grid container spacing={1}>
+                    <Grid item xs={1} className={classes.personSearchTitle}>Accion</Grid>
+                    <Grid item xs={3}>
+                      <CustomTextField
+                        placeholder="Accion"
+                        field="share"
+                        register={register}
+                        errorsField={errors.share}
+                        errorsMessageField={
+                          errors.share && errors.share.message
+                        }
+                        Icon={SearchIcon}
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
                 <Grid item xs={1} className={classes.personSearchTitle}>Socio</Grid>
                 <Grid item xs={3}>
                   <CustomTextField
@@ -248,7 +261,7 @@ export default function AccessControlReport() {
               </Grid>
             </Grid>
             <Grid item xs={12}>
-              <Grid container spacing={3}>
+              <Grid container spacing={1}>
                 <Grid item xs={1} className={classes.personSearchTitle}>Invitado</Grid>
                 <Grid item xs={3}>
                   <CustomTextField
@@ -276,18 +289,7 @@ export default function AccessControlReport() {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={3}>
-              <CustomTextField
-                placeholder="Accion"
-                field="share"
-                register={register}
-                errorsField={errors.share}
-                errorsMessageField={
-                  errors.share && errors.share.message
-                }
-                Icon={SearchIcon}
-              />
-            </Grid>
+            <Grid item xs={1}></Grid>
             <Grid item xs={3}>
               <CustomSelect
                 label="Ubicacion"
@@ -318,6 +320,19 @@ export default function AccessControlReport() {
                 <option value={1}> OK </option>
               </CustomSelect>
             </Grid>
+            <Grid item xs={4}></Grid>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={6}>
+              <RangePicker
+                label="Fecha"
+                startField="created_start"
+                endField="created_end"
+                register={register}
+                watch={watch}
+                startMsgErr={errors.created_start && errors.created_start.message}
+                endMsgErr={errors.created_end && errors.created_end.message}
+              />
+            </Grid>
             <Grid item xs={3}>
               <CustomSelect
                 label="Orden Fecha"
@@ -332,18 +347,11 @@ export default function AccessControlReport() {
                 <option value="desc"> DESC </option>
               </CustomSelect>
             </Grid>
-            <Grid item xs={4}>
-              <RangePicker
-                label="Fecha"
-                startField="created_start"
-                endField="created_end"
-                register={register}
-                watch={watch}
-                startMsgErr={errors.created_start && errors.created_start.message}
-                endMsgErr={errors.created_end && errors.created_end.message}
-              />
-            </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={12} style={{
+              textAlign: 'right',
+              marginTop: '-40px',
+              marginBottom: '10px'
+            }}>
               <Button variant="contained" color="primary" type="submit">
                 Buscar
           </Button>
