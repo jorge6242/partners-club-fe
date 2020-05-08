@@ -39,7 +39,7 @@ const shareMovementColumns: ShareMovementColumns[] = [
     minWidth: 10,
     align: "left",
 
-    component: (value: any) => <span>{value.value.description}</span>
+    component: (value: any) => <span>{value.value && value.value.description}</span>
   },
   {
     id: "description",
@@ -70,7 +70,7 @@ const shareMovementColumns: ShareMovementColumns[] = [
     minWidth: 10,
     align: "left",
 
-    component: (value: any) => <span>{value.value.description}</span>
+    component: (value: any) => <span>{value.value &&  value.value.description}</span>
   },
   {
     id: "number_sale_price",
@@ -86,7 +86,7 @@ const shareMovementColumns: ShareMovementColumns[] = [
     minWidth: 10,
     align: "left",
 
-    component: (value: any) => <span>{value.value.name} {value.value.last_name}</span>
+    component: (value: any) => <span>{value.value &&  value.value.name} {value.value &&  value.value.last_name}</span>
   },
   {
     id: "titular",
@@ -94,7 +94,7 @@ const shareMovementColumns: ShareMovementColumns[] = [
     minWidth: 10,
     align: "left",
 
-    component: (value: any) => <span>{value.value.name} {value.value.last_name}</span>
+    component: (value: any) => <span>{value.value &&  value.value.name} {value.value &&  value.value.last_name}</span>
   },
   {
     id: "number_procesed",
@@ -181,7 +181,7 @@ const columns: ShareColumns[] = [
     align: "left",
     component: (value: any) => {
       if (value.value) {
-        return (<span>{value.value.name} {value.value.last_name}</span>)
+        return (<span>{value.value &&  value.value.name} {value.value && value.value.last_name}</span>)
       }
       return (<span>N/A</span>)
     }
@@ -193,7 +193,7 @@ const columns: ShareColumns[] = [
     align: "left",
     component: (value: any) => {
       if (value.value) {
-        return (<span>{value.value.name} {value.value.last_name}</span>)
+        return (<span>{value.value && value.value.name} {value.value && value.value.last_name}</span>)
       }
       return (<span>N/A</span>)
     }
@@ -205,7 +205,7 @@ const columns: ShareColumns[] = [
     align: "left",
     component: (value: any) => {
       if (value.value) {
-        return (<span>{value.value.name} {value.value.last_name}</span>)
+        return (<span>{value.value && value.value.name} {value.value && value.value.last_name}</span>)
       }
       return (<span>N/A</span>)
     }
@@ -217,7 +217,7 @@ const columns: ShareColumns[] = [
     align: "left",
     component: (value: any) => {
       if (value.value) {
-        return (<span>{value.value.name} {value.value.last_name}</span>)
+        return (<span>{value.value && value.value.name} {value.value &&value.value.last_name}</span>)
       }
       return (<span>N/A</span>)
     }
