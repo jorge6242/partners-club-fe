@@ -444,7 +444,11 @@ export default function SharesReport() {
                 Icon={SearchIcon}
               />
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={12} style={{
+            textAlign: 'right',
+            marginTop: '-10px',
+            marginBottom: '10px'
+          }}>
               <Button variant="contained" color="primary" type="submit">
                 Buscar
           </Button>
