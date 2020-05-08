@@ -157,10 +157,17 @@ export default function AccessControlReport() {
 
   useEffect(() => {
     dispatch(getLocationList());
-  }, [dispatch])
+  }, [dispatch]);
+
+  const parseDate = (date: any) => moment(date).format('YYYY-MM-DD h:mm:ss');
 
   const handleForm = async (form: FormData) => {
-    dispatch(filter(form));
+    const body = {
+      ...form,
+      created_start : parseDate(form.created_start),
+      created_end : parseDate(form.created_end),
+    }
+    dispatch(filter(body));
   };
 
   const handleChangePage = (newPage: number) => {
@@ -325,6 +332,7 @@ export default function AccessControlReport() {
             <Grid item xs={6}>
               <RangePicker
                 label="Fecha"
+                type="datetime-local"
                 startField="created_start"
                 endField="created_end"
                 register={register}
