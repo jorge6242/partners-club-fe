@@ -43,35 +43,35 @@ const columns: AccessControlColumns[] = [
     label: "Ubicacion",
     minWidth: 10,
     align: "left",
-    component: (value: any) => <span>{value.value.description}</span>
+    component: (value: any) => <span>{value.value && value.value.description}</span>
   },
   {
     id: "share",
     label: "Accion",
     minWidth: 10,
     align: "left",
-    component: (value: any) => <span>{value.value.share_number}</span>
+    component: (value: any) => <span>{value.value && value.value.share_number}</span>
   },
   {
     id: "person",
     label: "CI",
     minWidth: 10,
     align: "left",
-    component: (value: any) => <span>{value.value.rif_ci}</span>
+    component: (value: any) => <span>{value.value && value.value.rif_ci}</span>
   },
   {
     id: "person",
     label: "Carnet",
     minWidth: 10,
     align: "left",
-    component: (value: any) => <span>{value.value.card_number}</span>
+    component: (value: any) => <span>{value.value && value.value.card_number}</span>
   },
   {
     id: "person",
     label: "Nombre",
     minWidth: 10,
     align: "left",
-    component: (value: any) => <span>{value.value.name} {value.value.last_name}</span>
+    component: (value: any) => <span>{value.value && value.value.name} {value.value && value.value.last_name}</span>
   },
   {
     id: "status",
@@ -89,8 +89,8 @@ const columns: AccessControlColumns[] = [
       if (value.value) {
         return (
           <div>
-            <div><span>{value.value.name} {value.value.last_name}</span></div>
-            <div><span>CI: {value.value.rif_ci}</span></div>
+            <div><span>{value.value && value.value.name} {value.value && value.value.last_name}</span></div>
+            <div><span>CI: {value.value && value.value.rif_ci}</span></div>
           </div>
         )
       }
