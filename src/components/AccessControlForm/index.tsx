@@ -185,6 +185,7 @@ export default function AccessControlForm() {
     };
     await dispatch(create(body));
     setSelectedFamilies([]);
+    dispatch(clearGetFamiliesPartnerByCard());
     reset();
   };
 

@@ -41,6 +41,7 @@ type InitialState = {
   personsToAssign: any;
   personsByType: Array<string | number>;
   setPersonsByTypeLoading: boolean;
+  personsReport: Array<string | number>;
 };
 
 const initialState: InitialState = {
@@ -94,6 +95,7 @@ const initialState: InitialState = {
   setCompanyPersonsLoading: false,
   personsByType: [],
   setPersonsByTypeLoading: false,
+  personsReport: [],
 };
 
 const personReducer = (state = initialState, action: ActionTypes) => {
@@ -103,6 +105,11 @@ const personReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         persons: action.payload,
       };
+      case ACTIONS.GET_PERSONS_REPORT:
+        return {
+          ...state,
+          personsReport: action.payload,
+        };
     case ACTIONS.GET_PERSONS_BY_TYPE:
       return {
         ...state,
@@ -314,7 +321,7 @@ const personReducer = (state = initialState, action: ActionTypes) => {
     case ACTIONS.CLEAR_PERSONS:
       return {
         ...state,
-        persons: initialState.persons,
+        persons: [],
       };
     default:
       return state;

@@ -4,7 +4,7 @@ import AddIcon from "@material-ui/icons/Add";
 import { useDispatch, useSelector } from 'react-redux';
 
 import './index.sass';
-import { getAll, remove, search } from "../../actions/personActions";
+import { getAll, remove, search, clearPersons } from "../../actions/personActions";
 import { updateModal } from "../../actions/modalActions";
 import PersonForm from "../../components/PersonForm";
 import DataTable4 from '../../components/DataTable4';
@@ -129,6 +129,12 @@ export default function Person() {
   const handlePerPage = (page: number, perPage: number) => {
     dispatch(getAll(page, perPage))
   }
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearPersons());
+    };
+  }, [dispatch]);
 
   return (
     <div className="person-container">

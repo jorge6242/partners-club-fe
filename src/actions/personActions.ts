@@ -61,6 +61,11 @@ export const getAll = (page: number = 1, perPage: number = 8) => async (
   }
 };
 
+export const resetPerson = () => ({
+  type: ACTIONS.GET_ALL,
+  payload: [],
+});
+
 export const getAllGuest = (page: number = 1, perPage: number = 8) => async (
   dispatch: Function
 ) => {
@@ -1174,6 +1179,11 @@ export const clearPersonLockersByLocation = () => ({
   type: ACTIONS.CLEAR_PERSON_LOCKERS_BY_LOCATION
 });
 
+export const clearReport = () => ({
+  type: ACTIONS.GET_PERSONS_REPORT,
+  payload: []
+});
+
 export const filter = (
   form: object,
   page: number = 1,
@@ -1198,7 +1208,7 @@ export const filter = (
       };
       response = data.data;
       dispatch({
-        type: ACTIONS.GET_ALL,
+        type: ACTIONS.GET_PERSONS_REPORT,
         payload: response
       });
       dispatch({

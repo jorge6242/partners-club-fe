@@ -13,6 +13,7 @@ export const ACTIONS = {
   GET_PERSONS_STATISTICS: "person/get_persons_statistics",
   GET_PERSONS_EXCEPTION_STATISTICS: "person/get_persons_exception_statistics",
   GET_PERSONS_BIRTHDAY_STATISTICS: "person/get_persons_birthday_statistics",
+  GET_PERSONS_REPORT: "person/get_persons_report",
   SET_LOADING: "person/set_loading",
   SET_COMPANY_PERSONS_LOADING: "person/set_company_persons_loading",
   SET_PERSONS_BY_TYPE_LOADING: "person/set_persons_by_type_loading",
@@ -49,6 +50,11 @@ export const ACTIONS = {
 
 interface GetPerson {
   type: typeof ACTIONS.GET;
+  payload: Array<string | number>;
+}
+
+interface GetPersonsReport {
+  type: typeof ACTIONS.GET_PERSONS_REPORT;
   payload: Array<string | number>;
 }
 
@@ -294,4 +300,5 @@ export type ActionTypes =
   | GetPersonsBirthdayStatistics
   | SetPersonsBirthdayStatisticsLoading
   | GetPersonsByType
-  | SetPersonsByTypeLoading;
+  | SetPersonsByTypeLoading
+  | GetPersonsReport;

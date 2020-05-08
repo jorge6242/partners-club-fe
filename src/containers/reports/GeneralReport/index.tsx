@@ -11,7 +11,8 @@ import {
   // getAll, 
   filter,
   filterReport,
-  clearPersons
+  clearPersons,
+  clearReport
 } from "../../../actions/personActions";
 import PersonColumn from '../../../interfaces/PersonColumn';
 import DataTable4 from "../../../components/DataTable4";
@@ -185,7 +186,7 @@ type FormData = {
 export default function GeneralReport() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { persons, pagination, loading } = useSelector((state: any) => state.personReducer);
+  const { personsReport, pagination, loading } = useSelector((state: any) => state.personReducer);
   const {
     handleSubmit,
     register,
@@ -212,6 +213,7 @@ export default function GeneralReport() {
   useEffect(() => {
     return () => {
       dispatch(clearPersons());
+      dispatch(clearReport());
       reset();
     };
   }, [reset, dispatch]);
@@ -498,7 +500,7 @@ export default function GeneralReport() {
           </Grid>
           <Grid item xs={12}>
             <DataTable4
-              rows={persons}
+              rows={personsReport}
               pagination={pagination}
               columns={columns}
               loading={loading}
