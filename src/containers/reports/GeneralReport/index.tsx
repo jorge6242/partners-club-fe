@@ -129,14 +129,14 @@ const columns: PersonColumn[] = [
     label: "Sexo",
     minWidth: 10,
     align: "right",
-    component: (value: any) => <span>{value.value.description}</span>,
+    component: (value: any) => <span>{value.value && value.value.description}</span>,
   },
   {
     id: "status_person",
     label: "Status",
     minWidth: 10,
     align: "right",
-    component: (value: any) => <span>{value.value.description}</span>,
+    component: (value: any) => <span>{value.value && value.value.description}</span>,
   },
 ]
 
