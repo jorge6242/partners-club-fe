@@ -192,8 +192,9 @@ export const create = (body: object) => async (dispatch: Function) => {
     snackBarUpdate({
       payload: {
         message,
-        type: "error",
-        status: true
+        type: "warning",
+        status: true,
+        autoHide: false,
       }
     })(dispatch);
     dispatch({
@@ -219,7 +220,7 @@ export const get = (id: number) => async (dispatch: Function) => {
     snackBarUpdate({
       payload: {
         message: error.message,
-        type: "error",
+        type: "erwarningror",
         status: true
       }
     })(dispatch);

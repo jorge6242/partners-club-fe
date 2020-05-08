@@ -4,12 +4,14 @@ type LoginInitialState = {
   status: boolean;
   message: string;
   type: string;
+  autoHide: boolean;
 }
 
 const initialState: LoginInitialState = {
   status: false,
   message: '',
   type: '',
+  autoHide: true,
 };
 
 const snackBarReducer = (state = initialState, action: any) => {

@@ -14,16 +14,22 @@ function Alert(props: any) {
 const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
+    '&': {
+
+    },
     "& > * + *": {
       marginTop: theme.spacing(2)
-    }
+    },
+  },
+  customSnackBar: {
+    left: '58% !important'
   }
 }));
 
 export default function SnackBar() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { status, message, type } = useSelector((state: any) => state.snackBarReducer);
+  const { status, message, type, autoHide } = useSelector((state: any) => state.snackBarReducer);
 
   const handleClose = () => {
     dispatch(
@@ -31,7 +37,8 @@ export default function SnackBar() {
         payload: {
           message: "",
           status: false,
-          type: ""
+          type: "",
+          autoHide: false,
         }
       })
     );
@@ -39,7 +46,7 @@ export default function SnackBar() {
 
   return (
     <div className={classes.root}>
-      <Snackbar open={status} autoHideDuration={20000} onClose={handleClose}>
+      <Snackbar open={status} autoHideDuration={autoHide ? 20000 : null} onClose={handleClose} className={classes.customSnackBar} >
         <Alert onClose={handleClose} severity={type}>
           {parse(message)}
         </Alert>

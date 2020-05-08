@@ -32,6 +32,7 @@ import CustomSearch from "../../components/FormElements/CustomSearch";
 import moment from "moment";
 import { updateModal } from "../../actions/secondModalActions";
 import GuestForm from "../GuestForm";
+import snackBarUpdate from "../../actions/snackBarActions";
 
 const ExpansionPanelSummary = withStyles({
   root: {
@@ -133,7 +134,7 @@ type FormData = {
 };
 
 export default function AccessControlForm() {
-  const searchInputRef = useRef<any>(null);
+  const searchInputRef: any = useRef<HTMLInputElement>();
   const [selectedFamilies, setSelectedFamilies] = useState<
     Array<string | number>
   >([]);
@@ -142,7 +143,7 @@ export default function AccessControlForm() {
     string | number
   >("");
   const [isSuggestion, SetIsSuggestion] = React.useState<boolean>(false);
-  const [activePartner, setActivePartner] = React.useState<boolean>(true);
+  const [selectedPersonToAssignGuest, setSelectedPersonToAssignGuest] = React.useState<any>(null);
   const classes = useStyles();
   const { handleSubmit, register, errors, reset, setValue } = useForm<
     FormData
@@ -174,7 +175,7 @@ export default function AccessControlForm() {
 
   const handleForm = async (form: object) => {
     const familyValues = getKeys(selectedFamilies);
-    const family = familyValues.length > 0 ? familyValues : null;
+    const family = familyValues.length > 0 ? familyValues : [];
     const created = moment().format('YYYY-MM-DD h:mm:ss');
     const status = 1;
     const body = { 
@@ -182,16 +183,30 @@ export default function AccessControlForm() {
       family, 
       status, 
       created,
-      selectedPartner: activePartner,
+      selectedPersonToAssignGuest,
     };
-    await dispatch(create(body));
-    setSelectedFamilies([]);
-    dispatch(clearGetFamiliesPartnerByCard());
-    reset();
+    if(family.length > 0) {
+      await dispatch(create(body));
+      setSelectedFamilies([]);
+      dispatch(clearGetFamiliesPartnerByCard());
+      setSelectedPersonToAssignGuest(null);
+      reset();
+      //searchInputRef.current.focus();
+    } else {
+      dispatch(snackBarUpdate({
+        payload: {
+          message: 'Porfavor seleccione miembros',
+          type: "error",
+          status: true
+        }
+      }))
+    }
   };
 
   const handleSearch = async (event: any) => {
+    setSelectedPersonToAssignGuest(null);
     setSelectedFamilies([]);
+    dispatch(clearGetFamiliesPartnerByCard());
     if(event.value !== "") {
       const response: any = await dispatch(getFamiliesPartnerByCard(event.value));
       if (!_.isEmpty(response) && !response.response) {
@@ -204,20 +219,22 @@ export default function AccessControlForm() {
         if (response.familyMembers) {
           const family = response.familyMembers.find((e: any) => e.selectedFamily === true);
           if (family) {
+            setSelectedPersonToAssignGuest(family.id);
             setSelectedFamilies([...selectedFamilies, family]);
-            setActivePartner(false);
           } else {
-            setActivePartner(true);
+            setSelectedPersonToAssignGuest(null);
           }
         }
       } else {
         setValue("people_id", "");
+        setSelectedPersonToAssignGuest(null);
       }
     } else {
       dispatch(clearGetFamiliesPartnerByCard());
       setSelectedFamilies([]);
       setValue("people_id", "");
-      // searchInputRef.current.focus()
+      setSelectedPersonToAssignGuest(null);
+      //searchInputRef.current.focus();
     }
   };
 
@@ -335,7 +352,7 @@ export default function AccessControlForm() {
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <Grid container justify="center" direction="row" spacing={3}>
-                  <Grid item xs={2}>
+                  {/* <Grid item xs={2}>
                     <Card
                       className={`${classes.rootFamilyCards} ${activePartner ? classes.activeCard : ''}`}
                     >
@@ -366,7 +383,7 @@ export default function AccessControlForm() {
                         </Typography>
                       </CardContent>
                     </Card>
-                  </Grid>
+                  </Grid> */}
                   {familiesPartnerByCard.familyMembers.map(
                     (element: any, i: number) => {
                       const currentRow = selectedFamilies.find(
