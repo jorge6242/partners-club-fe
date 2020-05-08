@@ -9,12 +9,14 @@ type CustomSearchdProps = {
     handleSearch: Function;
     label?: string;
     errorsField? : any;
+    ref?: any;
 };
 
 const CustomTextField: FunctionComponent<CustomSearchdProps> = ({
     handleSearch,
     label,
     errorsField,
+    ref = null,
 }) => (
         <Grid container spacing={1} alignItems="flex-end">
             <Grid item>
@@ -24,6 +26,7 @@ const CustomTextField: FunctionComponent<CustomSearchdProps> = ({
                 <TextField
                     id="input-with-icon-grid"
                     label={label || "Search"}
+                    ref={ref}
                     onChange={handleDebounce(handleSearch, 1000)}
                     required={errorsField ? true : false}
                     error={errorsField ? true : false}

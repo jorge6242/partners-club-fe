@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
@@ -133,6 +133,7 @@ type FormData = {
 };
 
 export default function AccessControlForm() {
+  const searchInputRef = useRef<any>(null);
   const [selectedFamilies, setSelectedFamilies] = useState<
     Array<string | number>
   >([]);
@@ -216,6 +217,7 @@ export default function AccessControlForm() {
       dispatch(clearGetFamiliesPartnerByCard());
       setSelectedFamilies([]);
       setValue("people_id", "");
+      // searchInputRef.current.focus()
     }
   };
 
@@ -557,6 +559,7 @@ export default function AccessControlForm() {
             </Grid>
             <Grid item xs={3}>
               <CustomSearch
+                ref={searchInputRef}
                 label="N° Carnet"
                 handleSearch={handleSearch}
                 errorsField={errors.people_id}
