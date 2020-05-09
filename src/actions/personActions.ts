@@ -1156,9 +1156,16 @@ export const getGuestByPartner = (identification: string) => async (
     }
     return response;
   } catch (error) {
+    let message = "Error en el Servidor";
+    if (error && error.response) {
+      const {
+        data: { message: msg }
+      } = error.response;
+      message = msg;
+    }
     snackBarUpdate({
       payload: {
-        message: error.message,
+        message,
         status: true,
         type: "error"
       }
