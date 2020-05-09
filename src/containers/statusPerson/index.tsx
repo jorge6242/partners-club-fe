@@ -12,11 +12,13 @@ import MasterTableColumns from '../../interfaces/MasterTableColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
 
 const columns: MasterTableColumns[] = [
-  { id: "id", label: "Id", minWidth: 170 },
+  { id: 
+    "id", label: "Id", 
+    minWidth: 10 },
   {
     id: "description",
     label: "Description",
-    minWidth: 170,
+    minWidth: 20,
     align: "right"
   },
 ];
