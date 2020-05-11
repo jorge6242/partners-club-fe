@@ -192,6 +192,8 @@ export default function AccessControlForm() {
       setSelectedPersonToAssignGuest(null);
       reset();
       //searchInputRef.current.focus();
+      const partnerSearch: HTMLElement | null = document.getElementById('partner-search');
+      partnerSearch.focus();
     } else {
       dispatch(snackBarUpdate({
         payload: {
@@ -577,6 +579,7 @@ export default function AccessControlForm() {
             </Grid>
             <Grid item xs={3}>
               <CustomSearch
+                id="partner-search"
                 ref={searchInputRef}
                 label="N° Carnet"
                 handleSearch={handleSearch}
