@@ -192,7 +192,7 @@ export default function AccessControlForm() {
       setSelectedPersonToAssignGuest(null);
       reset();
       //searchInputRef.current.focus();
-      const partnerSearch: HTMLElement | null = document.getElementById('partner-search');
+      const partnerSearch: any = document.getElementById('partner-search');
       partnerSearch.focus();
     } else {
       dispatch(snackBarUpdate({
