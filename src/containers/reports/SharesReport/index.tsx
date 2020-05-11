@@ -54,7 +54,7 @@ const shareMovementColumns: ShareMovementColumns[] = [
     minWidth: 10,
     align: "left",
 
-    component: (value: any) => <span>{value.value.description}</span>
+    component: (value: any) => <span>{value.value && value.value.description}</span>
   },
   {
     id: "rate",
