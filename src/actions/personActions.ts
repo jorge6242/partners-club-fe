@@ -1194,7 +1194,7 @@ export const clearReport = () => ({
 export const filter = (
   form: object,
   page: number = 1,
-  perPage: number = 8
+  perPage: number = 10
 ) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,

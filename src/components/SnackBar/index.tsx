@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
       marginTop: theme.spacing(2)
     },
   },
-  customSnackBar: {
+  activeDashboardContent: {
     left: '58% !important'
   }
 }));
@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 export default function SnackBar() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { status, message, type, autoHide } = useSelector((state: any) => state.snackBarReducer);
+  const { status, message, type, autoHide, dashboardContent } = useSelector((state: any) => state.snackBarReducer);
 
   const handleClose = () => {
     dispatch(
@@ -39,6 +39,7 @@ export default function SnackBar() {
           status: false,
           type: "",
           autoHide: false,
+          dashboardContent: false,
         }
       })
     );
@@ -46,7 +47,12 @@ export default function SnackBar() {
 
   return (
     <div className={classes.root}>
-      <Snackbar open={status} autoHideDuration={autoHide ? 20000 : null} onClose={handleClose} className={classes.customSnackBar} >
+      <Snackbar 
+        open={status} 
+        autoHideDuration={autoHide ? 20000 : null} 
+        onClose={handleClose} 
+        className={dashboardContent ? classes.activeDashboardContent : ''} 
+      >
         <Alert onClose={handleClose} severity={type}>
           {parse(message)}
         </Alert>

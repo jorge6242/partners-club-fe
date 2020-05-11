@@ -173,7 +173,7 @@ export default function AccessControlForm() {
     };
   }, [reset, dispatch]);
 
-  const handleForm = async (form: object) => {
+  const handleForm = async (form: any) => {
     const familyValues = getKeys(selectedFamilies);
     const family = familyValues.length > 0 ? familyValues : [];
     const created = moment().format('YYYY-MM-DD h:mm:ss');
@@ -183,7 +183,7 @@ export default function AccessControlForm() {
       family, 
       status, 
       created,
-      selectedPersonToAssignGuest,
+      selectedPersonToAssignGuest: form.guest_id === "" ? '' : selectedPersonToAssignGuest,
     };
     if(family.length > 0) {
       await dispatch(create(body));
@@ -246,6 +246,7 @@ export default function AccessControlForm() {
   };
 
   const handleSearchGuest = async (event: any) => {
+    setTempIdentificationGuest("");
     const response: any = await dispatch(getGuestByPartner(event.value));
     if (_.isEmpty(response)) {
       setValue("guest_id", "");

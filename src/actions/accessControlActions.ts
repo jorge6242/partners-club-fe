@@ -164,7 +164,8 @@ export const create = (body: object) => async (dispatch: Function) => {
         payload: {
           message: "Ingreso Registrado!",
           type: "success",
-          status: true
+          status: true,
+          dashboardContent: true,
         }
       })(dispatch);
       dispatch({
@@ -195,6 +196,7 @@ export const create = (body: object) => async (dispatch: Function) => {
         type: "warning",
         status: true,
         autoHide: false,
+        dashboardContent: true,
       }
     })(dispatch);
     dispatch({

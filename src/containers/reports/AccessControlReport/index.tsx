@@ -159,7 +159,7 @@ export default function AccessControlReport() {
     dispatch(getLocationList());
   }, [dispatch]);
 
-  const parseDate = (date: any) => moment(date).format('YYYY-MM-DD h:mm:ss');
+  const parseDate = (date: any) => date ? moment(date).format('YYYY-MM-DD h:mm:ss') : '';
 
   const handleForm = async (form: FormData) => {
     const body = {
@@ -183,6 +183,11 @@ export default function AccessControlReport() {
 
   const getReport = () => {
     const form = getValues();
+    const body = {
+      ...form,
+      created_start : parseDate(form.created_start),
+      created_end : parseDate(form.created_end),
+    }
     dispatch(filterReport(form))
   }
 
