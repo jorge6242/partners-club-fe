@@ -329,7 +329,16 @@ export default function AccessControlReport() {
                   errors.status && errors.status.message
                 }
               >
-                <option value={1}> OK </option>
+                <option value={-1}> Socio Inactivo </option>
+                <option value={-2}> Saldo deudor </option>
+                <option value={-3}> Accion Inactiva </option>
+                <option value={-4}> Bloqueo Expediente</option>
+                <option value={-5}> Socio/Familiar incorrecto </option>
+                <option value={-6}> Lista Excepcion </option>
+                <option value={-7}> Invitados Excede max visitas por mes </option>
+                <option value={-9}> Invitados Inactivos </option>
+                <option value={-10}> Invitado Incorrecto </option>
+                <option value={-11}> Invitado Lista Excepcion </option>
               </CustomSelect>
             </Grid>
             <Grid item xs={4}></Grid>
