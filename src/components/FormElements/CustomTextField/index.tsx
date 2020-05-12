@@ -62,7 +62,6 @@ const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
     size="small"
     margin="dense"
     fullWidth
-    autoFocus
     placeholder={multiline ? '' : placeholder}
     name={field}
     type={type}
