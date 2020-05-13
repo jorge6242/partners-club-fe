@@ -177,6 +177,7 @@ export default function AccessControlForm() {
     const familyValues = getKeys(selectedFamilies);
     const family = familyValues.length > 0 ? familyValues : [];
     const created = moment().format('YYYY-MM-DD h:mm:ss');
+    const tempLocation = form.location_id;
     const status = 1;
     const body = { 
       ...form, 
@@ -191,6 +192,7 @@ export default function AccessControlForm() {
       dispatch(clearGetFamiliesPartnerByCard());
       setSelectedPersonToAssignGuest(null);
       reset();
+      setValue("location_id", tempLocation);
       //searchInputRef.current.focus();
       const partnerSearch: any = document.getElementById('partner-search');
       partnerSearch.focus();
