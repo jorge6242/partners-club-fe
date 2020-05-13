@@ -271,9 +271,9 @@ export default function GeneralReport() {
                   errors.isPartner && errors.isPartner.message
                 }
               >
-                <option value={1}> Socios </option>
-                <option value={2}> Familiares </option>
-                <option value={3}> Invitados </option>
+                <option value="1"> Socios </option>
+                <option value="2"> Familiares </option>
+                <option value="3"> Invitados </option>
               </CustomSelect>
             </Grid>
             <Grid item xs={2}>
