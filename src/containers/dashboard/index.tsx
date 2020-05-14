@@ -285,11 +285,23 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     return build(menu);
   }
 
+    useEffect(() => {
+    history.listen((location, action) => {
+      if (!_.isEmpty(menuList) && menuList.items.length > 0) {
+        const route = location.pathname === '/dashboard' ? '/dashboard/main' : location.pathname;
+        const isValid = menuList.items.find((e: any) => e.route === route);
+        if (!isValid) {
+          window.location.href = "/#/dashboard/main";
+        }
+      }
+    });
+  }, [menuList])
+
 
   useEffect(() => {
       async function run() {
        await dispatch(checkLogin());
-       await dispatch(getMenuList());
+       await dispatch(getMenuList(location.pathname));
        await dispatch(getStatusPersonAll());
        await dispatch(getMaritalStatusAll());
        await dispatch(getGenderAll());

@@ -83,21 +83,6 @@ export default function Home() {
     dispatch(getWidgetList());
   }, [dispatch]);
 
-
-  useEffect(() => {
-    dispatch(getPartnerStatistics());
-    dispatch(getFamilyStatistics());
-    dispatch(getGuestStatistics());
-    dispatch(getPersonsStatistics());
-    dispatch(getRecordStatistics());
-    dispatch(getPersonsExceptionStatistics());
-    dispatch(getCardStatistics());
-    dispatch(getPersonsBirthdayStatistics());
-    dispatch(getPartnerFamilyStatistics());
-    dispatch(getGuestStatisticsGraph());
-  }, [dispatch]);
-
-
   const validateWidget = (value: string) => {
     const isValid = widgetList.find((e: any) => e.slug === value);
     if (isValid) {
@@ -105,6 +90,40 @@ export default function Home() {
     }
     return false;
   }
+
+  useEffect(() => {
+    if (validateWidget('PARTNERCONTROL_socios')) {
+      dispatch(getPartnerStatistics());
+    }
+    if (validateWidget('PARTNERCONTROL_familiares')) {
+      dispatch(getFamilyStatistics());
+    }
+    if (validateWidget('PARTNERCONTROL_invitados')) {
+      dispatch(getGuestStatistics());
+    }
+    if (validateWidget('PARTNERCONTROL_totales')) {
+      dispatch(getPersonsStatistics());
+    }
+    if (validateWidget('PARTNERCONTROL_bloqueo-expediente')) {
+      dispatch(getRecordStatistics());
+    }
+    if (validateWidget('PARTNERCONTROL_lista-excepcion')) {
+      dispatch(getPersonsExceptionStatistics());
+    }
+    if (validateWidget('PARTNERCONTROL_tdc-por-vencer')) {
+      dispatch(getCardStatistics());
+    }
+    if (validateWidget('PARTNERCONTROL_cumpleanos')) {
+      dispatch(getPersonsBirthdayStatistics());
+    }
+    if (validateWidget('PARTNERCONTROL_ingreso-socios-familiares')) {
+      dispatch(getPartnerFamilyStatistics());
+    }
+    if (validateWidget('PARTNERCONTROL_ingreso-invitados')) {
+      dispatch(getGuestStatisticsGraph());
+    }
+  }, [dispatch, widgetList]);
+
 
   // var str="3465389025"; //VERY BAD: Credit Card # *unencrypted* in source!
   // var n = str.replace(/.(?=.{4})/g, 'x');

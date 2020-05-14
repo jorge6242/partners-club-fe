@@ -5,3 +5,6 @@
 // QA http://192.168.0.252:9002
 
 var BASE_URL = "http://club.api.com";
+
+// Numero de intentos para la excepcion del enpoint.
+var attempts = 5;
