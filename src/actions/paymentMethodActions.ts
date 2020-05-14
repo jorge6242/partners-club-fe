@@ -3,7 +3,9 @@ import snackBarUpdate from "./snackBarActions";
 import { updateModal } from "./modalActions";
 import { ACTIONS } from '../interfaces/actionTypes/paymentMethodTypes';
 
-export const getAll = (page: number = 1, perPage: number = 8, intento: boolean = true) => async (dispatch: Function) => {
+const attempts = window.attempts;
+
+export const getAll = (page: number = 1, perPage: number = 8, count: number = 0) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,
     payload: true
@@ -36,16 +38,18 @@ export const getAll = (page: number = 1, perPage: number = 8, intento: boolean =
     }
     return response;
   } catch (error) {
-    if(intento) {
-      dispatch(getAll(page, perPage ,false));
+    if(count <= attempts) {
+      let counter = count + 1;
+      dispatch(getAll(page, perPage ,counter));
+    } else {
+      snackBarUpdate({
+        payload: {
+          message: error.message,
+          status: true,
+          type: "error",
+        },
+      })(dispatch);
     }
-    snackBarUpdate({
-      payload: {
-        message: error.message,
-        status: true,
-        type: "error"
-      }
-    })(dispatch);
     dispatch({
       type: ACTIONS.SET_LOADING,
       payload: false

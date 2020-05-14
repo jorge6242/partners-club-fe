@@ -8,6 +8,9 @@ import _ from 'lodash';
 import { mainStatusLoading } from '../actions/loadingMainActions';
 // import history from '../config/History';
 
+const attempts = window.attempts;
+
+
 export const login = (body: object) => async (dispatch: Function) => {
     dispatch({ type: ACTIONS.SET_LOADING, payload: true })
     try {
@@ -49,7 +52,7 @@ export const login = (body: object) => async (dispatch: Function) => {
 
 export const logout = () => ({ type: ACTIONS.LOGOUT })
 
-export const checkLogin = (intento: boolean = true) => async (dispatch: Function) => {
+export const checkLogin = (count: number = 0) => async (dispatch: Function) => {
     dispatch(mainStatusLoading(true))
     try {
         const {
@@ -65,8 +68,17 @@ export const checkLogin = (intento: boolean = true) => async (dispatch: Function
         }
         return checkLoginResponse;
     } catch (error) {
-        if(intento) {
-            dispatch(checkLogin(false));
+        if(count <= attempts) {
+            let counter = count + 1;
+            dispatch(checkLogin(counter));
+          } else {
+            snackBarUpdate({
+              payload: {
+                message: error.message,
+                status: true,
+                type: "error",
+              },
+            })(dispatch);
           }
         dispatch(mainStatusLoading(false))
         return error;
