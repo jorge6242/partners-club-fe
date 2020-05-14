@@ -319,7 +319,7 @@ export default function Home() {
               ) : (
                   <Chart
                     title={"Ingresos Invitados por mes"}
-                    type={"doughnut"}
+                    type={"bar"}
                     labels={guestStatisticsGraph.labels}
                     dataLabels={guestStatisticsGraph.dataMonth}
                   />

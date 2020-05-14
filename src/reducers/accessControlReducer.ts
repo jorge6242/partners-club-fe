@@ -3,7 +3,7 @@ import {
   ActionTypes
 } from "../interfaces/actionTypes/accessControlTypes";
 
-type BanksInitialState = {
+type InitStatess = {
   list: Array<string | number>;
   partnerFamilyStatistics: Array<string | number>;
   guestStatisticsGraph: Array<string | number>;
@@ -14,7 +14,7 @@ type BanksInitialState = {
   listData: any;
 };
 
-const initialState: BanksInitialState = {
+const initialState: InitStatess = {
   list: [],
   loading: false,
   pagination: {

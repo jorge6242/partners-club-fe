@@ -6,6 +6,7 @@ import { ACTIONS as personActions } from "../interfaces/actionTypes/personTypes"
 import Axios from "../config/Axios";
 import Prefix from "../config/ApiPrefix";
 import headers from "../helpers/headers";
+import moment from "moment";
 
 export const getAll = (page: number = 1, perPage: number = 8) => async (
   dispatch: Function
@@ -414,8 +415,8 @@ export const getPartnerFamilyStatistics = () => async (
       response = data;
       let chart = { labels : [], dataMonth: []};
       if(data && data.length > 0) {
-        const labels = data.map((e: any) => e.month);
-        const dataMonth = data.map((e: any) => e.data);
+        const labels = data.map((e: any) => moment().month(e.month ).format("MMM"));
+        const dataMonth = data.map((e: any) => e.cant);
         chart = { labels, dataMonth };
       }
       dispatch({
@@ -461,8 +462,8 @@ export const getGuestStatistics = () => async (
       response = data;
       let chart = { labels : [], dataMonth: []};
       if(data && data.length > 0) {
-        const labels = data.map((e: any) => e.month);
-        const dataMonth = data.map((e: any) => e.data);
+        const labels = data.map((e: any) => moment().month(e.month ).format("MMM"));
+        const dataMonth = data.map((e: any) => e.cant);
         chart = { labels, dataMonth };
       }
       dispatch({
