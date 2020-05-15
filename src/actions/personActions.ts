@@ -1186,10 +1186,16 @@ export const clearPersonLockersByLocation = () => ({
   type: ACTIONS.CLEAR_PERSON_LOCKERS_BY_LOCATION
 });
 
-export const clearReport = () => ({
-  type: ACTIONS.GET_PERSONS_REPORT,
-  payload: []
-});
+export const clearReport = () => (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.GET_PERSONS_REPORT,
+    payload: []
+  });
+  dispatch({
+    type: ACTIONS.GET_PERSONS_BIRTHDAY,
+    payload: []
+  });
+};
 
 export const filter = (
   form: object,
@@ -1582,5 +1588,70 @@ export const getPersonsBirthdayStatistics = () => async (dispatch: Function) => 
     })(dispatch);
     return error;
   }
+};
+
+export const getPersonsBirthday = (query: object = {}, page: number = 1, perPage: number = 8) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_PERSONS_BIRTHDAY_LOADING,
+    payload: true
+  });
+  try {
+    const {
+      data: { data },
+      status
+    } = await Person.getPersonsBirthday(query, page, perPage);
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_PERSONS_BIRTHDAY,
+        payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_PERSONS_BIRTHDAY_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    dispatch({
+      type: ACTIONS.SET_PERSONS_BIRTHDAY_LOADING,
+      payload: false
+    });
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    return error;
+  }
+};
+
+
+export const getPersonsBirthdayReport = (query: object) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_SECOND_LOADING,
+    payload: true
+  });
+    Axios({
+      url: `${Prefix.api}/person-filter-birthday-report`,
+      method: "GET",
+      responseType: "blob",
+      params: { ...query },
+      headers: headers()
+    }).then(response => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "file.pdf");
+      document.body.appendChild(link);
+      link.click();
+      dispatch({
+        type: ACTIONS.SET_SECOND_LOADING,
+        payload: false
+      });
+    });
 };
 

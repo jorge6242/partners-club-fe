@@ -16,6 +16,7 @@ type InitialState = {
   personsStatistics: object;
   personsExceptionStatistics: object;
   personsBirthdayStatistics: object;
+  personsBirthday: Array<string | number>;
   guestByPartner: object;
   loading: boolean;
   secondLoading: boolean;
@@ -35,6 +36,7 @@ type InitialState = {
   personsStatisticsLoading: boolean;
   personsExceptionStatisticsLoading: boolean;
   personsBirthdayStatisticsLoading: boolean;
+  personsBirthdayLoading: boolean;
   paginationPersonsToAssign: any;
   pagination: any;
   selectedPerson: any;
@@ -96,6 +98,8 @@ const initialState: InitialState = {
   personsByType: [],
   setPersonsByTypeLoading: false,
   personsReport: [],
+  personsBirthday: [],
+  personsBirthdayLoading: false,
 };
 
 const personReducer = (state = initialState, action: ActionTypes) => {
@@ -105,11 +109,11 @@ const personReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         persons: action.payload,
       };
-      case ACTIONS.GET_PERSONS_REPORT:
-        return {
-          ...state,
-          personsReport: action.payload,
-        };
+    case ACTIONS.GET_PERSONS_REPORT:
+      return {
+        ...state,
+        personsReport: action.payload,
+      };
     case ACTIONS.GET_PERSONS_BY_TYPE:
       return {
         ...state,
@@ -129,6 +133,11 @@ const personReducer = (state = initialState, action: ActionTypes) => {
       return {
         ...state,
         personsBirthdayStatistics: action.payload,
+      };
+    case ACTIONS.GET_PERSONS_BIRTHDAY:
+      return {
+        ...state,
+        personsBirthday: action.payload,
       };
     case ACTIONS.GET_FAMILY_STATISTICS:
       return {
@@ -231,6 +240,11 @@ const personReducer = (state = initialState, action: ActionTypes) => {
       return {
         ...state,
         personsBirthdayStatisticsLoading: action.payload,
+      };
+    case ACTIONS.SET_PERSONS_BIRTHDAY_LOADING:
+      return {
+        ...state,
+        personsBirthdayLoading: action.payload,
       };
     case ACTIONS.SET_FAMILY_BY_PERSON_LOADING:
       return {

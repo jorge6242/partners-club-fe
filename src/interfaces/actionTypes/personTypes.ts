@@ -13,6 +13,7 @@ export const ACTIONS = {
   GET_PERSONS_STATISTICS: "person/get_persons_statistics",
   GET_PERSONS_EXCEPTION_STATISTICS: "person/get_persons_exception_statistics",
   GET_PERSONS_BIRTHDAY_STATISTICS: "person/get_persons_birthday_statistics",
+  GET_PERSONS_BIRTHDAY: "person/get_persons_birthday",
   GET_PERSONS_REPORT: "person/get_persons_report",
   SET_LOADING: "person/set_loading",
   SET_COMPANY_PERSONS_LOADING: "person/set_company_persons_loading",
@@ -30,6 +31,7 @@ export const ACTIONS = {
   SET_PERSONS_STATISTICS_LOADING: "person/set_persons_statistics_loading",
   SET_PERSONS_EXCEPTION_STATISTICS_LOADING: "person/set_persons_exception_statistics_loading",
   SET_PERSONS_BIRTHDAY_STATISTICS_LOADING: "person/set_persons_birthday_statistics_loading",
+  SET_PERSONS_BIRTHDAY_LOADING: "person/set_persons_birthday_loading",
   SET_PERSON_LOCKERS: "person/set_person_lockers",
   SET_PERSON_LOCKERS_LOADING: "person/set_person_lockers_loading",
   GET_PARTNERS_TO_ASSIGN: "person/get_partners_to_assign",
@@ -90,6 +92,11 @@ interface GetPersonsExceptionStatistics {
 
 interface GetPersonsBirthdayStatistics {
   type: typeof ACTIONS.GET_PERSONS_BIRTHDAY_STATISTICS;
+  payload: Array<string | number>;
+}
+
+interface GetPersonsBirthday {
+  type: typeof ACTIONS.GET_PERSONS_BIRTHDAY;
   payload: Array<string | number>;
 }
 
@@ -224,6 +231,11 @@ interface SetPersonsBirthdayStatisticsLoading {
   payload: boolean;
 }
 
+interface SetPersonsBirthdayLoading {
+  type: typeof ACTIONS.SET_PERSONS_BIRTHDAY_LOADING;
+  payload: boolean;
+}
+
 interface GetPartnersToAssign {
   type: typeof ACTIONS.GET_PARTNERS_TO_ASSIGN;
   payload: boolean;
@@ -301,4 +313,6 @@ export type ActionTypes =
   | SetPersonsBirthdayStatisticsLoading
   | GetPersonsByType
   | SetPersonsByTypeLoading
-  | GetPersonsReport;
+  | GetPersonsReport
+  | GetPersonsBirthday
+  | SetPersonsBirthdayLoading;

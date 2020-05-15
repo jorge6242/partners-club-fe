@@ -186,6 +186,16 @@ const Person = {
       headers: headers()
     });
   },
+  getPersonsBirthday(query: object, page: number, perPage: number) {
+    return AXIOS.get(`${Prefix.api}/person-filter-birthday`, {
+      params: { 
+        ...query,
+        page,
+        perPage,
+      },
+      headers: headers()
+    });
+  },
 };
 
 export default Person;
