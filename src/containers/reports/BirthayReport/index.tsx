@@ -64,6 +64,13 @@ const columns: PersonColumn[] = [
         component: (value: any) => <span>{value.value}</span>,
     },
     {
+        id: "rif_ci",
+        label: "Cedula",
+        minWidth: 10,
+        align: "right",
+        component: (value: any) => <span>{value.value}</span>,
+    },
+    {
         id: "name",
         label: "Nombre",
         minWidth: 10,
@@ -77,9 +84,10 @@ const columns: PersonColumn[] = [
         align: "right",
         component: (value: any) => <span>{value.value}</span>,
     },
+
     {
-        id: "rif_ci",
-        label: "Cedula",
+        id: "birth_date",
+        label: "Nacimiento",
         minWidth: 10,
         align: "right",
         component: (value: any) => <span>{value.value}</span>,
