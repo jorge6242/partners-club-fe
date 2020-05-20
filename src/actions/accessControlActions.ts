@@ -492,3 +492,157 @@ export const getGuestStatistics = () => async (
   }
 };
 
+export const getMonthlyIncomeStatistics = () => async (
+  dispatch: Function
+) => {
+  dispatch({
+    type: ACTIONS.SET_PARTNER_FAMILY_STATISTICS_LOADING,
+    payload: true
+  });
+  try {
+    const {
+      data: { data },
+      status
+    } = await API.getMonthlyIncomeStatistics();
+    let response = [];
+    if (status === 200) {
+      response = data;
+      let chart = { labels : [], dataMonth: []};
+      if(data && data.length > 0) {
+        const labels = data.map((e: any) => moment().month(e.month ).format("MMM"));
+        const dataMonth = data.map((e: any) => e.cant);
+        chart = { labels, dataMonth };
+      }
+      dispatch({
+        type: ACTIONS.GET_MONTHLY_INCOME_STATISTICS,
+        payload: chart
+      });
+      dispatch({
+        type: ACTIONS.GET_MONTHLY_INCOME_REPORT,
+        payload: data
+      });
+      dispatch({
+        type: ACTIONS.SET_PARTNER_FAMILY_STATISTICS_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_PARTNER_FAMILY_STATISTICS_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
+export const getPartnerAgeStatistics = () => async (
+  dispatch: Function
+) => {
+  dispatch({
+    type: ACTIONS.SET_PARTNER_FAMILY_STATISTICS_LOADING,
+    payload: true
+  });
+  try {
+    const {
+      data: { data },
+      status
+    } = await API.getPartnerAgeStatistics();
+    let response = [];
+    if (status === 200) {
+      response = data;
+      let chart = { labels : [], dataLabels: []};
+      if(data && data.length > 0) {
+        const labels = data.map((e: any) => e.label);
+        const dataLabels = data.map((e: any) => e.data);
+        chart = { labels, dataLabels };
+      }
+      dispatch({
+        type: ACTIONS.GET_PARTNER_AGES_STATISTICS,
+        payload: chart
+      });
+      dispatch({
+        type: ACTIONS.GET_PARTNER_AGES_REPORT,
+        payload: data
+      });
+      dispatch({
+        type: ACTIONS.SET_PARTNER_FAMILY_STATISTICS_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_PARTNER_FAMILY_STATISTICS_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
+export const getSonsMoreThan30Statistics = () => async (
+  dispatch: Function
+) => {
+  dispatch({
+    type: ACTIONS.SET_PARTNER_FAMILY_STATISTICS_LOADING,
+    payload: true
+  });
+  try {
+    const {
+      data: { data },
+      status
+    } = await API.getSonsMoreThan30Statistics();
+    let response = [];
+    if (status === 200) {
+      response = data;
+      let chart = { labels : [], dataLabels: []};
+      if(data && data.length > 0) {
+        // const labels = data.map((e: any) => e.label);
+        // const dataLabels = data.map((e: any) => e.data);
+        // chart = { labels, dataLabels };
+      }
+      // dispatch({
+      //   type: ACTIONS.GET_PARTNER_SONS_30_STATISTICS,
+      //   payload: chart
+      // });
+      dispatch({
+        type: ACTIONS.GET_PARTNER_SONS_30_STATISTICS,
+        payload: data
+      });
+      dispatch({
+        type: ACTIONS.SET_PARTNER_FAMILY_STATISTICS_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_PARTNER_FAMILY_STATISTICS_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
+

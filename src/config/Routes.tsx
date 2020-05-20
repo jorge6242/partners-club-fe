@@ -56,6 +56,9 @@ import AccessControl from "../containers/accessControl";
 import Guest from "../containers/guest";
 import About from "../containers/about";
 import PersonBirthdayReport from "../containers/reports/BirthayReport";
+import MonthlyIncomeReport from "../containers/reports/MonthlyIncomeReport";
+import PartnerAgesReport from "../containers/reports/PartnersAgeReport";
+import PartneSons30Report from "../containers/reports/PartneSons30Report";
 
 export default function Routes() {
   const dispatch = useDispatch();
@@ -63,7 +66,6 @@ export default function Routes() {
 
   useEffect(() => {
     async function run(){
-      console.log('paso');
       if(window.location.pathname !== '/') {
         await dispatch(checkLogin());
         // await dispatch(getStatusPersonAll());
@@ -144,6 +146,9 @@ export default function Routes() {
                       <Route path="/dashboard/guest" exact component={Guest} />
                       <Route path="/dashboard/about" exact component={About} />
                       <Route path="/dashboard/person-birthday-report" exact component={PersonBirthdayReport} />
+                      <Route path="/dashboard/monthly-income-report" exact component={MonthlyIncomeReport} />
+                      <Route path="/dashboard/partner-ages-report" exact component={PartnerAgesReport} />
+                      <Route path="/dashboard/partners-sons-30" exact component={PartneSons30Report} />
                     </Dashboard>
                   </Switch>
                 );

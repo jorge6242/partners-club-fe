@@ -1,14 +1,27 @@
 import React, { FunctionComponent } from "react";
-import { Bar, Doughnut } from "react-chartjs-2";
+import { Bar, HorizontalBar, Doughnut, Pie } from "react-chartjs-2";
+
+const colors = [
+  '#f39c12',
+  '#2980b9',
+  '#27ae60',
+  '#c0392b',
+  '#8e44ad',
+  '#2c3e50',
+  '#16a085',
+  '#d35400',
+  '#2c3e50',
+];
 
 type FormComponentProps = {
   title: string;
   type: string;
   labels: any;
   dataLabels: any;
+  multiColors?: boolean;
 };
 
-const Chart: FunctionComponent<FormComponentProps> = ({ title, type, labels, dataLabels }) => {
+const Chart: FunctionComponent<FormComponentProps> = ({ title, type, labels, dataLabels, multiColors = false }) => {
   const data = {
     labels,
     datasets: [
@@ -16,7 +29,7 @@ const Chart: FunctionComponent<FormComponentProps> = ({ title, type, labels, dat
         label: title,
         fill: false,
         lineTension: 0.1,
-        backgroundColor: "#3498db",
+        backgroundColor: multiColors ? colors : "#3498db",
         borderColor: "white",
         borderCapStyle: "butt",
         borderDash: [],
@@ -38,7 +51,9 @@ const Chart: FunctionComponent<FormComponentProps> = ({ title, type, labels, dat
   return (
     <div>
       {type === "bar" && <Bar data={data} />}
+      {type === "horizontal-bar" && <HorizontalBar data={data} />}
       {type === "doughnut" && <Doughnut data={data} />}
+      {type === "pie" && <Pie data={data} />}
     </div>
   );
 };

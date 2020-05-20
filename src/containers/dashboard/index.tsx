@@ -285,7 +285,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     return build(menu);
   }
 
-    useEffect(() => {
+  useEffect(() => {
     history.listen((location, action) => {
       if (!_.isEmpty(menuList) && menuList.items.length > 0) {
         const route = location.pathname === '/dashboard' ? '/dashboard/main' : location.pathname;
@@ -299,23 +299,26 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
 
 
   useEffect(() => {
-      async function run() {
-       await dispatch(checkLogin());
-       await dispatch(getMenuList(location.pathname));
-       await dispatch(getStatusPersonAll());
-       await dispatch(getMaritalStatusAll());
-       await dispatch(getGenderAll());
-       await dispatch(getCountries());
-       await dispatch(getRelationTypes());
-       await dispatch(getPaymentMethods());
-       await dispatch(getTransactionTypes());
-       await dispatch(getCurrencies());
-       await dispatch(getSports());
-       await dispatch(getLockerLocationList());
-       await dispatch(getParameterList());
-       await dispatch(getProfessions());
-      }
-      run();
+
+    const checkLoginPromise = new Promise(function (resolve, reject) {
+      resolve(dispatch(checkLogin()));
+    });
+
+    checkLoginPromise.then(() => {
+      dispatch(getMenuList(location.pathname));
+      dispatch(getStatusPersonAll());
+      dispatch(getMaritalStatusAll());
+      dispatch(getGenderAll());
+      dispatch(getCountries());
+      dispatch(getRelationTypes());
+      dispatch(getPaymentMethods());
+      dispatch(getTransactionTypes());
+      dispatch(getCurrencies());
+      dispatch(getSports());
+      dispatch(getLockerLocationList());
+      dispatch(getParameterList());
+      dispatch(getProfessions());
+    })
   }, [dispatch])
 
   useEffect(() => {
@@ -476,7 +479,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
       </List>
     </div>
   );
-  const client =Helper.getParameter(parameterList, 'CLIENT_NAME')
+  const client = Helper.getParameter(parameterList, 'CLIENT_NAME')
   const nameRole: any = !_.isEmpty(user) ? _.first(user.roles) : '';
   return (
     <div className={classes.root}>
@@ -497,7 +500,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
               <Grid container spacing={1}>
                 <Grid item xs={12}>Suite Gestion Clubes</Grid>
               </Grid>
-                  <Grid item xs={12} style={{ fontSize: 14, fontStyle: 'italic' }}>{client.value}</Grid>
+              <Grid item xs={12} style={{ fontSize: 14, fontStyle: 'italic' }}>{client.value}</Grid>
             </Typography>
             <Typography variant="h6" noWrap style={{ lineHeight: 3 }}>
               <div>

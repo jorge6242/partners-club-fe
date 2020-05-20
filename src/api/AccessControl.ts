@@ -75,6 +75,21 @@ const API = {
       headers: headers()
     });
   },
+  getMonthlyIncomeStatistics() {
+    return AXIOS.get(`${Prefix.api}/monthly-income-statistics`, {
+      headers: headers()
+    });
+  },
+  getPartnerAgeStatistics() {
+    return AXIOS.get(`${Prefix.api}/partners-ages-statistics`, {
+      headers: headers()
+    });
+  },
+  getSonsMoreThan30Statistics() {
+    return AXIOS.get(`${Prefix.api}/partners-sons-30`, {
+      headers: headers()
+    });
+  },
 };
 
 export default API;

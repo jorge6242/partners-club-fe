@@ -69,8 +69,8 @@ interface DataTableProps {
   handleView?: Function;
   handleDelete?: any;
   loading?: boolean;
-  onChangePage: any;
-  onChangePerPage: any;
+  onChangePage?: any;
+  onChangePerPage?: any;
   fontSize?: string;
   handleSubRowComponent?: Function;
   renderSubRow?: any;
@@ -257,16 +257,20 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        labelRowsPerPage="Filas"
-        labelDisplayedRows={({ from, to, count }) => `${pagination.from}-${pagination.to}`}
-        component="div"
-        count={rows.to}
-        rowsPerPage={pagination.perPage}
-        page={pagination.prevPageUrl === null ? 0 : pagination.currentPage}
-        onChangePage={handlePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
+      {
+        pagination && (
+          <TablePagination
+            labelRowsPerPage="Filas"
+            labelDisplayedRows={({ from, to, count }) => `${pagination.from}-${pagination.to}`}
+            component="div"
+            count={rows.to}
+            rowsPerPage={pagination.perPage}
+            page={pagination.prevPageUrl === null ? 0 : pagination.currentPage}
+            onChangePage={handlePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
+        )
+      }
     </Paper >
   );
 };

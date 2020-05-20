@@ -4,6 +4,11 @@ export const ACTIONS = {
   GET_LIST: "access-control/get_list",
   GET_PARTNER_FAMILY_STATISTICS: "access-control/get_partner_family_statistics",
   GET_GUEST_STATISTICS: "access-control/get_guest_statistics",
+  GET_MONTHLY_INCOME_STATISTICS: "access-control/get_monthly_income_statistics",
+  GET_PARTNER_AGES_STATISTICS: "access-control/get_partner_ages_statistics",
+  GET_PARTNER_SONS_30_STATISTICS: "access-control/get_partner_sons_30_statistics",
+  GET_MONTHLY_INCOME_REPORT: "access-control/get_monthly_income_report",
+  GET_PARTNER_AGES_REPORT: "access-control/get_partner_ages_report",
   SET_LOADING: "access-control/set_loading",
   SET_REPORT_LOADING: "access-control/set_report_loading",
   SET_PARTNER_FAMILY_STATISTICS_LOADING:
@@ -14,6 +19,31 @@ export const ACTIONS = {
 
 interface Get {
   type: typeof ACTIONS.GET;
+  payload: Array<string | number>;
+}
+
+interface GetMontlhyIncomeStatistics {
+  type: typeof ACTIONS.GET_MONTHLY_INCOME_STATISTICS;
+  payload: Array<string | number>;
+}
+
+interface GetPartnerAgesStatistics {
+  type: typeof ACTIONS.GET_PARTNER_AGES_STATISTICS;
+  payload: Array<string | number>;
+}
+
+interface GetPartnerSons30Statistics {
+  type: typeof ACTIONS.GET_PARTNER_SONS_30_STATISTICS;
+  payload: Array<string | number>;
+}
+
+interface GetMontlhyIncomeReport {
+  type: typeof ACTIONS.GET_MONTHLY_INCOME_REPORT;
+  payload: Array<string | number>;
+}
+
+interface GetPartnerAgesReport {
+  type: typeof ACTIONS.GET_PARTNER_AGES_REPORT;
   payload: Array<string | number>;
 }
 
@@ -72,4 +102,9 @@ export type ActionTypes =
   | GetPartnerFamilyStatistics
   | SetPartnerFamilyStatisticsLoading
   | GetGuestStatistics
-  | SetGuestStatisticsLoading;
+  | SetGuestStatisticsLoading
+  | GetMontlhyIncomeStatistics
+  | GetMontlhyIncomeReport
+  | GetPartnerAgesStatistics
+  | GetPartnerAgesReport
+  | GetPartnerSons30Statistics;
