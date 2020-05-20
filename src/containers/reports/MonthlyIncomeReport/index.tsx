@@ -113,7 +113,6 @@ export default function MonthlyIncomeReport() {
     //     const form = getValues();
     //     dispatch(getPersonsBirthdayReport(form))
     // }
-    console.log('monthlyIncomes ', monthlyIncomes);
     return (
         <Grid container spacing={3}>
                 <Grid item xs={12} >
@@ -125,7 +124,7 @@ export default function MonthlyIncomeReport() {
                                         !isEmpty(monthlyIncomes) && (
                                             <Chart
                                                 title={"Reporte de Accesos Mensuales"}
-                                                type={"bar"}
+                                                type={"horizontal-bar"}
                                                 labels={monthlyIncomes.labels}
                                                 dataLabels={monthlyIncomes.dataMonth}
                                             />
