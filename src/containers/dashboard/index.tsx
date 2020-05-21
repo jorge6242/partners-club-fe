@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, FunctionComponent, useCallback } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
@@ -7,14 +7,6 @@ import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import SportsBaseballIcon from '@material-ui/icons/SportsBaseball';
-import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
-import LockIcon from '@material-ui/icons/Lock';
-import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
-import PeopleIcon from '@material-ui/icons/People';
-import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak';
-import BuildIcon from '@material-ui/icons/Build';
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -34,14 +26,11 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import IconExpandLess from '@material-ui/icons/ExpandLess'
 import IconExpandMore from '@material-ui/icons/ExpandMore'
-import IconLibraryBooks from '@material-ui/icons/LibraryBooks'
 import Collapse from '@material-ui/core/Collapse'
 import SettingsIcon from '@material-ui/icons/Settings';
 import _ from 'lodash';
 
 import { logout, checkLogin } from "../../actions/loginActions";
-import AccessControlForm from "../../components/AccessControlForm";
-import { updateModal } from "../../actions/modalActions";
 import { getAll as getStatusPersonAll } from "../../actions/statusPersonActions";
 import { getAll as getMaritalStatusAll } from "../../actions/maritalStatusActions";
 import { getAll as getGenderAll } from "../../actions/genderActions";
@@ -117,12 +106,72 @@ interface ResponsiveDrawerProps {
   container?: Element;
 }
 
+interface SubMenuProps {
+  menu: Array<string | number>;
+  item: any;
+}
+
+const SubMenu: FunctionComponent<SubMenuProps> = ({ menu, item }) => {
+  const [menuItem, setMenuItem] = useState(null);
+  const history = useHistory();
+  const findChildrens: any = menu.filter((e: any) => Number(e.parent) === Number(item.id));
+  let Icon = SettingsIcon;
+  if (item.icons) {
+    let currenMenutIcon = icons.find((e: any) => e.slug === item.icons.slug);
+    if (currenMenutIcon) {
+      Icon = currenMenutIcon.name;
+    }
+  }
+
+  const handleRoute = (path: string) => {
+    history.push(path);
+  };
+
+  const handleSubMenu = (currentItem: any) => {
+    if (menuItem === currentItem) {
+      setMenuItem(null);
+    } else {
+      setMenuItem(currentItem);
+    }
+  }
+
+  const handleSubMenuOrRoute = useCallback(() => {
+    findChildrens.length > 0 ? handleSubMenu(item.id) : handleRoute(item.route ? item.route : '/dashboard/main')
+  },
+    [item, findChildrens],
+  );
+
+  return (
+    <React.Fragment key={item.id}>
+      <ListItem button onClick={handleSubMenuOrRoute}>
+        <ListItemIcon >
+          <Icon />
+        </ListItemIcon>
+        <ListItemText primary={item.name} />
+        {findChildrens.length > 0 && (
+          item.id === menuItem ? <IconExpandLess /> : <IconExpandMore />
+        )
+        }
+      </ListItem>
+      {findChildrens.length > 0 && (
+        <Collapse in={item.id === menuItem || false} timeout="auto" unmountOnExit>
+          <List dense>
+            {findChildrens.map((e: any, i:number) => <SubMenu key={i} menu={menu} item={e} />)}
+          </List>
+        </Collapse>
+      )
+
+      }
+    </React.Fragment>
+  )
+}
+
+
 export default function Dashboard(props: ResponsiveDrawerProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const { container, children } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [subMenuItem, setSubMenuItem] = React.useState(null);
-  const [subMenuItem2, setSubMenuItem2] = React.useState(null);
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();
@@ -136,34 +185,6 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
   const {
     parameterReducer: { listData: parameterList }
   } = useSelector((state: any) => state);
-
-  const [open1, setOpen1] = React.useState(false);
-  const [open2, setOpen2] = React.useState(false);
-  const [open3, setOpen3] = React.useState(false);
-  const [open4, setOpen4] = React.useState(false);
-  const [open5, setOpen5] = React.useState(false);
-
-  function handleClick(value: number) {
-    switch (value) {
-      case 1:
-        setOpen1(!open1)
-        break;
-      case 2:
-        setOpen2(!open2)
-        break;
-      case 3:
-        setOpen3(!open3)
-        break;
-      case 4:
-        setOpen4(!open4)
-        break;
-      case 5:
-        setOpen5(!open5)
-        break;
-      default:
-        break;
-    }
-  }
 
   const handleMenu1 = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -182,67 +203,6 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     }
   }
 
-  function setSecondSubMenu(currentItem: any) {
-    if (subMenuItem2 == currentItem) {
-      setSubMenuItem2(null);
-    } else {
-      setSubMenuItem2(currentItem);
-    }
-  }
-
-  const renderThirdMenu = (item: any) => {
-    let Icon = SettingsIcon;
-    if (item.icons) {
-      let currenMenutIcon = icons.find((e: any) => e.slug === item.icons.slug);
-      if (currenMenutIcon) {
-        Icon = currenMenutIcon.name;
-      }
-    }
-    return (
-      <ListItem button onClick={() => handeClick(item.route ? item.route : '/dashboard/main')}>
-        <ListItemIcon>
-          <Icon />
-        </ListItemIcon>
-        <ListItemText primary={item.name} />
-      </ListItem>
-    )
-  }
-
-  const secondMenu = (CustomIcon: React.ReactType, title: string, route: string, menu: any, item: any) => {
-    const findChildrens: any = menu.filter((e: any) => e.parent == item.id);
-    let Icon = SettingsIcon;
-    if (item.icons) {
-      let currenMenutIcon = icons.find((e: any) => e.slug === item.icons.slug);
-      if (currenMenutIcon) {
-        Icon = currenMenutIcon.name;
-      }
-    }
-    return (
-      <React.Fragment key={item.id}>
-        <ListItem button onClick={() => findChildrens.length > 0 ? setSecondSubMenu(item.id) : handeClick(item.route ? item.route : '/dashboard/main')}>
-          <ListItemIcon >
-            <Icon />
-          </ListItemIcon>
-          <ListItemText primary={item.name} />
-          {findChildrens.length > 0 && (
-            item.id === subMenuItem2 ? <IconExpandLess /> : <IconExpandMore />
-          )
-          }
-        </ListItem>
-        {findChildrens.length > 0 && (
-          <Collapse in={item.id === subMenuItem2 ? true : false} timeout="auto" unmountOnExit>
-            <List dense>
-              {findChildrens.map((e: any) => renderThirdMenu(e))}
-            </List>
-          </Collapse>
-        )
-
-        }
-      </React.Fragment>
-    )
-  }
-
-
   function build(menu: any) {
     return menu.map((item: any, i: number) => {
       if (item.parent === "0") {
@@ -255,7 +215,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
           }
         }
         return (
-          <React.Fragment>
+          <React.Fragment key={i}>
             <ListItem button onClick={() => findChildrens.length > 0 ? setSubMenu(item.id) : handeClick(item.route ? item.route : '/dashboard/main')}>
               <ListItemIcon >
                 <Icon />
@@ -269,7 +229,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             {findChildrens.length > 0 && (
               <Collapse in={item.id === subMenuItem ? true : false} timeout="auto" unmountOnExit>
                 <List dense>
-                  {findChildrens.map((e: any) => secondMenu(DoubleArrowIcon, e.name, "", menu, e))}
+                  {findChildrens.map((e: any, i:number) => <SubMenu key={i} menu={menu} item={e} />)}
                 </List>
               </Collapse>
             )
@@ -295,7 +255,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
         }
       }
     });
-  }, [menuList])
+  }, [menuList, history])
 
 
   useEffect(() => {
@@ -338,144 +298,12 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
 
   const handleLogout = () => dispatch(logout());
 
-  // const renderMenu = (Icon: React.ReactType, title: string, route: string) => (
-  //   <ListItem button>
-  //     <ListItemIcon>
-  //       <Icon />
-  //     </ListItemIcon>
-  //     <ListItemText
-  //       primary={title}
-  //       onClick={() => handeClick(route)}
-  //     />
-  //   </ListItem>
-  // )
-
-  const renderFirstMenu = (Icon: React.ReactType, title: string, route: string) => (
-    <MenuItem>
-      <ListItemIcon>
-        <Icon />
-      </ListItemIcon>
-      <ListItemText
-        primary={title}
-        onClick={() => handeClick(route)}
-      />
-    </MenuItem>
-  )
-
-  const renderSecondMenu = (Icon: React.ReactType, title: string, route: string) => (
-    <ListItem button onClick={() => handeClick(route)}>
-      <ListItemIcon>
-        <Icon />
-      </ListItemIcon>
-      <ListItemText primary={title} />
-    </ListItem>
-  )
-
   const drawer = (
     <div>
       <Logo />
       <Divider />
       <List dense >
         {!_.isEmpty(menuList) && buildMenu(menuList.items)}
-        {/* <Divider />
-        {renderFirstMenu(DashboardIcon, "Inicio", "/dashboard/main")}
-        {renderFirstMenu(AccountCircleIcon, "Socios", "/dashboard/socio")}
-        {renderSecondMenu(DoubleArrowIcon, "Invitados", "/dashboard/guest")}
-        {renderFirstMenu(DoubleArrowIcon, "Acciones", "/dashboard/share")}
-        {renderFirstMenu(DoubleArrowIcon, "Movimientos de Acciones", "/dashboard/share-movement")}
-
-        <ListItem button onClick={() => handleClick(1)}>
-          <ListItemIcon >
-            <BuildIcon />
-          </ListItemIcon>
-          <ListItemText primary="Mantenimientos" />
-          {open1 ? <IconExpandLess /> : <IconExpandMore />}
-        </ListItem>
-
-        <Collapse in={open1} timeout="auto" unmountOnExit>
-          <List dense>
-            {renderSecondMenu(AccountBalanceIcon, "Banco", "/dashboard/banco")}
-            {renderSecondMenu(DoubleArrowIcon, "Pais", "/dashboard/pais")}
-            {renderSecondMenu(SportsBaseballIcon, "Deporte", "/dashboard/deporte")}
-            {renderSecondMenu(DoubleArrowIcon, "Profesion", "/dashboard/profesion")}
-            {renderSecondMenu(DoubleArrowIcon, "Estado Civil", "/dashboard/estado-civil")}
-            {renderSecondMenu(DoubleArrowIcon, "Estatus", "/dashboard/status-persona")}
-            {renderSecondMenu(DoubleArrowIcon, "Sexo", "/dashboard/sexo")}
-            {renderSecondMenu(DoubleArrowIcon, "Tipo Relacion", "/dashboard/relation-type")}
-            {renderSecondMenu(DoubleArrowIcon, "Metodo de Pago", "/dashboard/payment-method")}
-            {renderSecondMenu(DoubleArrowIcon, "Tipo de Tarjeta", "/dashboard/card-type")}
-            {renderSecondMenu(DoubleArrowIcon, "Tipo de Accion", "/dashboard/share-type")}
-            {renderSecondMenu(DoubleArrowIcon, "Parametros", "/dashboard/parameter")}
-            {renderSecondMenu(DoubleArrowIcon, "Locker", "/dashboard/locker")}
-            {renderSecondMenu(DoubleArrowIcon, "Tipos de transacion", "/dashboard/transaction-type")}
-          </List>
-        </Collapse>
-
-        <ListItem button onClick={() => handleClick(2)}>
-          <ListItemIcon >
-            <IconLibraryBooks />
-          </ListItemIcon>
-          <ListItemText primary="Reportes" />
-          {open2 ? <IconExpandLess /> : <IconExpandMore />}
-        </ListItem>
-
-        <Collapse in={open2} timeout="auto" unmountOnExit>
-          <List dense>
-            {renderSecondMenu(IconLibraryBooks, "General", "/dashboard/report-general")}
-            {renderSecondMenu(IconLibraryBooks, "Acciones", "/dashboard/share-report")}
-          </List>
-        </Collapse>
-
-
-        <ListItem button onClick={() => handleClick(3)}>
-          <ListItemIcon >
-            <LockIcon />
-          </ListItemIcon>
-          <ListItemText primary="Seguridad" />
-          {open3 ? <IconExpandLess /> : <IconExpandMore />}
-        </ListItem>
-
-        <Collapse in={open3} timeout="auto" unmountOnExit>
-          <List dense>
-            {renderSecondMenu(PeopleIcon, "Usuarios", "/dashboard/user")}
-            {renderSecondMenu(PeopleIcon, "Roles", "/dashboard/role")}
-            {renderSecondMenu(LockIcon, "Permisos", "/dashboard/permission")}
-            {renderSecondMenu(DoubleArrowIcon, "Widget", "/dashboard/widget")}
-            {renderSecondMenu(DoubleArrowIcon, "Menu", "/dashboard/menu")}
-            {renderSecondMenu(DoubleArrowIcon, "Menu Item", "/dashboard/menu-item")}
-          </List>
-        </Collapse>
-
-
-        <ListItem button onClick={() => handleClick(4)}>
-          <ListItemIcon >
-            <DoubleArrowIcon />
-          </ListItemIcon>
-          <ListItemText primary="Acceso" />
-          {open4 ? <IconExpandLess /> : <IconExpandMore />}
-        </ListItem>
-
-        <Collapse in={open4} timeout="auto" unmountOnExit>
-          <List dense>
-            {renderSecondMenu(CenterFocusWeakIcon, "Control de Acceso", "/dashboard/access-control")}
-            {renderSecondMenu(DoubleArrowIcon, "Ubicaciones", "/dashboard/location")}
-            {renderSecondMenu(DoubleArrowIcon, "Invitados", "/dashboard/guest")}
-            <ListItem button onClick={() => handleClick(5)}>
-              <ListItemIcon >
-                <IconLibraryBooks />
-              </ListItemIcon>
-              <ListItemText primary="Reportes" />
-              {open5 ? <IconExpandLess /> : <IconExpandMore />}
-            </ListItem>
-
-            <Collapse in={open5} timeout="auto" unmountOnExit>
-              <List dense>
-                {renderSecondMenu(IconLibraryBooks, "Control de Acceso", "/dashboard/access-control-report")}
-                {renderSecondMenu(IconLibraryBooks, "Invitados", "/dashboard/guest")}
-              </List>
-            </Collapse>
-          </List>
-        </Collapse> */}
       </List>
     </div>
   );

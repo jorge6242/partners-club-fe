@@ -176,13 +176,14 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                 <CircularProgress color="primary" />
               </TableRow>
             ) : (
-                rows.map((row: any) => {
+                rows.map((row: any, i: number) => {
                   return (
-                    <React.Fragment>
+                    <React.Fragment key={i}>
                       <TableRow
                         hover
                         role="checkbox"
-                        tabIndex={-1} key={row.id}
+                        tabIndex={-1}
+                        key={i}
                         onClick={() => handleSelect(row.share_movements && row.share_movements.length ? row.id : 0)}
                       >
                         {columns.map((column: any) => {
@@ -248,7 +249,7 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                       </TableRow>
                       {
                         row.share_movements && row.share_movements.length > 0 && renderSubRow && selectedRow === row.id &&
-                        <TableRow><TableCell colSpan={10}>{renderSubRow(row.share_movements)}</TableCell></TableRow>
+                        <TableRow key={i}><TableCell colSpan={10}>{renderSubRow(row.share_movements)}</TableCell></TableRow>
                       }
                     </React.Fragment>
                   );

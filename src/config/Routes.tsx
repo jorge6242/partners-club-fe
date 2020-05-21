@@ -9,7 +9,10 @@ import MainLayout from "../Hoc/MainLayout";
 import SnackBar from "../components/SnackBar";
 import Login from "../containers/login";
 import SecureStorage from "./SecureStorage";
-import { checkLogin, setupInterceptors } from "../actions/loginActions";
+import { 
+  checkLogin, 
+  //setupInterceptors 
+} from "../actions/loginActions";
 import Bank from "../containers/bank";
 import Country from "../containers/Country";
 import Sport from "../containers/Sport";
@@ -27,16 +30,6 @@ import ExpirationCard from "../containers/Templates/ExpirationCard";
 import RelationType from "../containers/relationType";
 import PaymentMethod from "../containers/paymentMethod";
 import CardType from "../containers/cardType";
-import { getAll as getStatusPersonAll } from "../actions/statusPersonActions";
-import { getAll as getMaritalStatusAll } from "../actions/maritalStatusActions";
-import { getAll as getGenderAll } from "../actions/genderActions";
-import { getAll as getCountries } from "../actions/countryActions";
-import { getAll as getRelationTypes } from "../actions/relationTypeActions";
-import { getAll as getPaymentMethods } from "../actions/paymentMethodActions";
-import { getList as getTransactionTypes } from "../actions/transactionTypeActions";
-import { getList as getCurrencies } from "../actions/currencyActions";
-import { getAll as getSports } from "../actions/sportActions";
-import { getList as getLockerLocationList } from "../actions/lockerLocationsActions";
 import TransactionType from "../containers/transactionType";
 import ShareMovement from "../containers/shareMovement";
 import ShareType from "../containers/shareType";
@@ -68,16 +61,6 @@ export default function Routes() {
     async function run(){
       if(window.location.pathname !== '/') {
         await dispatch(checkLogin());
-        // await dispatch(getStatusPersonAll());
-        // await dispatch(getMaritalStatusAll());
-        // await dispatch(getGenderAll());
-        // await dispatch(getCountries());
-        // await dispatch(getRelationTypes());
-        // await dispatch(getPaymentMethods());
-        // await dispatch(getTransactionTypes());
-        // await dispatch(getCurrencies());
-        // await dispatch(getSports());
-        // await dispatch(getLockerLocationList());
       }
     }
     run();

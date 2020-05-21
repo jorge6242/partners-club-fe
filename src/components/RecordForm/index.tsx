@@ -8,14 +8,12 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 import Grid from '@material-ui/core/Grid';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import _ from 'lodash';
 import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
 import Fab from "@material-ui/core/Fab";
 import parse from 'react-html-parser'
 
-import CustomTextField from "../FormElements/CustomTextField";
-import { create, getRecordsByPerson, get as getRecord } from "../../actions/recordActions";
+import { create, get as getRecord } from "../../actions/recordActions";
 import { getList as getTypeList, get } from "../../actions/recordTypeActions";
 import CustomSelect from "../FormElements/CustomSelect";
 import Upload from "../FormElements/Upload";
@@ -140,16 +138,12 @@ const RecordForm: FunctionComponent<RecordFormProps> = ({
       }
     }
     fetch();
-  }, [id, dispatch]);
-
-  const handleLink = (url: any) => {
-    window.open(url,"_blank");
-  }
+  }, [id, dispatch, isView]);
 
   const renderFile = (url: any) => {
     return (
       <Grid item xs={1}>
-      <a target="_blank" href={url} title="file2" >
+      <a target="_blank" rel="noopener noreferrer" href={url} title="file2" >
         <Fab size="small" color="primary" aria-label="add" >
           <SystemUpdateAltIcon />
         </Fab>
