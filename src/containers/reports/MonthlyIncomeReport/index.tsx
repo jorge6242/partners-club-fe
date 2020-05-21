@@ -29,6 +29,8 @@ import { getAll as getProfessions } from "../../../actions/professionActions";
 import { getAll as getSports } from "../../../actions/sportActions";
 import Chart from "../../../components/chart";
 import { getMonthlyIncomeStatistics } from '../../../actions/accessControlActions';
+import moment from "moment";
+import Loader from "../../../components/common/Loader";
 
 interface Columns {
     id:
@@ -45,7 +47,7 @@ const columns: Columns[] = [
         id: "month",
         label: "Mes",
         minWidth: 10,
-        component: (value: any) => <span>{value.value}</span>,
+        component: (value: any) => <span>{moment().month(value.value).format("MMM")}</span>,
     },
     {
         id: "cant",
@@ -80,7 +82,7 @@ type FormData = {
 export default function MonthlyIncomeReport() {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const { monthlyIncomes, monthlyIncomesReport, guestStatisticsGraphLoading: loading } = useSelector((state: any) => state.accessControlReducer);
+    const { monthlyIncomes, monthlyIncomesReport, partnerFamilyStatisticsLoading: loading } = useSelector((state: any) => state.accessControlReducer);
     const {
         handleSubmit,
         register,
@@ -113,6 +115,13 @@ export default function MonthlyIncomeReport() {
     //     const form = getValues();
     //     dispatch(getPersonsBirthdayReport(form))
     // }
+    if(loading) {
+        return (
+            <Grid container spacing={3} justify="center" >
+                <Loader size={35} />
+            </Grid>
+        )
+    }
     return (
         <Grid container spacing={3}>
                 <Grid item xs={12} >

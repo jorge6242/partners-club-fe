@@ -30,6 +30,7 @@ import { getAll as getSports } from "../../../actions/sportActions";
 import Chart from "../../../components/chart";
 import {  getSonsMoreThan30Statistics } from '../../../actions/accessControlActions';
 import Columns from '../../../interfaces/PersonColumn';
+import Loader from "../../../components/common/Loader";
 
 const columns: Columns[] = [
     {
@@ -101,7 +102,7 @@ type FormData = {
 export default function PartneSons30Report() {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const { partnerSons30, guestStatisticsGraphLoading: loading } = useSelector((state: any) => state.accessControlReducer);
+    const { partnerSons30, partnerFamilyStatisticsLoading: loading } = useSelector((state: any) => state.accessControlReducer);
     const {
         handleSubmit,
         register,
@@ -130,6 +131,13 @@ export default function PartneSons30Report() {
     //     const form = getValues();
     //     dispatch(getPersonsBirthdayReport(form))
     // }
+    if(loading) {
+        return (
+            <Grid container spacing={3} justify="center" >
+                <Loader size={35} />
+            </Grid>
+        )
+    }
     return (
         <Grid container spacing={3}>
                 <Grid item xs={12} > Reporte Hijos mayores de 30 años </Grid>

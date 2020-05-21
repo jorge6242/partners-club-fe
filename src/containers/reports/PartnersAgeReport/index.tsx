@@ -29,6 +29,7 @@ import { getAll as getProfessions } from "../../../actions/professionActions";
 import { getAll as getSports } from "../../../actions/sportActions";
 import Chart from "../../../components/chart";
 import { getMonthlyIncomeStatistics, getPartnerAgeStatistics } from '../../../actions/accessControlActions';
+import Loader from "../../../components/common/Loader";
 
 interface Columns {
     id:
@@ -80,7 +81,7 @@ type FormData = {
 export default function PartnerAgesReport() {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const { partnerAges, partnerAgesReport, guestStatisticsGraphLoading: loading } = useSelector((state: any) => state.accessControlReducer);
+    const { partnerAges, partnerAgesReport, partnerFamilyStatisticsLoading: loading } = useSelector((state: any) => state.accessControlReducer);
     const {
         handleSubmit,
         register,
@@ -113,6 +114,13 @@ export default function PartnerAgesReport() {
     //     const form = getValues();
     //     dispatch(getPersonsBirthdayReport(form))
     // }
+    if(loading) {
+        return (
+            <Grid container spacing={3} justify="center" >
+                <Loader size={35} />
+            </Grid>
+        )
+    }
     return (
         <Grid container spacing={3}>
                 <Grid item xs={12} >
