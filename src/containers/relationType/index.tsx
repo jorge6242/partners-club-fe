@@ -7,23 +7,28 @@ import './index.sass';
 import { getAll, remove, search } from "../../actions/relationTypeActions";
 import { updateModal } from "../../actions/modalActions";
 import RelationTypeForm from "../../components/RelationTypeForm";
-import DataTable from '../../components/DataTable'
+import DataTable4 from '../../components/DataTable4'
 import PersonRelationColumns from '../../interfaces/PersonRelationColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
 
 const columns: PersonRelationColumns[] = [
-  { id: "id", label: "Id", minWidth: 170 },
+  {
+    id: "id",
+    label: "Id",
+    minWidth: 30,
+    component: (value: any) => <span>{value.value}</span>
+  },
   {
     id: "description",
     label: "Description",
-    minWidth: 170,
-    align: "right"
+    minWidth: 30,
+    component: (value: any) => <span>{value.value}</span>
   },
   {
     id: "inverse_relation",
     label: "Relacion inversa",
-    minWidth: 170,
-    align: "right"
+    minWidth: 30,
+    component: (value: any) => <span>{value.value}</span>
   },
 ];
 
@@ -85,8 +90,8 @@ export default function RelationType() {
         <CustomSearch handleSearch={handleSearch} />
       </div>
       <div>
-        <DataTable
-          data={list}
+        <DataTable4
+          rows={list}
           columns={columns}
           handleEdit={handleEdit}
           isDelete

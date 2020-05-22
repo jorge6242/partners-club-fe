@@ -8,7 +8,7 @@ import './index.sass';
 import { getAll, remove, search } from "../../actions/userActions";
 import { updateModal } from "../../actions/modalActions";
 import UserForm from "../../components/UserForm";
-import DataTable2 from '../../components/DataTable2'
+import DataTable4 from '../../components/DataTable4'
 import UserColumns from '../../interfaces/UserColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
 
@@ -110,11 +110,10 @@ export default function User() {
         <CustomSearch handleSearch={handleSearch} />
       </div>
       <div>
-        <DataTable2
-          data={list}
+        <DataTable4
+          rows={list}
           columns={columns}
           handleEdit={handleEdit}
-          isDelete
           handleDelete={handleDelete}
           loading={loading}
         />

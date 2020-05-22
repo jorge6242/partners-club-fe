@@ -4,4 +4,5 @@ export default interface PersonRelationColumns {
     minWidth?: number;
     align?: "right";
     format?: (value: number) => string;
+    component?: any;
   }

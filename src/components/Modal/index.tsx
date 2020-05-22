@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function ModalTest() {
+export default function Modal() {
     const classes = useStyles();
     const dispatch = useDispatch();
     const { status, element, isLoader, customSize, title } = useSelector((state: any) => state.modalReducer);

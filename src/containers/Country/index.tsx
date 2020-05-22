@@ -7,17 +7,22 @@ import './index.sass';
 import { getAll, remove, search } from "../../actions/countryActions";
 import { updateModal } from "../../actions/modalActions";
 import CountryForm from "../../components/CountryForm";
-import DataTable from '../../components/DataTable'
+import DataTable4 from '../../components/DataTable4'
 import MasterTableColumns from '../../interfaces/MasterTableColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
 
 const columns: MasterTableColumns[] = [
-  { id: "id", label: "Id", minWidth: 170 },
+  {
+    id: "id",
+    label: "Id",
+    minWidth: 20,
+    component: (value: any) => <span>{value.value}</span>
+  },
   {
     id: "description",
     label: "Description",
-    minWidth: 170,
-    align: "right"
+    minWidth: 20,
+    component: (value: any) => <span>{value.value}</span>
   },
 ];
 
@@ -79,11 +84,10 @@ export default function Country() {
         <CustomSearch handleSearch={handleSearch} />
       </div>
       <div>
-        <DataTable
-          data={countries}
+        <DataTable4
+          rows={countries}
           columns={columns}
           handleEdit={handleEdit}
-          isDelete
           handleDelete={handleDelete}
           loading={loading}
         />

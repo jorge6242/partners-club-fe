@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
-    width: "30%"
+    width: "50%"
   },
 }));
 

@@ -49,6 +49,7 @@ import Helper from '../../helpers/utilities';
 import { Grid } from "@material-ui/core";
 
 import Logo from '../../components/Logo'
+import Loader from "../../components/common/Loader";
 
 const drawerWidth = 240;
 
@@ -156,7 +157,7 @@ const SubMenu: FunctionComponent<SubMenuProps> = ({ menu, item }) => {
       {findChildrens.length > 0 && (
         <Collapse in={item.id === menuItem || false} timeout="auto" unmountOnExit>
           <List dense>
-            {findChildrens.map((e: any, i:number) => <SubMenu key={i} menu={menu} item={e} />)}
+            {findChildrens.map((e: any, i: number) => <SubMenu key={i} menu={menu} item={e} />)}
           </List>
         </Collapse>
       )
@@ -183,7 +184,8 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
   const { listData: menuList } = useSelector((state: any) => state.menuReducer);
 
   const {
-    parameterReducer: { listData: parameterList }
+    parameterReducer: { listData: parameterList },
+    menuReducer: { loading: menuLoading }
   } = useSelector((state: any) => state);
 
   const handleMenu1 = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -229,7 +231,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             {findChildrens.length > 0 && (
               <Collapse in={item.id === subMenuItem ? true : false} timeout="auto" unmountOnExit>
                 <List dense>
-                  {findChildrens.map((e: any, i:number) => <SubMenu key={i} menu={menu} item={e} />)}
+                  {findChildrens.map((e: any, i: number) => <SubMenu key={i} menu={menu} item={e} />)}
                 </List>
               </Collapse>
             )
@@ -297,16 +299,25 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
   };
 
   const handleLogout = () => dispatch(logout());
-
-  const drawer = (
-    <div>
-      <Logo />
-      <Divider />
-      <List dense >
-        {!_.isEmpty(menuList) && buildMenu(menuList.items)}
-      </List>
-    </div>
-  );
+  
+  const drawer = () => {
+    if (menuLoading) {
+      return (
+        <div style={{ textAlign: 'center', marginTop: 20 }} >
+          <Loader />
+        </div>
+      )
+    }
+    return (
+      <div>
+        <Logo />
+        <Divider />
+        <List dense >
+          {!_.isEmpty(menuList) && buildMenu(menuList.items)}
+        </List>
+      </div>
+    );
+  }
   const client = Helper.getParameter(parameterList, 'CLIENT_NAME')
   const nameRole: any = !_.isEmpty(user) ? _.first(user.roles) : '';
   return (
@@ -373,7 +384,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
               keepMounted: true // Better open performance on mobile.
             }}
           >
-            {drawer}
+            {drawer()}
           </Drawer>
         </Hidden>
         <Hidden xsDown implementation="css">
@@ -384,7 +395,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             variant="permanent"
             open
           >
-            {drawer}
+            {drawer()}
           </Drawer>
         </Hidden>
       </nav>

@@ -7,19 +7,22 @@ import './index.sass';
 import { getAll, remove, search } from "../../actions/statusPersonActions";
 import { updateModal } from "../../actions/modalActions";
 import StatusPersonForm from "../../components/StatusPersonForm";
-import DataTable from '../../components/DataTable'
+import DataTable4 from '../../components/DataTable4'
 import MasterTableColumns from '../../interfaces/MasterTableColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
 
 const columns: MasterTableColumns[] = [
-  { id: 
-    "id", label: "Id", 
-    minWidth: 10 },
+  {
+    id: "id",
+    label: "Id",
+    minWidth: 30,
+    component: (value: any) => <span>{value.value}</span>
+  },
   {
     id: "description",
     label: "Description",
-    minWidth: 20,
-    align: "right"
+    minWidth: 30,
+    component: (value: any) => <span>{value.value}</span>
   },
 ];
 
@@ -81,11 +84,10 @@ export default function StatusPerson() {
         <CustomSearch handleSearch={handleSearch} />
       </div>
       <div>
-        <DataTable
-          data={list}
+        <DataTable4
+          rows={list}
           columns={columns}
           handleEdit={handleEdit}
-          isDelete
           handleDelete={handleDelete}
           loading={loading}
         />
