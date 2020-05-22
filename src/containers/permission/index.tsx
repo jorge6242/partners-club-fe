@@ -49,7 +49,8 @@ export default function Permission() {
       updateModal({
         payload: {
           status: true,
-          element: <PermissionForm id={id} />
+          element: <PermissionForm id={id} />,
+           customSize:''
         }
       })
     );
@@ -60,7 +61,8 @@ export default function Permission() {
       updateModal({
         payload: {
           status: true,
-          element: <PermissionForm />
+          element: <PermissionForm />,
+          customSize:''
         }
       })
     );

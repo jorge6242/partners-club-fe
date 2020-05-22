@@ -114,7 +114,7 @@ interface SubMenuProps {
 const SubMenu: FunctionComponent<SubMenuProps> = ({ menu, item }) => {
   const [menuItem, setMenuItem] = useState(null);
   const history = useHistory();
-  const findChildrens: any = menu.filter((e: any) => Number(e.parent) === Number(item.id));
+  const findChildrens: any = menu.filter((e: any) => e.parent == item.id);
   let Icon = SettingsIcon;
   if (item.icons) {
     let currenMenutIcon = icons.find((e: any) => e.slug === item.icons.slug);

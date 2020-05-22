@@ -30,7 +30,8 @@ const useStyles = makeStyles(theme => ({
     },
     wrapper: {
         margin: theme.spacing(1),
-        position: "relative"
+        position: "relative",
+        textAlign: 'center',
     },
     buttonProgress: {
         position: "absolute",
@@ -40,7 +41,8 @@ const useStyles = makeStyles(theme => ({
         marginLeft: -9
     },
     submit: {
-        margin: theme.spacing(3, 0, 2)
+        margin: theme.spacing(3, 0, 2),
+        width: '30%'
     },
     select: {
         padding: "10px 0px 10px 0px",
@@ -75,7 +77,7 @@ const NoteForm: FunctionComponent<NoteFormProps> = ({
     id,
     isView = false
 }) => {
-    const [ selectedDescription, setSelectedDecription ] = useState<any>('');
+    const [selectedDescription, setSelectedDecription] = useState<any>('');
     const [selectedNote, setSelectedNote] = useState<any>({});
     const classes = useStyles();
     const { handleSubmit, register, errors, reset, setValue } = useForm<FormData>();
@@ -125,7 +127,7 @@ const NoteForm: FunctionComponent<NoteFormProps> = ({
 
     const handleDescription = (content: string) => {
         setSelectedDecription(content);
-      }
+    }
 
     const renderDetail = () => {
         return !_.isEmpty(selectedNote) && (
@@ -203,7 +205,7 @@ const NoteForm: FunctionComponent<NoteFormProps> = ({
                         </CustomSelect>
                     </Grid>
                     <Grid item xs={12}>
-                    <CustomEditor onChange={handleDescription} content={selectedDescription} />
+                        <CustomEditor onChange={handleDescription} content={selectedDescription} />
                     </Grid>
                     <Grid item xs={12}>
                         <div className={classes.wrapper}>

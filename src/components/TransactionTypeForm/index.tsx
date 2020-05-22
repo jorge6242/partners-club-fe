@@ -25,7 +25,8 @@ const useStyles = makeStyles(theme => ({
   },
   wrapper: {
     margin: theme.spacing(1),
-    position: "relative"
+    position: "relative",
+    textAlign: "center"
   },
   buttonProgress: {
     position: "absolute",
@@ -35,7 +36,8 @@ const useStyles = makeStyles(theme => ({
     marginLeft: -9
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
+    margin: theme.spacing(3, 0, 2),
+    width: "30%"
   },
   select: {
     padding: "10px 0px 10px 0px",
