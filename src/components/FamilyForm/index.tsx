@@ -103,25 +103,10 @@ const FamilyForm: FunctionComponent<ComponentProps> = ({ id }) => {
 
 
   useEffect(() => {
-    async function fetch() {
-        dispatch(getRelationTypeList());
-        dispatch(getGenderList());
-        dispatch(getMaritalStatusList());
-        // if (id) {
-        //     const response: any = await dispatch(get(id));
-        //     const { name, last_name, rif_ci, primary_email, telephone1, picture, gender_id } = response;
-        //     setValue("name", name);
-        //     setValue("last_name", last_name);
-        //     setValue("rif_ci", rif_ci);
-        //     setValue("primary_email", primary_email);
-        //     setValue("telephone1", telephone1);
-        //     setValue("picture", picture);
-        //     setValue("gender_id", gender_id);
-        //     setImage({ ...image, preview: picture });
-        // }
-    }
-    fetch();
-}, [id, dispatch, setValue, setImage, image]);
+    dispatch(getRelationTypeList());
+    dispatch(getGenderList());
+    dispatch(getMaritalStatusList());
+}, [dispatch]);
 
   useEffect(() => {
     return () => {
@@ -289,7 +274,7 @@ const FamilyForm: FunctionComponent<ComponentProps> = ({ id }) => {
                     errorsMessageField={
                       errors.gender_id && errors.gender_id.message
                     }
-                    selectionMessage="Seleccione Sexo"
+                    selectionMessage="Seleccione"
                   >
                     {genderList.map((item: any) => (
                       <option key={item.id} value={item.id}>
@@ -325,7 +310,7 @@ const FamilyForm: FunctionComponent<ComponentProps> = ({ id }) => {
                     errorsMessageField={
                       errors.relation_type_id && errors.relation_type_id.message
                     }
-                    selectionMessage="Seleccione Sexo"
+                    selectionMessage="Seleccione"
                   >
                     {relationTypeList.map((item: any) => (
                       <option key={item.id} value={item.id}>

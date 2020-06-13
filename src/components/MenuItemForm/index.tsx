@@ -6,7 +6,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import SettingsIcon from '@material-ui/icons/Settings';
 import _ from 'lodash';
 
 import CustomTextField from "../FormElements/CustomTextField";
@@ -15,7 +14,6 @@ import { getMenuList } from "../../actions/menuActions";
 import { getList as getIconList } from "../../actions/menuItemIconActions";
 import { Grid } from "@material-ui/core";
 import CustomSelect from "../FormElements/CustomSelect";
-import icons from "../../helpers/collectionIcons";
 import { getAll as getAllRoles } from "../../actions/roleActions";
 import TransferList from "../TransferList";
 

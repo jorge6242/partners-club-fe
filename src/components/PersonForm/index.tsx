@@ -1367,7 +1367,6 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
             placeholder="Pasaporte"
             field="passport"
             register={register}
-            errorsField={errors.passport}
             errorsMessageField={errors.passport && errors.passport.message}
           />
         </Grid>
