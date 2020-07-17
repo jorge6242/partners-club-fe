@@ -10,6 +10,7 @@ import ShareTypeForm from "../../components/ShareTypeForm";
 import DataTable4 from '../../components/DataTable4'
 import ShareTypeColumns from '../../interfaces/ShareTypeColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
+import { Chip } from "@material-ui/core";
 
 const columns: ShareTypeColumns[] = [
   { 
@@ -32,6 +33,36 @@ const columns: ShareTypeColumns[] = [
     align: "right",
     component: (value: any) => <span>{value.value}</span>
   },
+  {
+    id: "access",
+    label: "Acceso",
+    minWidth: 10,
+    align: "right",
+    component: (value: any) => {
+        let access = '';
+        let backgroundColor = '';
+        if (value.value == "0") {
+            access = "Inactivo";
+            backgroundColor = '#e74c3c';
+        }
+        if (value.value == "1") {
+            access = "Activo";
+            backgroundColor = '#2ecc71';
+        }
+        return (
+                <Chip
+                    label={access}
+                    style={{
+                        backgroundColor,
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: "10px"
+                    }}
+                    size="small"
+                />
+        )
+    }
+}
 ];
 
 export default function ShareType() {

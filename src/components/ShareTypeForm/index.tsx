@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import CustomTextField from "../FormElements/CustomTextField";
 import { update, create, get } from "../../actions/shareTypeActions";
+import CustomSelect from "../FormElements/CustomSelect";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -49,6 +50,7 @@ const useStyles = makeStyles(theme => ({
 type FormData = {
   description: string;
   code: string;
+  access: string;
 };
 
 type ShareTypeFormProps = {
@@ -73,6 +75,7 @@ const ShareTypeForm: FunctionComponent<ShareTypeFormProps> = ({
         const response: any = await dispatch(get(id));
         setValue("description", response.description);
         setValue("code", response.code);
+        setValue("access", response.access);
       }
     }
     fetch();
@@ -122,6 +125,19 @@ const ShareTypeForm: FunctionComponent<ShareTypeFormProps> = ({
             errorsField={errors.code}
             errorsMessageField={errors.code && errors.code.message}
           />
+
+          <CustomSelect
+            label="Acceso"
+            selectionMessage="Seleccione"
+            field="access"
+            register={register}
+            errorsMessageField={
+              errors.access && errors.access.message
+            }
+          >
+            <option value={1}> Activo </option>
+            <option value={0}> Inactivo </option>
+          </CustomSelect>
 
           <div className={classes.wrapper}>
             <Button
