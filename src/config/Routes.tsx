@@ -52,6 +52,7 @@ import PersonBirthdayReport from "../containers/reports/BirthayReport";
 import MonthlyIncomeReport from "../containers/reports/MonthlyIncomeReport";
 import PartnerAgesReport from "../containers/reports/PartnersAgeReport";
 import PartneSons30Report from "../containers/reports/PartneSons30Report";
+import RegisterPassword from "../containers/registerPassword";
 
 export default function Routes() {
   const dispatch = useDispatch();
@@ -132,6 +133,7 @@ export default function Routes() {
                       <Route path="/dashboard/monthly-income-report" exact component={MonthlyIncomeReport} />
                       <Route path="/dashboard/partner-ages-report" exact component={PartnerAgesReport} />
                       <Route path="/dashboard/partners-sons-30" exact component={PartneSons30Report} />
+                      <Route path="/dashboard/update-password" exact component={RegisterPassword} />
                     </Dashboard>
                   </Switch>
                 );
