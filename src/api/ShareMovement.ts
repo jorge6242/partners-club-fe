@@ -27,6 +27,15 @@ const ShareMovement = {
       { headers: headers() }
     );
   },
+  disableShare(data: any) {
+    return AXIOS.post(
+      `${Prefix.api}/share-disable`,
+      {
+        ...data
+      },
+      { headers: headers() }
+    );
+  },
   get(id: number) {
     return AXIOS.get(`${Prefix.api}/share-movement/${id}`, { headers: headers() });
   },

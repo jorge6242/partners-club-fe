@@ -1,7 +1,9 @@
-import API from "../api/ShareMovement";
+import API from "../api/SharePermitMovementsTypes";
 import snackBarUpdate from "../actions/snackBarActions";
 import { updateModal } from "../actions/modalActions";
-import { ACTIONS } from '../interfaces/actionTypes/shareMovementTypes';
+import { ACTIONS } from '../interfaces/actionTypes/sharePermitMovementsTypesTypes';
+
+const attempts = window.attempts;
 
 export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch: Function) => {
   dispatch({
@@ -43,6 +45,48 @@ export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch
         type: "error"
       }
     })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
+export const getList = (count: number = 0) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_LOADING,
+    payload: true
+  });
+  try {
+    const { data: { data }, status } = await API.getList();
+    let response = [];
+    if (status === 200) {
+
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_LIST,
+        payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    if(count <= attempts) {
+      let counter = count + 1;
+      dispatch(getList(counter));
+    } else {
+      snackBarUpdate({
+        payload: {
+          message: error.message,
+          status: true,
+          type: "error",
+        },
+      })(dispatch);
+    }
     dispatch({
       type: ACTIONS.SET_LOADING,
       payload: false
@@ -113,61 +157,7 @@ export const create = (body: object) => async (dispatch: Function) => {
       createresponse = response;
       snackBarUpdate({
         payload: {
-          message: "Movimiento de Accion Creada!",
-          type: "success",
-          status: true
-        }
-      })(dispatch);
-      dispatch(getAll());
-      dispatch(
-        updateModal({
-          payload: {
-            status: false,
-            element: null
-          }
-        })
-      );
-      dispatch({
-        type: ACTIONS.SET_LOADING,
-        payload: false
-      });
-    }
-    return createresponse;
-  } catch (error) {
-    let message = 'General Error';
-    if (error && error.response) {
-      const { data: { message: msg } } = error.response; 
-      message = msg
-    }
-    snackBarUpdate({
-      payload: {
-        message,
-        type: "error",
-        status: true
-      }
-    })(dispatch);
-    dispatch({
-      type: ACTIONS.SET_LOADING,
-      payload: false
-    });
-    return error;
-  }
-};
-
-export const disableShare = (body: object) => async (dispatch: Function) => {
-  dispatch({
-    type: ACTIONS.SET_LOADING,
-    payload: true
-  });
-  try {
-    const response = await API.disableShare(body);
-    const { status } = response;
-    let createresponse: any = [];
-    if (status === 200 || status === 201) {
-      createresponse = response;
-      snackBarUpdate({
-        payload: {
-          message: createresponse.data.message,
+          message: "Permiso de movimiennto de accion ha sido Creado!",
           type: "success",
           status: true
         }
@@ -243,7 +233,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Movimiento de Accion Actualizada!",
+          message: "Permiso de movimiennto de accion ha sido Actualizado!",
           type: "success",
           status: true
         }
@@ -295,7 +285,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Movimiento de Accion Eliminada!",
+          message: "Permiso de movimiennto de accion Eliminado!",
           type: "success",
           status: true
         }
@@ -314,84 +304,3 @@ export const remove = (id: number) => async (dispatch: Function) => {
     return error;
   }
 };
-
-export const getList = () => async (dispatch: Function) => {
-  dispatch({
-    type: ACTIONS.SET_LOADING,
-    payload: true
-  });
-  try {
-    const { data: { data }, status } = await API.getList();
-    let response = [];
-    if (status === 200) {
-
-      response = data;
-      dispatch({
-        type: ACTIONS.GET_LIST,
-        payload: response
-      });
-      dispatch({
-        type: ACTIONS.SET_LOADING,
-        payload: false
-      });
-    }
-    return response;
-  } catch (error) {
-    snackBarUpdate({
-      payload: {
-        message: error.message,
-        status: true,
-        type: "error"
-      }
-    })(dispatch);
-    dispatch({
-      type: ACTIONS.SET_LOADING,
-      payload: false
-    });
-    return error;
-  }
-};
-
-export const updateLastMovement = () => ({
-  type: ACTIONS.GET_LAST_MOVEMENT,
-  payload: []
-});
-
-
-export const getLastMovement = (share: number) => async (dispatch: Function) => {
-  dispatch({
-    type: ACTIONS.SET_LAST_MOVEMENT_LOADING,
-    payload: true
-  });
-  try {
-    const { data: { data }, status } = await API.getLastMovement(share);
-    let response = [];
-    if (status === 200) {
-
-      response = data;
-      dispatch({
-        type: ACTIONS.GET_LAST_MOVEMENT,
-        payload: response
-      });
-      dispatch({
-        type: ACTIONS.SET_LAST_MOVEMENT_LOADING,
-        payload: false
-      });
-    }
-    return response;
-  } catch (error) {
-    snackBarUpdate({
-      payload: {
-        message: error.message,
-        status: true,
-        type: "error"
-      }
-    })(dispatch);
-    dispatch({
-      type: ACTIONS.SET_LAST_MOVEMENT_LOADING,
-      payload: false
-    });
-    return error;
-  }
-};
-

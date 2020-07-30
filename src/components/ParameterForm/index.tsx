@@ -147,6 +147,7 @@ const ParameterForm: FunctionComponent<ComponentProps> = ({
                         errorsMessageField={
                             errors.eliminable && errors.eliminable.message
                         }
+                        required
                     >
                         <option value={1}> SI </option>
                         <option value={0}> NO </option>

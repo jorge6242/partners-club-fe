@@ -13,7 +13,6 @@ import ShareMovementColumns from '../../interfaces/ShareMovementColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
 import moment from "moment";
 import { Button } from "@material-ui/core";
-import ShareMovementFormDisable from "../../components/ShareMovementFormDisable";
 
 const columns: ShareMovementColumns[] = [
   {
@@ -95,7 +94,7 @@ const columns: ShareMovementColumns[] = [
   },
 ];
 
-export default function ShareMovement() {
+export default function ShareMovementDisable() {
   const dispatch = useDispatch();
   const { list, loading, pagination } = useSelector((state: any) => state.shareMovementReducer);
   useEffect(() => {
@@ -133,17 +132,6 @@ export default function ShareMovement() {
     dispatch(getAll(page, perPage))
   }
 
-  const handleButton = (condition: string, title: string) => {
-    dispatch(
-      updateModal({
-        payload: {
-          status: true,
-          element: <ShareMovementFormDisable condition={condition} title={title} />
-        }
-      })
-    );
-  }
-
   const renderButton = (title: string, color: string) => {
     return <Button
       type="button"
@@ -158,16 +146,16 @@ export default function ShareMovement() {
   return (
     <Grid container spacing={3}>
 
-      <Grid item xs={12}>Movimientos de Acciones</Grid>
+      <Grid item xs={12}>Movimientos de Acciones a dar de Baja</Grid>
       <Grid item xs={6}> <CustomSearch handleSearch={handleSearch} /> </Grid>
       <Grid item xs={6} style={{ textAlign: 'right' }} >
         <Grid container spacing={3} style={{ textAlign: 'right' }}>
           <Grid item xs={11}>
             <Grid container spacing={3}>
               <Grid item xs={6}>{renderButton('Exonerar', '#3f51b5')}</Grid>
-              <Grid item xs={6} onClick={() => handleButton('DAR_DE_BAJA', 'Dar de Baja')} >{renderButton('Dar de Baja', '#3f51b5')}</Grid>
+              <Grid item xs={6}>{renderButton('Dar de Baja', '#3f51b5')}</Grid>
               <Grid item xs={6}>{renderButton('Remover exoneracion', '#27ae60')}</Grid>
-              <Grid item xs={6} onClick={() => handleButton('RECUPERAR_BAJA', 'Recuperar Baja')} >{renderButton('Recuperar Baja', '#27ae60')}</Grid>
+              <Grid item xs={6}>{renderButton('Recuperar Baja', '#27ae60')}</Grid>
             </Grid>
           </Grid>
           <Grid item xs={1} onClick={() => handleCreate()}  style={{ textAlign: 'right' }}>

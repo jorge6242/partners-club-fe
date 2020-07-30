@@ -402,6 +402,114 @@ export const searchToAssign = (term: string) => async (dispatch: Function) => {
   }
 };
 
+export const singleSearchToAssign = (term: string, condition: string) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_SHARE_TO_ASSIGN_LOADING,
+    payload: true
+  });
+  try {
+    const { data: { data }, status } = await API.singleSearchToAssign(term, condition)
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_SHARE_TO_ASSIGN,
+        payload: response
+      });
+    }
+    dispatch({
+      type: ACTIONS.SET_SHARE_TO_ASSIGN_LOADING,
+      payload: false
+    });
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_SHARE_TO_ASSIGN_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
+export const searchDisableToAssign = (term: string, condition: string) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_SHARE_TO_ASSIGN_LOADING,
+    payload: true
+  });
+  try {
+    const { data: { data }, status } = await API.searchDisableToAssign(term, condition)
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_SHARE_TO_ASSIGN,
+        payload: response
+      });
+    }
+    dispatch({
+      type: ACTIONS.SET_SHARE_TO_ASSIGN_LOADING,
+      payload: false
+    });
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_SHARE_TO_ASSIGN_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
+export const getSharesBySearch = (term: string) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_SHARE_TO_ASSIGN_LOADING,
+    payload: true
+  });
+  try {
+    const { data: { data }, status } = await API.getSharesBySearch(term)
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_SHARE_TO_ASSIGN,
+        payload: response
+      });
+    }
+    dispatch({
+      type: ACTIONS.SET_SHARE_TO_ASSIGN_LOADING,
+      payload: false
+    });
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_SHARE_TO_ASSIGN_LOADING,
+      payload: false
+    });
+    return error;
+  }
+};
+
 export const reset = () => ({ type: ACTIONS.RESET});
 
 export const filter = (form: object, page: number = 1, perPage: number = 8) => async (dispatch: Function) => {

@@ -10,7 +10,8 @@ export default interface ShareColumns {
     | "payment_method"
     | "share_type"
     | "father_share"
-    | "status";
+    | "status"
+    | "permit";
   label: string;
   minWidth?: number;
   align?: "left" | "right";

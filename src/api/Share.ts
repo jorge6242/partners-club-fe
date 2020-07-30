@@ -54,6 +54,32 @@ const API = {
       headers: headers()
     });
   },
+  getSharesBySearch(term: string) {
+    return AXIOS.get(`${Prefix.api}/get-shares-by-search`, {
+      params: {
+        term,
+      },
+      headers: headers()
+    });
+  },
+  singleSearchToAssign(term: string, condition:string) {
+    return AXIOS.get(`${Prefix.api}/search-share-active`, {
+      params: {
+        term,
+        condition,
+      },
+      headers: headers()
+    });
+  },
+  searchDisableToAssign(term: string, condition:string) {
+    return AXIOS.get(`${Prefix.api}/search-share-disable`, {
+      params: {
+        term,
+        condition,
+      },
+      headers: headers()
+    });
+  },
   getByPartner(id: number) {
     return AXIOS.get(`${Prefix.api}/share-by-partner/${id}`, { headers: headers() });
   },

@@ -53,6 +53,9 @@ import MonthlyIncomeReport from "../containers/reports/MonthlyIncomeReport";
 import PartnerAgesReport from "../containers/reports/PartnersAgeReport";
 import PartneSons30Report from "../containers/reports/PartneSons30Report";
 import RegisterPassword from "../containers/registerPassword";
+import ShareMovementDisable from "../containers/shareMovementDisable";
+import SharePermitMovementsTypes from "../containers/sharePermitMovementsTypes";
+import SharePermitMovement from "../containers/sharePermitMovement";
 
 export default function Routes() {
   const dispatch = useDispatch();
@@ -98,6 +101,7 @@ export default function Routes() {
                       <Route path="/dashboard/deporte" component={Sport} />
                       <Route path="/dashboard/transaction-type" component={TransactionType} />
                       <Route path="/dashboard/share-movement" component={ShareMovement} />
+                      <Route path="/dashboard/share-movement-disable" component={ShareMovementDisable} />
                       <Route
                         path="/dashboard/profesion"
                         component={Profession}
@@ -134,6 +138,8 @@ export default function Routes() {
                       <Route path="/dashboard/partner-ages-report" exact component={PartnerAgesReport} />
                       <Route path="/dashboard/partners-sons-30" exact component={PartneSons30Report} />
                       <Route path="/dashboard/update-password" exact component={RegisterPassword} />
+                      <Route path="/dashboard/share-permit-movements-types" exact component={SharePermitMovementsTypes} />
+                      <Route path="/dashboard/share-permit-movements" exact component={SharePermitMovement} />
                     </Dashboard>
                   </Switch>
                 );

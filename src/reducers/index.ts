@@ -44,6 +44,8 @@ import mainLoaderReducer from './mainLoaderReducer';
 import noteTypeReducer from './noteTypeReducer';
 import menuItemIconReducer from './menuItemIconReducer';
 import customModalReducer from './customModalReducer';
+import sharePermitMovementsTypesReducer from './sharePermitMovementsTypesReducer';
+import sharePermitMovementReducer from './sharePermitMovementReducer';
 
 const rootReducer = combineReducers({
   modalReducer,
@@ -87,7 +89,9 @@ const rootReducer = combineReducers({
   mainLoaderReducer,
   noteTypeReducer,
   menuItemIconReducer,
-  customModalReducer
+  customModalReducer,
+  sharePermitMovementsTypesReducer,
+  sharePermitMovementReducer
 });
 
 export default rootReducer;
