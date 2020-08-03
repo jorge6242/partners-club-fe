@@ -635,8 +635,8 @@ type FormData = {
   state: string;
   type_person: number;
   postal_code: string;
-  status_person_id: number;
-  marital_statuses_id: number;
+  status_person_id: string;
+  marital_statuses_id: string;
   countries_id: number;
   profession_list: any;
   share_list: number;
@@ -943,22 +943,25 @@ const PersonForm: FunctionComponent<PersonFormProps> = ({ id }) => {
       dispatch(clear());
       dispatch(clearPersonLockersByLocation());
       dispatch(clearList());
+      dispatch(updateLastMovement());
     };
   }, [reset, dispatch]);
 
   const handleForm = async (form: object) => {
     const data = {
+      ...form,
       lockers: selectedLockers,
       id_card_picture: null,
       user: user.username,
       date: moment().format('YYYY-MM-DD'),
+      isPartner: 1,
     };
     if (tempPersonId > 0) {
-      await dispatch(update({ id: tempPersonId, ...form, ...data }));
+      await dispatch(update({ id: tempPersonId, ...data }));
       dispatch(getLockersByPartner(tempPersonId));
     } else {
       const response: any = await dispatch(
-        create({ ...form, id_card_picture: null})
+        create({ ...data, id_card_picture: null})
       );
       setTempPersonId(response.id);
       dispatch(searchPersonToAssignFamily(response.id));
