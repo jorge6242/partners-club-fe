@@ -145,9 +145,9 @@ export default function SharePermitMovementsTypes() {
         return (
           <React.Fragment>
             <Chip
-              label={selectedRow === "1" ? "Activo" : "Inactivo"}
+              label={selectedRow.status === "1" ? "Activo" : "Inactivo"}
               style={{
-                backgroundColor: selectedRow === "1" ? "#2ecc71" : "#e74c3c",
+                backgroundColor: selectedRow.status === "1" ? "#2ecc71" : "#e74c3c",
                 color: "white",
                 fontWeight: "bold",
                 fontSize: "10px"
