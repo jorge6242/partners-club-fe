@@ -103,10 +103,10 @@ export default function SharePermitMovement() {
 
 
   const handleSwitchStatus = async (selectedId: number, selectedStatus: string) => {
-    if (selectedStatus === "0") {
+    if (selectedStatus === "1") {
       const data = {
         id: selectedId,
-        status: 1,
+        status: 0,
       };
       dispatch(update(data));
     }
@@ -165,9 +165,9 @@ export default function SharePermitMovement() {
         return (
           <React.Fragment>
             <Chip
-              label={selectedRow.status === "0" ? "Activo" : "Inactivo"}
+              label={selectedRow.status === "1" ? "Activo" : "Inactivo"}
               style={{
-                backgroundColor: selectedRow.status === "0" ? "#2ecc71" : "#e74c3c",
+                backgroundColor: selectedRow.status === "1" ? "#2ecc71" : "#e74c3c",
                 color: "white",
                 fontWeight: "bold",
                 fontSize: "10px"
@@ -175,7 +175,7 @@ export default function SharePermitMovement() {
               size="small"
             />
             <GreenSwitch
-              checked={selectedRow.status == "0" ? true : false}
+              checked={selectedRow.status == "1" ? true : false}
               onChange={() => handleSwitchStatus(selectedRow.id, selectedRow.status)}
             />
           </React.Fragment>
