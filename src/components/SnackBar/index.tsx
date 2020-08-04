@@ -37,7 +37,6 @@ export default function SnackBar() {
         payload: {
           message: "",
           status: false,
-          type: "",
           autoHide: false,
           dashboardContent: false,
         }

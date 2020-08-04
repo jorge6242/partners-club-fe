@@ -145,7 +145,7 @@ export default function AccessControlForm() {
   const [isSuggestion, SetIsSuggestion] = React.useState<boolean>(false);
   const [selectedPersonToAssignGuest, setSelectedPersonToAssignGuest] = React.useState<any>(null);
   const classes = useStyles();
-  const { handleSubmit, register, errors, reset, setValue } = useForm<
+  const { handleSubmit, register, errors, reset, setValue, getValues } = useForm<
     FormData
   >();
 
@@ -157,14 +157,33 @@ export default function AccessControlForm() {
       guestByPartner,
       guestByPartnerLoading
     },
-    locationReducer: { listData: locationList }
+    locationReducer: { listData: locationList },
+    snackBarReducer: { status: snackBarStatus, type: snackBarType },
   } = useSelector((state: any) => state);
 
   const dispatch = useDispatch();
 
+  const cleanForm = () => {
+    const form = getValues();
+    const tempLocation = form.location_id;
+    setSelectedFamilies([]);
+    dispatch(clearGetFamiliesPartnerByCard());
+    setSelectedPersonToAssignGuest(null);
+    reset();
+    setValue("location_id", tempLocation);
+    const partnerSearch: any = document.getElementById('partner-search');
+    partnerSearch.focus();
+  }
+
   useEffect(() => {
     dispatch(getList());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (snackBarType !== 'error' && !snackBarStatus) {
+      cleanForm();
+    }
+  }, [snackBarStatus, snackBarType]);
 
   useEffect(() => {
     return () => {
@@ -179,24 +198,15 @@ export default function AccessControlForm() {
     const created = moment().format('YYYY-MM-DD h:mm:ss');
     const tempLocation = form.location_id;
     const status = 1;
-    const body = { 
-      ...form, 
-      family, 
-      status, 
+    const body = {
+      ...form,
+      family,
+      status,
       created,
       selectedPersonToAssignGuest: form.guest_id === "" ? '' : selectedPersonToAssignGuest,
     };
-    if(family.length > 0) {
-      await dispatch(create(body));
-      setSelectedFamilies([]);
-      dispatch(clearGetFamiliesPartnerByCard());
-      setSelectedPersonToAssignGuest(null);
-      reset();
-      setValue("location_id", tempLocation);
-      //searchInputRef.current.focus();
-      const partnerSearch: any = document.getElementById('partner-search');
-      partnerSearch.focus();
-    } else {
+    console.log('form.share_id ', form.share_id);
+    if (family.length === 0) {
       dispatch(snackBarUpdate({
         payload: {
           message: 'Porfavor seleccione miembros',
@@ -204,21 +214,48 @@ export default function AccessControlForm() {
           status: true
         }
       }))
+    } else if (form.share_id === '') {
+      dispatch(snackBarUpdate({
+        payload: {
+          message: 'Socio no posee acciones activas',
+          type: "error",
+          status: true
+        }
+      }))
+    } else {
+      try {
+       await dispatch(create(body));
+        cleanForm();
+      } catch (err) {
+        
+      }
     }
+
   };
 
   const handleSearch = async (event: any) => {
     setSelectedPersonToAssignGuest(null);
     setSelectedFamilies([]);
+    dispatch(snackBarUpdate({
+      payload: {
+        message: "",
+        status: false,
+        type: "error",
+        autoHide: false,
+        dashboardContent: false,
+      }
+    }));
     dispatch(clearGetFamiliesPartnerByCard());
-    if(event.value !== "") {
+    if (event.value !== "") {
       const response: any = await dispatch(getFamiliesPartnerByCard(event.value));
       if (!_.isEmpty(response) && !response.response) {
         setValue("people_id", response.id);
-        if(response.shares.length === 1) {
+        if (response.shares && response.shares.length === 1) {
           const list = response.shares;
           const current: any = _.first(list);
           setValue("share_id", current.id);
+        } else {
+          setValue("share_id", "");
         }
         if (response.familyMembers) {
           const family = response.familyMembers.find((e: any) => e.selectedFamily === true);
@@ -515,37 +552,32 @@ export default function AccessControlForm() {
 
   const renderShares = () => {
     const shares = familiesPartnerByCard.shares;
-    if(shares.length === 1) {
+    if (shares.length === 1) {
       const current: any = _.first(shares);
       setValue("share_id", current.id);
       return (
         <Paper className={classes.singleShare}>
           <strong>Accion N°</strong> {current.share_number}
-          <input
-            style={{ display: "none" }}
-            name="share_id"
-            ref={register}
-          />
         </Paper>
       )
     }
     return (
       <CustomSelect
-      label="Accion"
-      selectionMessage="Seleccione"
-      field="share_id"
-      required
-      register={register}
-      errorsMessageField={
-        errors.share_id && errors.share_id.message
-      }
-    >
-      {familiesPartnerByCard.shares.map((item: any) => (
-        <option key={item.id} value={item.id}>
-        {item.share_number}
-        </option>
-      ))}
-    </CustomSelect>
+        label="Accion"
+        selectionMessage="Seleccione"
+        field="share_id"
+        required
+        register={register}
+        errorsMessageField={
+          errors.share_id && errors.share_id.message
+        }
+      >
+        {familiesPartnerByCard.shares.map((item: any) => (
+          <option key={item.id} value={item.id}>
+            {item.share_number}
+          </option>
+        ))}
+      </CustomSelect>
     )
   }
 
@@ -593,6 +625,11 @@ export default function AccessControlForm() {
                 ref={register({
                   required: true
                 })}
+              />
+              <input
+                style={{ display: "none" }}
+                name="share_id"
+                ref={register}
               />
             </Grid>
             {!familiesPartnerCardLoading && familiesPartnerByCard.shares && (

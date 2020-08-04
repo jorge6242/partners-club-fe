@@ -155,7 +155,7 @@ const ShareMovementFormDisable: FunctionComponent<ShareMovementFormDisableProps>
     const body = {
       ...form,
       number_procesed: 1,
-      created,
+      created: null,
       condition,
     };
     setConfirmationMessage(false);

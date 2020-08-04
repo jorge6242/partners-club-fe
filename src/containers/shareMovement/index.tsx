@@ -14,6 +14,7 @@ import CustomSearch from '../../components/FormElements/CustomSearch';
 import moment from "moment";
 import { Button } from "@material-ui/core";
 import ShareMovementFormDisable from "../../components/ShareMovementFormDisable";
+import { useHistory } from "react-router-dom";
 
 const columns: ShareMovementColumns[] = [
   {
@@ -98,6 +99,7 @@ const columns: ShareMovementColumns[] = [
 export default function ShareMovement() {
   const dispatch = useDispatch();
   const { list, loading, pagination } = useSelector((state: any) => state.shareMovementReducer);
+  const history = useHistory();
   useEffect(() => {
     async function fetchData() {
       dispatch(getAll());
@@ -164,9 +166,9 @@ export default function ShareMovement() {
         <Grid container spacing={3} style={{ textAlign: 'right' }}>
           <Grid item xs={11}>
             <Grid container spacing={3}>
-              <Grid item xs={6}>{renderButton('Exonerar', '#3f51b5')}</Grid>
+              <Grid item xs={6} onClick={() => history.push('/dashboard/share-permit-movements')} >{renderButton('Exonerar', '#3f51b5')}</Grid>
               <Grid item xs={6} onClick={() => handleButton('DAR_DE_BAJA', 'Dar de Baja')} >{renderButton('Dar de Baja', '#3f51b5')}</Grid>
-              <Grid item xs={6}>{renderButton('Remover exoneracion', '#27ae60')}</Grid>
+              <Grid item xs={6} onClick={() => history.push('/dashboard/share-permit-movements')} >{renderButton('Remover exoneracion', '#27ae60')}</Grid>
               <Grid item xs={6} onClick={() => handleButton('RECUPERAR_BAJA', 'Recuperar Baja')} >{renderButton('Recuperar Baja', '#27ae60')}</Grid>
             </Grid>
           </Grid>

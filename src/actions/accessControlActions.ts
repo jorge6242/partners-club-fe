@@ -204,7 +204,7 @@ export const create = (body: object) => async (dispatch: Function) => {
       type: ACTIONS.SET_LOADING,
       payload: false
     });
-    return error;
+    throw error;
   }
 };
 
@@ -223,7 +223,7 @@ export const get = (id: number) => async (dispatch: Function) => {
     snackBarUpdate({
       payload: {
         message: error.message,
-        type: "erwarningror",
+        type: "error",
         status: true
       }
     })(dispatch);
