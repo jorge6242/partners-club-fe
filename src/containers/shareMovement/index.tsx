@@ -166,9 +166,9 @@ export default function ShareMovement() {
         <Grid container spacing={3} style={{ textAlign: 'right' }}>
           <Grid item xs={11}>
             <Grid container spacing={3}>
-              <Grid item xs={6} onClick={() => history.push('/dashboard/share-permit-movements')} >{renderButton('Exonerar', '#3f51b5')}</Grid>
+              <Grid item xs={6} onClick={() => history.push('/dashboard/share-permit-movements')} >{renderButton('Dar Permiso', '#3f51b5')}</Grid>
               <Grid item xs={6} onClick={() => handleButton('DAR_DE_BAJA', 'Dar de Baja')} >{renderButton('Dar de Baja', '#3f51b5')}</Grid>
-              <Grid item xs={6} onClick={() => history.push('/dashboard/share-permit-movements')} >{renderButton('Remover exoneracion', '#27ae60')}</Grid>
+              <Grid item xs={6} onClick={() => history.push('/dashboard/share-permit-movements')} >{renderButton('Revocar Permiso', '#27ae60')}</Grid>
               <Grid item xs={6} onClick={() => handleButton('RECUPERAR_BAJA', 'Recuperar Baja')} >{renderButton('Recuperar Baja', '#27ae60')}</Grid>
             </Grid>
           </Grid>
