@@ -202,6 +202,7 @@ const SharePermitMovementForm: FunctionComponent<SharePermitMovementFormProps> =
                 register={register}
                 errorsField={errors.days}
                 errorsMessageField={errors.days && errors.days.message}
+                readOnly
               />
             </Grid>
 
