@@ -1250,7 +1250,7 @@ export const filter = (
   }
 };
 
-export const filterReport = (body: object) => async (dispatch: Function) => {
+export const filterReport = (body: any) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_SECOND_LOADING,
     payload: true
@@ -1263,9 +1263,11 @@ export const filterReport = (body: object) => async (dispatch: Function) => {
     headers: headers()
   }).then(response => {
     const url = window.URL.createObjectURL(new Blob([response.data]));
+    console.log('response.data ', response.data);
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", "generalReport.pdf");
+    const ext = body.type;
+    link.setAttribute("download", `generalReport.${ext}`);
     document.body.appendChild(link);
     link.click();
     dispatch({

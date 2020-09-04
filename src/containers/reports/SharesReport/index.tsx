@@ -7,6 +7,8 @@ import SearchIcon from "@material-ui/icons/Search";
 import Button from '@material-ui/core/Button';
 import Chip from "@material-ui/core/Chip";
 import CustomTextField from '../../../components/FormElements/CustomTextField'
+import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
+import ListAltIcon from '@material-ui/icons/ListAlt';
 
 import { filter, filterReport, reset as resetShare } from "../../../actions/shareActions";
 import ShareColumns from '../../../interfaces/ShareColumns';
@@ -294,9 +296,9 @@ export default function SharesReport() {
     dispatch(filter(form, page, perPage))
   }
 
-  const getReport = () => {
+  const getReport = (type: string) => {
     const form = getValues();
-    dispatch(filterReport(form))
+    dispatch(filterReport({...form, type}))
   }
   const renderShareMovements = (rows: object) => {
     return (
@@ -325,13 +327,25 @@ export default function SharesReport() {
           <Grid container spacing={3} direction="row"
             justify="space-between"
             alignItems="center">
-            <Grid item xs={6}> Reporte de Acciones</Grid>
-            <Grid item xs={6} className={classes.printButtonContainer} >
+            <Grid item xs={8}> Reporte de Acciones</Grid>
+            <Grid item xs={4}>
+              <Grid container spacing={3}>
+              <Grid item xs={6} className={classes.printButtonContainer} style={{ textAlign: 'right' }} >
               <LoadingButton
-                Icon={PrintIcon}
-                loading={reportLoading}
-                handleClick={() => getReport()}
-              /></Grid>
+                Icon={PictureAsPdfIcon}
+                loading={loading}
+                handleClick={() => getReport('pdf')}
+              />
+              </Grid>
+              <Grid item xs={6} className={classes.printButtonContainer} style={{ textAlign: 'left' }} >
+              <LoadingButton
+                Icon={ListAltIcon}
+                loading={loading}
+                handleClick={() => getReport('csv')}
+              />
+              </Grid>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
 

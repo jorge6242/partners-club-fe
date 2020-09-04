@@ -37,7 +37,7 @@ const LoadingButton: FunctionComponent<FormComponentProps> = ({
   const classes = useStyles();
   return (
     <div className={classes.wrapper}>
-      <Fab aria-label="save" color="primary" onClick={handleClick}>
+      <Fab aria-label="save" size="small" color="primary" onClick={handleClick}>
         <Icon />
       </Fab>
       {loading && (

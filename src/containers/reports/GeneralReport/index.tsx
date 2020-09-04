@@ -17,6 +17,8 @@ import {
 import PersonColumn from '../../../interfaces/PersonColumn';
 import DataTable4 from "../../../components/DataTable4";
 import PrintIcon from "@material-ui/icons/Print";
+import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
+import ListAltIcon from '@material-ui/icons/ListAlt';
 import LoadingButton from "../../../components/FormElements/LoadingButton";
 import CustomTextField from '../../../components/FormElements/CustomTextField'
 import CustomSelect from "../../../components/FormElements/CustomSelect";
@@ -233,9 +235,9 @@ export default function GeneralReport() {
     dispatch(filter(form, page, perPage))
   }
 
-  const getReport = () => {
+  const getReport = (type: string) => {
     const form = getValues();
-    dispatch(filterReport(form))
+    dispatch(filterReport({...form, type}))
   }
 
   return (
@@ -249,13 +251,25 @@ export default function GeneralReport() {
           <Grid container spacing={3} direction="row"
             justify="space-between"
             alignItems="center">
-            <Grid item xs={6}> Reporte General</Grid>
-            <Grid item xs={6} className={classes.printButtonContainer} >
+            <Grid item xs={8}> Reporte General</Grid>
+            <Grid item xs={4}>
+              <Grid container spacing={1}>
+              <Grid item xs={6} className={classes.printButtonContainer} style={{ textAlign: 'right' }} >
               <LoadingButton
-                Icon={PrintIcon}
+                Icon={PictureAsPdfIcon}
                 loading={loading}
-                handleClick={() => getReport()}
-              /></Grid>
+                handleClick={() => getReport('pdf')}
+              />
+              </Grid>
+              <Grid item xs={6} className={classes.printButtonContainer} style={{ textAlign: 'left' }} >
+              <LoadingButton
+                Icon={ListAltIcon}
+                loading={loading}
+                handleClick={() => getReport('csv')}
+              />
+              </Grid>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
 

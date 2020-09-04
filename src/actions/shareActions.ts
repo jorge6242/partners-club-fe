@@ -560,7 +560,7 @@ export const filter = (form: object, page: number = 1, perPage: number = 8) => a
   }
 };
 
-export const filterReport  = (body: object) => async (dispatch: Function) => {
+export const filterReport  = (body: any) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_REPORT_LOADING,
     payload: true
@@ -575,7 +575,8 @@ export const filterReport  = (body: object) => async (dispatch: Function) => {
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'sharesReport.pdf');
+    const ext = body.type;
+    link.setAttribute('download', `sharesReport.${ext}`);
     document.body.appendChild(link);
     link.click();
     dispatch({
